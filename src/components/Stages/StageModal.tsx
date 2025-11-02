@@ -278,7 +278,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
           break;
           
         case 'STEP_3':
-          recipients = ['reegan@optimalfire.co.nz', 'quenique@optimalfire.co.nz'];
+          recipients = ['contracts@optimalfire.co.nz'];
           emailSubject = `${projectName} - Step 3 Complete - Step 4 Should Commence`;
           nextStep = 'Step 4: Commercial';
           break;

@@ -19,7 +19,8 @@ export const useProjects = () => {
       
       const recipients = [
         'pieter@optimalfire.co.nz',
-        'ray@optimalfire.co.nz'
+        'ray@optimalfire.co.nz',
+        'pedro@optimalfire.co.nz'
       ];
       
       const emailSubject = `New Project Created: ${project.name}`;

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { X, Building2, Calendar, User } from 'lucide-react';
 import type { Project } from '../../types/database';
 import { getNextProjectCode } from '../../lib/database';
+import { buildFolderName } from '../../lib/naming';
 
 interface CreateProjectModalProps {
   onClose: () => void;
@@ -45,7 +46,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ onClose, onCrea
     setError('');
 
     try {
-      await onCreate(formData);
+      await onCreate({ ...formData, project_title: projectTitle });
       onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create project');
@@ -57,6 +58,10 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ onClose, onCrea
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
+
+  const projectTitle = useMemo(() => {
+    return buildFolderName(formData.name, formData.client, formData.project_code);
+  }, [formData.name, formData.client, formData.project_code]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -115,6 +120,15 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ onClose, onCrea
               disabled={loadingCode}
             />
           </div>
+
+          {projectTitle && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+              <label className="block text-xs font-medium text-blue-700 mb-1">
+                Project Title (Auto-generated)
+              </label>
+              <p className="text-sm font-mono text-blue-900">{projectTitle}</p>
+            </div>
+          )}
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">

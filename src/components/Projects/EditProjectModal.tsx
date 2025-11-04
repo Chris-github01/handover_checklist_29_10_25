@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { X, Building2, Calendar, User } from 'lucide-react';
 import type { Project } from '../../types/database';
+import { buildFolderName } from '../../lib/naming';
 
 interface EditProjectModalProps {
   project: Project;
@@ -19,6 +20,10 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({ project, onClose, o
     start_date_target: project.start_date_target,
     status: project.status
   });
+
+  const projectTitle = useMemo(() => {
+    return buildFolderName(formData.name, formData.client, formData.project_code);
+  }, [formData.name, formData.client, formData.project_code]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -28,7 +33,7 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({ project, onClose, o
     setError('');
 
     try {
-      await onUpdate(project.id, formData);
+      await onUpdate(project.id, { ...formData, project_title: projectTitle });
       onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update project');
@@ -97,6 +102,15 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({ project, onClose, o
               placeholder="Enter project code (optional)"
             />
           </div>
+
+          {projectTitle && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+              <label className="block text-xs font-medium text-blue-700 mb-1">
+                Project Title (Auto-generated)
+              </label>
+              <p className="text-sm font-mono text-blue-900">{projectTitle}</p>
+            </div>
+          )}
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">

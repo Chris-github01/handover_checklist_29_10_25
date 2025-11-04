@@ -11,6 +11,7 @@ export interface Project {
   name: string;
   client: string;
   project_code?: string;
+  project_title?: string;
   project_type: 'passive_fire' | 'intumescent' | 'passive_intumescent';
   region: 'auckland' | 'wellington';
   bwof: boolean;

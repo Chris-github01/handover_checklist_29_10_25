@@ -199,17 +199,27 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
           }
         } catch (err) {
           errorCount++;
-          console.error(`Error importing row ${rowNum}:`, err);
+          console.error(`\n!!! ERROR IN ROW ${rowNum} !!!`);
+          console.error('Error object:', err);
+          console.error('Error type:', typeof err);
+          console.error('Error JSON:', JSON.stringify(err, null, 2));
           console.error(`Row ${rowNum} data:`, row);
 
           let errorMsg = 'Unknown error';
           if (err instanceof Error) {
             errorMsg = err.message;
+            console.error('Error is Error instance, message:', errorMsg);
             if (err.stack) {
-              console.error(`Row ${rowNum} stack:`, err.stack);
+              console.error(`Stack trace:`, err.stack);
             }
+          } else if (err && typeof err === 'object') {
+            // Try to extract message from object
+            const errObj = err as any;
+            errorMsg = errObj.message || errObj.error || errObj.msg || JSON.stringify(err);
+            console.error('Error is object, extracted message:', errorMsg);
           } else {
-            console.error(`Row ${rowNum} error type:`, typeof err, err);
+            errorMsg = String(err);
+            console.error('Error converted to string:', errorMsg);
           }
 
           errors.push(`Row ${rowNum}: ${errorMsg}`);

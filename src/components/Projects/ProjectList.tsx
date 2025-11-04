@@ -60,24 +60,27 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
   };
 
   const handleFileImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    alert('Import function called!');
     console.log('=== IMPORT STARTED ===');
     const file = event.target.files?.[0];
     console.log('File:', file);
+
     if (!file) {
-      alert('No file selected!');
       console.log('No file selected');
       return;
     }
-    alert(`File selected: ${file.name}`);
 
+    console.log(`File selected: ${file.name}`);
     setImporting(true);
+
     try {
       console.log('Reading file...');
       const data = await file.arrayBuffer();
-      console.log('File read, parsing Excel...');
-      const workbook = XLSX.read(data);
-      console.log('Workbook:', workbook);
+      console.log('File read, size:', data.byteLength, 'bytes');
+
+      console.log('Parsing Excel...');
+      const workbook = XLSX.read(data, { type: 'array' });
+      console.log('Workbook parsed successfully');
+      console.log('Sheet names:', workbook.SheetNames);
 
       if (!workbook.SheetNames || workbook.SheetNames.length === 0) {
         throw new Error('No sheets found in the Excel file');

@@ -86,9 +86,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-            {project.name}{project.bwof && ' BWOF'}
+            {project.project_title || project.name}{project.bwof && ' BWOF'}
           </h3>
-          
+
           <div className="flex items-center text-gray-600 mb-2">
             <Building2 className="w-4 h-4 mr-2" />
             <span className="text-sm">{project.client}</span>

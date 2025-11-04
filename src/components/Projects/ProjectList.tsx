@@ -167,9 +167,24 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
           };
 
           console.log(`Row ${rowNum} - Creating project with data:`, projectData);
-          await createProject(projectData as any);
-          console.log(`Row ${rowNum} - Successfully created`);
-          successCount++;
+
+          try {
+            await createProject(projectData as any);
+            console.log(`Row ${rowNum} - Successfully created`);
+            successCount++;
+          } catch (createError) {
+            console.error(`Row ${rowNum} - Database error:`, createError);
+            if (createError && typeof createError === 'object' && 'message' in createError) {
+              console.error(`Row ${rowNum} - Error message:`, (createError as any).message);
+            }
+            if (createError && typeof createError === 'object' && 'details' in createError) {
+              console.error(`Row ${rowNum} - Error details:`, (createError as any).details);
+            }
+            if (createError && typeof createError === 'object' && 'hint' in createError) {
+              console.error(`Row ${rowNum} - Error hint:`, (createError as any).hint);
+            }
+            throw createError;
+          }
         } catch (err) {
           errorCount++;
           console.error(`Error importing row ${rowNum}:`, err);

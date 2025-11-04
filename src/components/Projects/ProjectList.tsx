@@ -86,32 +86,44 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
 
       for (let i = 0; i < jsonData.length; i++) {
         const row = jsonData[i] as any;
+        const rowNum = i + 2;
         try {
+          console.log(`Processing row ${rowNum}:`, row);
+          console.log('Available columns:', Object.keys(row));
+
           const projectName = row['Project Name'];
           const clientName = row['Client Name'];
+
+          console.log(`Row ${rowNum} - Project Name: "${projectName}", Client Name: "${clientName}"`);
 
           if (!projectName || !clientName) {
             throw new Error(`Missing required fields: Project Name="${projectName}", Client Name="${clientName}"`);
           }
 
           const rawRegion = row['Region'];
+          console.log(`Row ${rowNum} - Region: "${rawRegion}"`);
           const region = rawRegion === 'Auckland' ? 'auckland' :
                         rawRegion === 'Wellington' ? 'wellington' :
                         'auckland';
 
           let projectCode = row['Project Code'] || '';
+          console.log(`Row ${rowNum} - Project Code: "${projectCode}"`);
           if (!projectCode || projectCode.trim() === '') {
             projectCode = await getNextProjectCode(region);
+            console.log(`Row ${rowNum} - Generated Project Code: "${projectCode}"`);
           }
 
           const projectTitle = buildFolderName(projectName, clientName, projectCode);
+          console.log(`Row ${rowNum} - Project Title: "${projectTitle}"`);
 
           const rawProjectType = row['Project Type'];
+          console.log(`Row ${rowNum} - Project Type: "${rawProjectType}"`);
           const projectType = rawProjectType === 'Passive Fire' ? 'passive_fire' :
                               rawProjectType === 'Intumescent' ? 'intumescent' :
                               'passive_intumescent';
 
           const rawStatus = row['Project Status'];
+          console.log(`Row ${rowNum} - Project Status: "${rawStatus}"`);
           const status = rawStatus === 'Await Pre-let (Verbal confirmation)' ? 'await_pre_let' :
                         rawStatus === 'Awarded' ? 'awarded' :
                         rawStatus === 'In Progress' ? 'in_progress' :
@@ -133,14 +145,26 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
             project_title: projectTitle
           };
 
+          console.log(`Row ${rowNum} - Creating project with data:`, projectData);
           await createProject(projectData as any);
+          console.log(`Row ${rowNum} - Successfully created`);
           successCount++;
         } catch (err) {
           errorCount++;
-          const errorMsg = err instanceof Error ? err.message : 'Unknown error';
-          const rowNum = i + 2;
+          console.error(`Error importing row ${rowNum}:`, err);
+          console.error(`Row ${rowNum} data:`, row);
+
+          let errorMsg = 'Unknown error';
+          if (err instanceof Error) {
+            errorMsg = err.message;
+            if (err.stack) {
+              console.error(`Row ${rowNum} stack:`, err.stack);
+            }
+          } else {
+            console.error(`Row ${rowNum} error type:`, typeof err, err);
+          }
+
           errors.push(`Row ${rowNum}: ${errorMsg}`);
-          console.error(`Error importing row ${rowNum}:`, err, row);
         }
       }
 

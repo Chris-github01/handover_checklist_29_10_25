@@ -182,7 +182,8 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({ project, onClose, o
               <option value="await_pre_let">Await Pre-let (Verbal confirmation)</option>
               <option value="awarded">Awarded</option>
               <option value="in_progress">In Progress</option>
-              <option value="active">Active/Handover Complete</option>
+              <option value="active">Active</option>
+              <option value="handover_complete">Handover Complete (Auto-set)</option>
             </select>
           </div>
 

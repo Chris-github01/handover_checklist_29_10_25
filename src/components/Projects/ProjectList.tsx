@@ -7,9 +7,11 @@ import ProjectCard from './ProjectCard';
 import * as XLSX from 'xlsx';
 import { getNextProjectCode } from '../../lib/database';
 import { buildFolderName } from '../../lib/naming';
+import { useAuth } from '../../contexts/AuthContext';
 
 const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: string, projectBwof: boolean) => void }> = ({ onSelectProject }) => {
   const { projects, loading, error, createProject, updateProject, deleteProject } = useProjects();
+  const { userProfile } = useAuth();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingProject, setEditingProject] = useState<ProjectWithStats | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -320,30 +322,34 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
         </div>
 
         <div className="flex items-center space-x-3">
-          <button
-            onClick={handleExportExcel}
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
-          >
-            <Download className="w-5 h-5" />
-            <span>Export Projects Excel</span>
-          </button>
+          {(userProfile?.name === 'Pieter' || userProfile?.name === 'Ramona') && (
+            <>
+              <button
+                onClick={handleExportExcel}
+                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+              >
+                <Download className="w-5 h-5" />
+                <span>Export Projects Excel</span>
+              </button>
 
-          <button
-            onClick={handleImportClick}
-            disabled={importing}
-            className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <Upload className="w-5 h-5" />
-            <span>{importing ? 'Importing...' : 'Import Projects'}</span>
-          </button>
+              <button
+                onClick={handleImportClick}
+                disabled={importing}
+                className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Upload className="w-5 h-5" />
+                <span>{importing ? 'Importing...' : 'Import Projects'}</span>
+              </button>
 
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".xlsx,.xls"
-            onChange={handleFileImport}
-            className="hidden"
-          />
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".xlsx,.xls"
+                onChange={handleFileImport}
+                className="hidden"
+              />
+            </>
+          )}
 
           <button
             onClick={() => setShowCreateModal(true)}

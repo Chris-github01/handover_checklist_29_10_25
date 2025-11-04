@@ -322,7 +322,7 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
         </div>
 
         <div className="flex items-center space-x-3">
-          {(userProfile?.name === 'Pieter' || userProfile?.name === 'Ramona') && (
+          {(userProfile?.email === 'pieter@optimalfire.co.nz' || userProfile?.email === 'ramona@optimalfire.co.nz') && (
             <>
               <button
                 onClick={handleExportExcel}

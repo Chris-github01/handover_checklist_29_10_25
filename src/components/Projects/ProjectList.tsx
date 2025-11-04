@@ -65,51 +65,81 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
     try {
       const data = await file.arrayBuffer();
       const workbook = XLSX.read(data);
+
+      if (!workbook.SheetNames || workbook.SheetNames.length === 0) {
+        throw new Error('No sheets found in the Excel file');
+      }
+
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+      if (!jsonData || jsonData.length === 0) {
+        throw new Error('No data found in the Excel file');
+      }
 
       const { getNextProjectCode } = await import('../../lib/database');
       const { buildFolderName } = await import('../../lib/naming');
 
+      let successCount = 0;
+      let errorCount = 0;
+      const errors: string[] = [];
+
       for (const row of jsonData as any[]) {
-        const region = row['Region'] === 'Auckland' ? 'auckland' : 'wellington';
-        const projectName = row['Project Name'] || '';
-        const clientName = row['Client Name'] || '';
+        try {
+          const projectName = row['Project Name'];
+          const clientName = row['Client Name'];
+          const region = row['Region'] === 'Auckland' ? 'auckland' : 'wellington';
 
-        let projectCode = row['Project Code'] || '';
-        if (!projectCode) {
-          projectCode = await getNextProjectCode(region);
+          if (!projectName || !clientName) {
+            throw new Error(`Missing required fields: Project Name or Client Name`);
+          }
+
+          let projectCode = row['Project Code'] || '';
+          if (!projectCode) {
+            projectCode = await getNextProjectCode(region);
+          }
+
+          const projectTitle = buildFolderName(projectName, clientName, projectCode);
+
+          const projectData = {
+            name: projectName,
+            client: clientName,
+            project_code: projectCode,
+            project_type: row['Project Type'] === 'Passive Fire' ? 'passive_fire' :
+                          row['Project Type'] === 'Intumescent' ? 'intumescent' :
+                          'passive_intumescent',
+            region: region,
+            bwof: row['BWOF'] === 'Yes',
+            start_date_target: row['Target Start Date'] || '',
+            status: row['Project Status'] === 'Await Pre-let (Verbal confirmation)' ? 'await_pre_let' :
+                    row['Project Status'] === 'Awarded' ? 'awarded' :
+                    row['Project Status'] === 'In Progress' ? 'in_progress' :
+                    row['Project Status'] === 'Active' ? 'active' :
+                    'handover_complete',
+            site_manager: row['Site Manager (SM)'] || null,
+            qs: row['QS'] || null,
+            project_title: projectTitle
+          };
+
+          await createProject(projectData as any);
+          successCount++;
+        } catch (err) {
+          errorCount++;
+          const errorMsg = err instanceof Error ? err.message : 'Unknown error';
+          errors.push(`Row ${successCount + errorCount}: ${errorMsg}`);
+          console.error('Error importing row:', err, row);
         }
-
-        const projectTitle = buildFolderName(projectName, clientName, projectCode);
-
-        const projectData = {
-          name: projectName,
-          client: clientName,
-          project_code: projectCode,
-          project_type: row['Project Type'] === 'Passive Fire' ? 'passive_fire' :
-                        row['Project Type'] === 'Intumescent' ? 'intumescent' :
-                        'passive_intumescent',
-          region: region,
-          bwof: row['BWOF'] === 'Yes',
-          start_date_target: row['Target Start Date'] || '',
-          status: row['Project Status'] === 'Await Pre-let (Verbal confirmation)' ? 'await_pre_let' :
-                  row['Project Status'] === 'Awarded' ? 'awarded' :
-                  row['Project Status'] === 'In Progress' ? 'in_progress' :
-                  row['Project Status'] === 'Active' ? 'active' :
-                  'handover_complete',
-          site_manager: row['Site Manager (SM)'] || null,
-          qs: row['QS'] || null,
-          project_title: projectTitle
-        };
-
-        await createProject(projectData as any);
       }
 
-      alert(`Successfully imported ${jsonData.length} projects`);
+      if (successCount > 0) {
+        alert(`Successfully imported ${successCount} project(s)${errorCount > 0 ? `\n${errorCount} error(s) occurred` : ''}`);
+      } else {
+        throw new Error(`Failed to import any projects. Errors:\n${errors.join('\n')}`);
+      }
     } catch (err) {
       console.error('Import error:', err);
-      alert('Error importing projects. Please check the file format.');
+      const errorMsg = err instanceof Error ? err.message : 'Unknown error';
+      alert(`Error importing projects: ${errorMsg}\n\nPlease check that your Excel file has the correct columns:\nProject Name, Client Name, Project Code, Project Type, Region, BWOF, Target Start Date, Project Status, Site Manager (SM), QS`);
     } finally {
       setImporting(false);
       if (fileInputRef.current) {

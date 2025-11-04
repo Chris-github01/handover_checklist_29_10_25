@@ -5,6 +5,8 @@ import CreateProjectModal from './CreateProjectModal';
 import EditProjectModal from './EditProjectModal';
 import ProjectCard from './ProjectCard';
 import * as XLSX from 'xlsx';
+import { getNextProjectCode } from '../../lib/database';
+import { buildFolderName } from '../../lib/naming';
 
 const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: string, projectBwof: boolean) => void }> = ({ onSelectProject }) => {
   const { projects, loading, error, createProject, updateProject, deleteProject } = useProjects();
@@ -95,8 +97,6 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
         console.log('First row data:', jsonData[0]);
       }
 
-      const { getNextProjectCode } = await import('../../lib/database');
-      const { buildFolderName } = await import('../../lib/naming');
 
       let successCount = 0;
       let errorCount = 0;

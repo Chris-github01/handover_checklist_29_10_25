@@ -58,13 +58,16 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
   };
 
   const handleFileImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    alert('Import function called!');
     console.log('=== IMPORT STARTED ===');
     const file = event.target.files?.[0];
     console.log('File:', file);
     if (!file) {
+      alert('No file selected!');
       console.log('No file selected');
       return;
     }
+    alert(`File selected: ${file.name}`);
 
     setImporting(true);
     try {

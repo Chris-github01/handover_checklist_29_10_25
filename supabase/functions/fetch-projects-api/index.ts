@@ -17,6 +17,8 @@ interface Project {
   bwof: boolean;
   start_date_target: string;
   status: string;
+  site_manager?: string;
+  qs?: string;
   created_at: string;
 }
 
@@ -68,7 +70,7 @@ Deno.serve(async (req: Request) => {
 
     let query = supabase
       .from('projects')
-      .select('id, name, client, project_code, project_title, project_type, region, bwof, start_date_target, status, created_at')
+      .select('id, name, client, project_code, project_title, project_type, region, bwof, start_date_target, status, site_manager, qs, created_at')
       .order('created_at', { ascending: false });
 
     if (searchQuery) {

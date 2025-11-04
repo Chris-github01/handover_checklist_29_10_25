@@ -130,7 +130,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
             <span className="text-sm">Target: {formatDate(project.start_date_target)}</span>
           </div>
         </div>
-        
+
+        <div className="flex flex-col space-y-1 text-xs text-gray-600 mr-2">
+          <div>
+            <span className="font-medium">SM:</span> {project.site_manager || '-'}
+          </div>
+          <div>
+            <span className="font-medium">QS:</span> {project.qs || '-'}
+          </div>
+        </div>
+
         <div className="flex items-center space-x-2">
           <button
             onClick={handleCopy}

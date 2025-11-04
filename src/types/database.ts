@@ -17,6 +17,8 @@ export interface Project {
   bwof: boolean;
   start_date_target: string;
   status: 'awarded' | 'await_pre_let' | 'in_progress' | 'active' | 'handover_complete';
+  site_manager?: string;
+  qs?: string;
   created_at: string;
 }
 

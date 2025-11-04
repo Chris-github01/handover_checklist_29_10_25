@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useProjects, ProjectWithStats } from '../../hooks/useProjects';
-import { Plus, Search, Building2, AlertCircle } from 'lucide-react';
+import { Plus, Search, Building2, AlertCircle, Download, Upload } from 'lucide-react';
 import CreateProjectModal from './CreateProjectModal';
 import EditProjectModal from './EditProjectModal';
 import ProjectCard from './ProjectCard';
+import * as XLSX from 'xlsx';
 
 const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: string, projectBwof: boolean) => void }> = ({ onSelectProject }) => {
   const { projects, loading, error, createProject, updateProject, deleteProject } = useProjects();
@@ -11,6 +12,8 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
   const [editingProject, setEditingProject] = useState<ProjectWithStats | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState<'in_progress' | 'complete'>('in_progress');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [importing, setImporting] = useState(false);
 
   const filteredProjects = projects
     .filter(project => {
@@ -21,6 +24,85 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
         : project.status !== 'handover_complete';
       return matchesSearch && matchesTab;
     });
+
+  const handleExportExcel = () => {
+    const exportData = projects.map(project => ({
+      'Project Name': project.name,
+      'Client Name': project.client,
+      'Project Code': project.project_code || '',
+      'Project Type': project.project_type === 'passive_fire' ? 'Passive Fire' :
+                      project.project_type === 'intumescent' ? 'Intumescent' :
+                      'Passive & Intumescent',
+      'Region': project.region === 'auckland' ? 'Auckland' : 'Wellington',
+      'BWOF': project.bwof ? 'Yes' : 'No',
+      'Target Start Date': project.start_date_target,
+      'Project Status': project.status === 'await_pre_let' ? 'Await Pre-let (Verbal confirmation)' :
+                        project.status === 'awarded' ? 'Awarded' :
+                        project.status === 'in_progress' ? 'In Progress' :
+                        project.status === 'active' ? 'Active' :
+                        'Handover Complete',
+      'Site Manager (SM)': project.site_manager || '',
+      'QS': project.qs || ''
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Projects');
+
+    const timestamp = new Date().toISOString().split('T')[0];
+    XLSX.writeFile(workbook, `Projects_Export_${timestamp}.xlsx`);
+  };
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setImporting(true);
+    try {
+      const data = await file.arrayBuffer();
+      const workbook = XLSX.read(data);
+      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+      const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+      for (const row of jsonData as any[]) {
+        const projectData = {
+          name: row['Project Name'] || '',
+          client: row['Client Name'] || '',
+          project_code: row['Project Code'] || '',
+          project_type: row['Project Type'] === 'Passive Fire' ? 'passive_fire' :
+                        row['Project Type'] === 'Intumescent' ? 'intumescent' :
+                        'passive_intumescent',
+          region: row['Region'] === 'Auckland' ? 'auckland' : 'wellington',
+          bwof: row['BWOF'] === 'Yes',
+          start_date_target: row['Target Start Date'] || '',
+          status: row['Project Status'] === 'Await Pre-let (Verbal confirmation)' ? 'await_pre_let' :
+                  row['Project Status'] === 'Awarded' ? 'awarded' :
+                  row['Project Status'] === 'In Progress' ? 'in_progress' :
+                  row['Project Status'] === 'Active' ? 'active' :
+                  'handover_complete',
+          site_manager: row['Site Manager (SM)'] || null,
+          qs: row['QS'] || null,
+          project_title: ''
+        };
+
+        await createProject(projectData as any);
+      }
+
+      alert(`Successfully imported ${jsonData.length} projects`);
+    } catch (err) {
+      console.error('Import error:', err);
+      alert('Error importing projects. Please check the file format.');
+    } finally {
+      setImporting(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
 
   if (loading) {
     return (
@@ -52,14 +134,41 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
           <h2 className="text-3xl font-bold text-gray-900">Projects</h2>
           <p className="text-gray-600 mt-1">Manage your project handover processes</p>
         </div>
-        
-        <button
-          onClick={() => setShowCreateModal(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
-        >
-          <Plus className="w-5 h-5" />
-          <span>New Project</span>
-        </button>
+
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={handleExportExcel}
+            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+          >
+            <Download className="w-5 h-5" />
+            <span>Export Projects Excel</span>
+          </button>
+
+          <button
+            onClick={handleImportClick}
+            disabled={importing}
+            className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Upload className="w-5 h-5" />
+            <span>{importing ? 'Importing...' : 'Import Projects'}</span>
+          </button>
+
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".xlsx,.xls"
+            onChange={handleFileImport}
+            className="hidden"
+          />
+
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+          >
+            <Plus className="w-5 h-5" />
+            <span>New Project</span>
+          </button>
+        </div>
       </div>
 
       <div className="mb-6 space-y-4">

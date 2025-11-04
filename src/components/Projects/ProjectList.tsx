@@ -10,11 +10,17 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingProject, setEditingProject] = useState<ProjectWithStats | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState<'in_progress' | 'complete'>('in_progress');
 
-  const filteredProjects = projects.filter(project =>
-    project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    project.client.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredProjects = projects
+    .filter(project => {
+      const matchesSearch = project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        project.client.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesTab = activeTab === 'complete'
+        ? project.status === 'handover_complete'
+        : project.status !== 'handover_complete';
+      return matchesSearch && matchesTab;
+    });
 
   if (loading) {
     return (
@@ -56,7 +62,32 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
         </button>
       </div>
 
-      <div className="mb-6">
+      <div className="mb-6 space-y-4">
+        <div className="border-b border-gray-200">
+          <div className="flex space-x-8">
+            <button
+              onClick={() => setActiveTab('in_progress')}
+              className={`pb-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === 'in_progress'
+                  ? 'border-blue-600 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Handover in Progress
+            </button>
+            <button
+              onClick={() => setActiveTab('complete')}
+              className={`pb-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === 'complete'
+                  ? 'border-blue-600 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Handover Complete
+            </button>
+          </div>
+        </div>
+
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
           <input

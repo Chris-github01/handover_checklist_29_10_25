@@ -187,32 +187,6 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({ project, onClose, o
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Site Manager (SM)
-            </label>
-            <input
-              type="text"
-              value={formData.site_manager || ''}
-              onChange={(e) => handleInputChange('site_manager', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Enter site manager name (optional)"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              QS
-            </label>
-            <input
-              type="text"
-              value={formData.qs || ''}
-              onChange={(e) => handleInputChange('qs', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Enter QS name (optional)"
-            />
-          </div>
-
           {error && (
             <div className="bg-red-50 border border-red-200 rounded-lg p-3">
               <p className="text-red-800 text-sm">{error}</p>

@@ -13,6 +13,36 @@ export const getProjects = async (): Promise<Project[]> => {
   return data || [];
 };
 
+export const getNextProjectCode = async (region: 'auckland' | 'wellington'): Promise<string> => {
+  const suffix = region === 'auckland' ? 'A' : 'W';
+
+  const { data, error } = await supabase
+    .from('projects')
+    .select('project_code')
+    .ilike('project_code', `%${suffix}`)
+    .order('created_at', { ascending: false });
+
+  if (error) throw error;
+
+  if (!data || data.length === 0) {
+    return `510${suffix}`;
+  }
+
+  const codes = data
+    .map(p => p.project_code)
+    .filter((code): code is string => code !== null && code !== undefined)
+    .filter(code => code.endsWith(suffix))
+    .map(code => {
+      const match = code.match(/^(\d+)[A-Z]$/);
+      return match ? parseInt(match[1], 10) : 0;
+    })
+    .filter(num => num >= 510);
+
+  const maxNumber = codes.length > 0 ? Math.max(...codes) : 509;
+
+  return `${maxNumber + 1}${suffix}`;
+};
+
 export const getProjectStageStats = async (projectId: string) => {
   const { data: stageData, error } = await supabase
     .from('stage_statuses')

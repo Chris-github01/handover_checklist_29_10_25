@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Building2, Calendar, User } from 'lucide-react';
 import type { Project } from '../../types/database';
+import { getNextProjectCode } from '../../lib/database';
 
 interface CreateProjectModalProps {
   onClose: () => void;
@@ -20,6 +21,23 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ onClose, onCrea
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [loadingCode, setLoadingCode] = useState(false);
+
+  useEffect(() => {
+    const fetchNextCode = async () => {
+      setLoadingCode(true);
+      try {
+        const nextCode = await getNextProjectCode(formData.region);
+        setFormData(prev => ({ ...prev, project_code: nextCode }));
+      } catch (err) {
+        console.error('Error fetching next project code:', err);
+      } finally {
+        setLoadingCode(false);
+      }
+    };
+
+    fetchNextCode();
+  }, [formData.region]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,6 +112,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ onClose, onCrea
               onChange={(e) => handleInputChange('project_code', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Enter project code (optional)"
+              disabled={loadingCode}
             />
           </div>
 

@@ -77,6 +77,13 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
         throw new Error('No data found in the Excel file');
       }
 
+      console.log('=== EXCEL IMPORT DEBUG ===');
+      console.log('Total rows:', jsonData.length);
+      if (jsonData.length > 0) {
+        console.log('Column names found:', Object.keys(jsonData[0]));
+        console.log('First row data:', jsonData[0]);
+      }
+
       const { getNextProjectCode } = await import('../../lib/database');
       const { buildFolderName } = await import('../../lib/naming');
 

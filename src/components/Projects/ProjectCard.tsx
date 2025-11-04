@@ -108,9 +108,20 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
             {project.project_title || project.name}{project.bwof && ' BWOF'}
           </h3>
 
-          <div className="flex items-center text-gray-600 mb-2">
-            <Building2 className="w-4 h-4 mr-2" />
-            <span className="text-sm">{project.client}</span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center text-gray-600 mb-2">
+              <Building2 className="w-4 h-4 mr-2" />
+              <span className="text-sm">{project.client}</span>
+            </div>
+
+            <div className="flex flex-col space-y-1 text-xs text-gray-600 mr-2">
+              <div>
+                <span className="font-medium">SM:</span> {project.site_manager || '-'}
+              </div>
+              <div>
+                <span className="font-medium">QS:</span> {project.qs || '-'}
+              </div>
+            </div>
           </div>
 
           {project.project_code && (
@@ -128,15 +139,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
           <div className="flex items-center text-gray-600">
             <Calendar className="w-4 h-4 mr-2" />
             <span className="text-sm">Target: {formatDate(project.start_date_target)}</span>
-          </div>
-        </div>
-
-        <div className="flex flex-col space-y-1 text-xs text-gray-600 mr-2">
-          <div>
-            <span className="font-medium">SM:</span> {project.site_manager || '-'}
-          </div>
-          <div>
-            <span className="font-medium">QS:</span> {project.qs || '-'}
           </div>
         </div>
 

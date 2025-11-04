@@ -130,8 +130,17 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
           let projectCode = row['Project Code'] || '';
           console.log(`Row ${rowNum} - Project Code: "${projectCode}"`);
           if (!projectCode || projectCode.trim() === '') {
-            projectCode = await getNextProjectCode(region);
-            console.log(`Row ${rowNum} - Generated Project Code: "${projectCode}"`);
+            console.log(`Row ${rowNum} - Generating project code for region: ${region}`);
+            try {
+              projectCode = await getNextProjectCode(region);
+              console.log(`Row ${rowNum} - Generated Project Code: "${projectCode}"`);
+              if (!projectCode) {
+                throw new Error('Generated project code is empty or undefined');
+              }
+            } catch (codeError) {
+              console.error(`Row ${rowNum} - Error generating project code:`, codeError);
+              throw new Error(`Failed to generate project code: ${codeError instanceof Error ? codeError.message : 'Unknown error'}`);
+            }
           }
 
           const projectTitle = buildFolderName(projectName, clientName, projectCode);

@@ -105,9 +105,12 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
       let errorCount = 0;
       const errors: string[] = [];
 
+      console.log(`Starting to process ${jsonData.length} row(s)...`);
+
       for (let i = 0; i < jsonData.length; i++) {
         const row = jsonData[i] as any;
         const rowNum = i + 2;
+        console.log(`\n=== Processing row ${rowNum} ===`);
         try {
           console.log(`Processing row ${rowNum}:`, row);
           console.log('Available columns:', Object.keys(row));
@@ -213,8 +216,12 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
         }
       }
 
+      console.log(`\n=== IMPORT COMPLETE ===`);
+      console.log(`Success: ${successCount}, Errors: ${errorCount}`);
+
       if (successCount > 0) {
         alert(`Successfully imported ${successCount} project(s)${errorCount > 0 ? `\n${errorCount} error(s) occurred` : ''}`);
+        await onRefresh();
       } else {
         throw new Error(`Failed to import any projects. Errors:\n${errors.join('\n')}`);
       }

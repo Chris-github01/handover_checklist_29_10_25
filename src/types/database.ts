@@ -12,6 +12,7 @@ export interface Project {
   client: string;
   project_code?: string;
   project_type: 'passive_fire' | 'intumescent' | 'passive_intumescent';
+  region: 'auckland' | 'wellington';
   bwof: boolean;
   start_date_target: string;
   status: 'awarded' | 'await_pre_let' | 'in_progress' | 'active';

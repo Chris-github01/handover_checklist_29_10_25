@@ -13,6 +13,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ onClose, onCrea
     client: '',
     project_code: '',
     project_type: 'passive_fire' as const,
+    region: 'auckland' as const,
     bwof: false,
     start_date_target: '',
     status: 'await_pre_let' as const
@@ -109,6 +110,21 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ onClose, onCrea
               <option value="passive_fire">Passive Fire</option>
               <option value="intumescent">Intumescent</option>
               <option value="passive_intumescent">Passive & Intumescent</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Region
+            </label>
+            <select
+              value={formData.region}
+              onChange={(e) => handleInputChange('region', e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            >
+              <option value="auckland">Auckland</option>
+              <option value="wellington">Wellington</option>
             </select>
           </div>
 

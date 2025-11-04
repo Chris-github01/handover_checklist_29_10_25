@@ -84,38 +84,50 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
       let errorCount = 0;
       const errors: string[] = [];
 
-      for (const row of jsonData as any[]) {
+      for (let i = 0; i < jsonData.length; i++) {
+        const row = jsonData[i] as any;
         try {
           const projectName = row['Project Name'];
           const clientName = row['Client Name'];
-          const region = row['Region'] === 'Auckland' ? 'auckland' : 'wellington';
 
           if (!projectName || !clientName) {
-            throw new Error(`Missing required fields: Project Name or Client Name`);
+            throw new Error(`Missing required fields: Project Name="${projectName}", Client Name="${clientName}"`);
           }
 
+          const rawRegion = row['Region'];
+          const region = rawRegion === 'Auckland' ? 'auckland' :
+                        rawRegion === 'Wellington' ? 'wellington' :
+                        'auckland';
+
           let projectCode = row['Project Code'] || '';
-          if (!projectCode) {
+          if (!projectCode || projectCode.trim() === '') {
             projectCode = await getNextProjectCode(region);
           }
 
           const projectTitle = buildFolderName(projectName, clientName, projectCode);
 
+          const rawProjectType = row['Project Type'];
+          const projectType = rawProjectType === 'Passive Fire' ? 'passive_fire' :
+                              rawProjectType === 'Intumescent' ? 'intumescent' :
+                              'passive_intumescent';
+
+          const rawStatus = row['Project Status'];
+          const status = rawStatus === 'Await Pre-let (Verbal confirmation)' ? 'await_pre_let' :
+                        rawStatus === 'Awarded' ? 'awarded' :
+                        rawStatus === 'In Progress' ? 'in_progress' :
+                        rawStatus === 'Active' ? 'active' :
+                        rawStatus === 'Handover Complete' ? 'handover_complete' :
+                        'await_pre_let';
+
           const projectData = {
             name: projectName,
             client: clientName,
             project_code: projectCode,
-            project_type: row['Project Type'] === 'Passive Fire' ? 'passive_fire' :
-                          row['Project Type'] === 'Intumescent' ? 'intumescent' :
-                          'passive_intumescent',
+            project_type: projectType,
             region: region,
             bwof: row['BWOF'] === 'Yes',
             start_date_target: row['Target Start Date'] || '',
-            status: row['Project Status'] === 'Await Pre-let (Verbal confirmation)' ? 'await_pre_let' :
-                    row['Project Status'] === 'Awarded' ? 'awarded' :
-                    row['Project Status'] === 'In Progress' ? 'in_progress' :
-                    row['Project Status'] === 'Active' ? 'active' :
-                    'handover_complete',
+            status: status,
             site_manager: row['Site Manager (SM)'] || null,
             qs: row['QS'] || null,
             project_title: projectTitle
@@ -126,8 +138,9 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
         } catch (err) {
           errorCount++;
           const errorMsg = err instanceof Error ? err.message : 'Unknown error';
-          errors.push(`Row ${successCount + errorCount}: ${errorMsg}`);
-          console.error('Error importing row:', err, row);
+          const rowNum = i + 2;
+          errors.push(`Row ${rowNum}: ${errorMsg}`);
+          console.error(`Error importing row ${rowNum}:`, err, row);
         }
       }
 

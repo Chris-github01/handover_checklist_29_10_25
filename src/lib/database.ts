@@ -13,6 +13,17 @@ export const getProjects = async (): Promise<Project[]> => {
   return data || [];
 };
 
+export const checkProjectCodeExists = async (projectCode: string): Promise<boolean> => {
+  const { data, error } = await supabase
+    .from('projects')
+    .select('project_code')
+    .eq('project_code', projectCode)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data !== null;
+};
+
 export const getNextProjectCode = async (region: 'auckland' | 'wellington'): Promise<string> => {
   const suffix = region === 'auckland' ? 'A' : 'W';
 

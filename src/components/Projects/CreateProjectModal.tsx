@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { X, Building2, Calendar, User } from 'lucide-react';
+import { X, Building2, Calendar, User, AlertCircle } from 'lucide-react';
 import type { Project } from '../../types/database';
-import { getNextProjectCode } from '../../lib/database';
+import { getNextProjectCode, checkProjectCodeExists } from '../../lib/database';
 import { buildFolderName } from '../../lib/naming';
 
 interface CreateProjectModalProps {
@@ -23,6 +23,8 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ onClose, onCrea
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [loadingCode, setLoadingCode] = useState(false);
+  const [codeExists, setCodeExists] = useState(false);
+  const [suggestedCode, setSuggestedCode] = useState('');
 
   useEffect(() => {
     const fetchNextCode = async () => {
@@ -30,6 +32,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ onClose, onCrea
       try {
         const nextCode = await getNextProjectCode(formData.region);
         setFormData(prev => ({ ...prev, project_code: nextCode }));
+        setSuggestedCode(nextCode);
       } catch (err) {
         console.error('Error fetching next project code:', err);
       } finally {
@@ -40,8 +43,38 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ onClose, onCrea
     fetchNextCode();
   }, [formData.region]);
 
+  useEffect(() => {
+    const checkCode = async () => {
+      if (!formData.project_code) {
+        setCodeExists(false);
+        return;
+      }
+
+      try {
+        const exists = await checkProjectCodeExists(formData.project_code);
+        setCodeExists(exists);
+
+        if (exists) {
+          const nextCode = await getNextProjectCode(formData.region);
+          setSuggestedCode(nextCode);
+        }
+      } catch (err) {
+        console.error('Error checking project code:', err);
+      }
+    };
+
+    const debounceTimer = setTimeout(checkCode, 500);
+    return () => clearTimeout(debounceTimer);
+  }, [formData.project_code, formData.region]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (codeExists) {
+      setError('Project code already exists. Please use the suggested code or enter a different one.');
+      return;
+    }
+
     setLoading(true);
     setError('');
 
@@ -57,6 +90,11 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ onClose, onCrea
 
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const useSuggestedCode = () => {
+    setFormData(prev => ({ ...prev, project_code: suggestedCode }));
+    setCodeExists(false);
   };
 
   const projectTitle = useMemo(() => {
@@ -115,10 +153,31 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ onClose, onCrea
               type="text"
               value={formData.project_code}
               onChange={(e) => handleInputChange('project_code', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                codeExists ? 'border-red-300 bg-red-50' : 'border-gray-300'
+              }`}
               placeholder="Enter project code (optional)"
               disabled={loadingCode}
             />
+            {codeExists && (
+              <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <div className="flex items-start">
+                  <AlertCircle className="w-4 h-4 text-yellow-600 mr-2 mt-0.5 flex-shrink-0" />
+                  <div className="flex-1">
+                    <p className="text-sm text-yellow-800 mb-2">
+                      This project code already exists. Use suggested code: <strong>{suggestedCode}</strong>
+                    </p>
+                    <button
+                      type="button"
+                      onClick={useSuggestedCode}
+                      className="text-sm bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded transition-colors"
+                    >
+                      Use {suggestedCode}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {projectTitle && (

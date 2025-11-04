@@ -59,6 +59,30 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
     fileInputRef.current?.click();
   };
 
+  const excelDateToJSDate = (excelDate: any): string | null => {
+    if (!excelDate) return null;
+
+    // If it's already a string in a valid format, return it
+    if (typeof excelDate === 'string') {
+      // Check if it's already a valid date string
+      const parsed = new Date(excelDate);
+      if (!isNaN(parsed.getTime())) {
+        return excelDate;
+      }
+      return null;
+    }
+
+    // If it's a number (Excel serial date)
+    if (typeof excelDate === 'number') {
+      // Excel dates are days since 1900-01-01 (with a leap year bug)
+      const excelEpoch = new Date(1899, 11, 30); // Dec 30, 1899
+      const date = new Date(excelEpoch.getTime() + excelDate * 24 * 60 * 60 * 1000);
+      return date.toISOString().split('T')[0]; // Return YYYY-MM-DD
+    }
+
+    return null;
+  };
+
   const handleFileImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log('=== IMPORT STARTED ===');
     const file = event.target.files?.[0];
@@ -164,6 +188,10 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
                         rawStatus === 'Handover Complete' ? 'handover_complete' :
                         'await_pre_let';
 
+          const rawStartDate = row['Target Start Date'];
+          const startDate = excelDateToJSDate(rawStartDate);
+          console.log(`Row ${rowNum} - Target Start Date: raw="${rawStartDate}", converted="${startDate}"`);
+
           const projectData = {
             name: projectName,
             client: clientName,
@@ -171,7 +199,7 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
             project_type: projectType,
             region: region,
             bwof: row['BWOF'] === 'Yes',
-            start_date_target: row['Target Start Date'] || '',
+            start_date_target: startDate || '',
             status: status,
             site_manager: row['Site Manager (SM)'] || null,
             qs: row['QS'] || null,

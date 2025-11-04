@@ -1,5 +1,5 @@
-import React from 'react';
-import { Calendar, Building2, ArrowRight, Trash2, CreditCard as Edit, CheckCircle2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { Calendar, Building2, ArrowRight, Trash2, CreditCard as Edit, CheckCircle2, Copy, Check } from 'lucide-react';
 import { ProjectWithStats } from '../../hooks/useProjects';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -13,6 +13,7 @@ interface ProjectCardProps {
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onDelete }) => {
   const { userProfile } = useAuth();
   const isDirector = userProfile?.role === 'Director';
+  const [copied, setCopied] = useState(false);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -78,6 +79,20 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
     onEdit(project);
   };
 
+  const handleCopy = async (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click
+
+    const textToCopy = project.project_title || project.name;
+
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy text:', err);
+    }
+  };
+
   return (
     <div
       onClick={onClick}
@@ -113,6 +128,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
         </div>
         
         <div className="flex items-center space-x-2">
+          <button
+            onClick={handleCopy}
+            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+            title="Copy Project Title"
+          >
+            {copied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
+          </button>
           <button
             onClick={handleEdit}
             className="p-2 text-blue-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors opacity-0 group-hover:opacity-100"

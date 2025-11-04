@@ -62,13 +62,26 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
   const excelDateToJSDate = (excelDate: any): string | null => {
     if (!excelDate) return null;
 
-    // If it's already a string in a valid format, return it
+    // If it's a string
     if (typeof excelDate === 'string') {
-      // Check if it's already a valid date string
-      const parsed = new Date(excelDate);
-      if (!isNaN(parsed.getTime())) {
-        return excelDate;
+      // Handle dates with slashes (e.g., "2025/11/12")
+      if (excelDate.includes('/')) {
+        const parts = excelDate.split('/');
+        if (parts.length === 3) {
+          // Assuming format is YYYY/MM/DD
+          const [year, month, day] = parts;
+          return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+        }
       }
+
+      // Handle dates with dashes (e.g., "2025-11-12")
+      if (excelDate.includes('-')) {
+        const parsed = new Date(excelDate);
+        if (!isNaN(parsed.getTime())) {
+          return excelDate;
+        }
+      }
+
       return null;
     }
 

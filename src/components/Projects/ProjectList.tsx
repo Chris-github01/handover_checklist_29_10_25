@@ -68,15 +68,29 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
+      const { getNextProjectCode } = await import('../../lib/database');
+      const { buildFolderName } = await import('../../lib/naming');
+
       for (const row of jsonData as any[]) {
+        const region = row['Region'] === 'Auckland' ? 'auckland' : 'wellington';
+        const projectName = row['Project Name'] || '';
+        const clientName = row['Client Name'] || '';
+
+        let projectCode = row['Project Code'] || '';
+        if (!projectCode) {
+          projectCode = await getNextProjectCode(region);
+        }
+
+        const projectTitle = buildFolderName(projectName, clientName, projectCode);
+
         const projectData = {
-          name: row['Project Name'] || '',
-          client: row['Client Name'] || '',
-          project_code: row['Project Code'] || '',
+          name: projectName,
+          client: clientName,
+          project_code: projectCode,
           project_type: row['Project Type'] === 'Passive Fire' ? 'passive_fire' :
                         row['Project Type'] === 'Intumescent' ? 'intumescent' :
                         'passive_intumescent',
-          region: row['Region'] === 'Auckland' ? 'auckland' : 'wellington',
+          region: region,
           bwof: row['BWOF'] === 'Yes',
           start_date_target: row['Target Start Date'] || '',
           status: row['Project Status'] === 'Await Pre-let (Verbal confirmation)' ? 'await_pre_let' :
@@ -86,7 +100,7 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
                   'handover_complete',
           site_manager: row['Site Manager (SM)'] || null,
           qs: row['QS'] || null,
-          project_title: ''
+          project_title: projectTitle
         };
 
         await createProject(projectData as any);

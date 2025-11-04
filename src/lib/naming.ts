@@ -64,6 +64,6 @@ export function buildFolderName(projectName: string, clientName: string, project
 
   const proj = shortenProject(projectName);
   const client = shortenClient(clientName);
-  const folder = `${proj} - ${client}_${projectCode}`;
+  const folder = `${proj} -${client}_${projectCode}`;
   return clamp(safe(folder));
 }

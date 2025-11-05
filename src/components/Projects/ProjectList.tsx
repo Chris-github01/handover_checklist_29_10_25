@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useProjects, ProjectWithStats } from '../../hooks/useProjects';
-import { Plus, Search, Building2, AlertCircle, Download, Upload } from 'lucide-react';
+import { Plus, Search, Building2, AlertCircle, Download, Upload, MoreVertical } from 'lucide-react';
 import CreateProjectModal from './CreateProjectModal';
 import EditProjectModal from './EditProjectModal';
 import ProjectCard from './ProjectCard';
@@ -18,6 +18,7 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
   const [activeTab, setActiveTab] = useState<'in_progress' | 'complete'>('in_progress');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [importing, setImporting] = useState(false);
+  const [showActionsMenu, setShowActionsMenu] = useState(false);
 
   const filteredProjects = projects
     .filter(project => {
@@ -323,23 +324,47 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
 
         <div className="flex items-center space-x-3">
           {(userProfile?.email === 'pieter@optimalfire.co.nz' || userProfile?.email === 'ramona@optimalfire.co.nz') && (
-            <>
+            <div className="relative">
               <button
-                onClick={handleExportExcel}
-                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+                onClick={() => setShowActionsMenu(!showActionsMenu)}
+                className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
               >
-                <Download className="w-5 h-5" />
-                <span>Export Projects Excel</span>
+                <MoreVertical className="w-5 h-5" />
+                <span>Actions</span>
               </button>
 
-              <button
-                onClick={handleImportClick}
-                disabled={importing}
-                className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <Upload className="w-5 h-5" />
-                <span>{importing ? 'Importing...' : 'Import Projects'}</span>
-              </button>
+              {showActionsMenu && (
+                <>
+                  <div
+                    className="fixed inset-0 z-10"
+                    onClick={() => setShowActionsMenu(false)}
+                  />
+                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20">
+                    <button
+                      onClick={() => {
+                        handleExportExcel();
+                        setShowActionsMenu(false);
+                      }}
+                      className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center space-x-2 transition-colors"
+                    >
+                      <Download className="w-5 h-5 text-green-600" />
+                      <span className="text-gray-700">Export Projects Excel</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        handleImportClick();
+                        setShowActionsMenu(false);
+                      }}
+                      disabled={importing}
+                      className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center space-x-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <Upload className="w-5 h-5 text-orange-600" />
+                      <span className="text-gray-700">{importing ? 'Importing...' : 'Import Projects'}</span>
+                    </button>
+                  </div>
+                </>
+              )}
 
               <input
                 ref={fileInputRef}
@@ -348,7 +373,7 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
                 onChange={handleFileImport}
                 className="hidden"
               />
-            </>
+            </div>
           )}
 
           <button

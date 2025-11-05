@@ -21,11 +21,11 @@ interface ExtractedData {
 }
 
 function parseAmount(val: any): number {
-  if (typeof val === 'number') return Math.abs(val);
+  if (typeof val === 'number') return Math.round(Math.abs(val) * 100) / 100;
   if (typeof val === 'string') {
     const cleaned = val.replace(/[$\s]/g, '').replace(/,/g, '');
     const value = parseFloat(cleaned);
-    return isNaN(value) ? 0 : Math.abs(value);
+    return isNaN(value) ? 0 : Math.round(Math.abs(value) * 100) / 100;
   }
   return 0;
 }
@@ -64,7 +64,6 @@ function extractFromSpreadsheet(uint8Array: Uint8Array, fileType: string): Extra
   const sheetName = workbook.SheetNames[0];
   const worksheet = workbook.Sheets[sheetName];
   
-  // Read all data starting from row 13 (index 12)
   const data = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '', range: 12 }) as any[][];
   
   console.log('Total rows from row 13:', data.length);
@@ -79,37 +78,27 @@ function extractFromSpreadsheet(uint8Array: Uint8Array, fileType: string): Extra
     const row = data[i];
     if (!row || row.length === 0) continue;
     
-    // Column B is index 1 (0-based)
     const itemNumber = String(row[1] || '').trim();
     
-    // Skip empty item numbers
     if (!itemNumber) continue;
     
-    // Check if this is Contract Works (starts with "1" like 1, 1.1, 1.2, etc.)
     const isContractWork = itemNumber.match(/^1(\.\d+)?$/);
     
-    // Check if this is Variation Work (starts with "2" like 2, 2.1, 2.2, etc.)
     const isVariation = itemNumber.match(/^2(\.\d+)?$/);
     
     if (!isContractWork && !isVariation) continue;
     
-    // Column C-J (indices 2-9): Description
     const description = combineWrappedColumns(row, 2, 9);
     
-    // Column M (index 12): Total value
     const totalValue = parseAmount(row[12] || 0);
     
-    // Column N (index 13): Percentage
     const percentage = parsePercentage(row[13] || 0);
     
-    // Columns O, P, Q (indices 14, 15, 16): Claimed to date
     const claimedText = combineWrappedColumns(row, 14, 16);
     const claimedValue = parseAmount(claimedText);
     
-    // Use claimed value if available, otherwise calculate from percentage
-    const claimed = claimedValue > 0 ? claimedValue : (totalValue * (percentage / 100));
+    const claimed = claimedValue > 0 ? claimedValue : Math.round(totalValue * (percentage / 100) * 100) / 100;
     
-    // Skip rows with no value
     if (totalValue === 0) continue;
     
     const item = {

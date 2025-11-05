@@ -82,9 +82,9 @@ function extractFromSpreadsheet(uint8Array: Uint8Array, fileType: string): Extra
     
     if (!itemNumber) continue;
     
-    const isContractWork = itemNumber.match(/^1(\.\d+)?$/);
+    const isContractWork = itemNumber.match(/^1(\.\d+)*$/);
     
-    const isVariation = itemNumber.match(/^2(\.\d+)?$/);
+    const isVariation = itemNumber.match(/^2(\.\d+)*$/);
     
     if (!isContractWork && !isVariation) continue;
     

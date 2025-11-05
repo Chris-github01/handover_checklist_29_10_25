@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Trash2, Save, FileUp } from 'lucide-react';
+import { X, Plus, Trash2, Save } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
-import { PDFImportModal } from './PDFImportModal';
 
 interface Variation {
   id?: string;
@@ -24,7 +23,6 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showPDFImport, setShowPDFImport] = useState(false);
 
   useEffect(() => {
     loadCostData();
@@ -91,27 +89,6 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
     const updated = variations.filter((_, i) => i !== index);
     const reindexed = updated.map((v, i) => ({ ...v, order_index: i }));
     setVariations(reindexed);
-  };
-
-  const handlePDFImport = (data: any) => {
-    if (data.contractWorks && data.contractWorks.length > 0) {
-      const totalValue = data.contractWorks.reduce((sum: number, item: any) => sum + item.value, 0);
-      const totalClaimed = data.contractWorks.reduce((sum: number, item: any) => sum + item.claimed, 0);
-      setAgreedContractValue(totalValue);
-      setContractWorksClaimed(totalClaimed);
-    }
-
-    if (data.variations && data.variations.length > 0) {
-      const importedVariations = data.variations.map((v: any, index: number) => ({
-        description: v.description,
-        value: v.value,
-        claimed_amount: v.claimed,
-        order_index: index
-      }));
-      setVariations(importedVariations);
-    }
-
-    setShowPDFImport(false);
   };
 
   const handleSave = async () => {
@@ -201,16 +178,6 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
               <p className="text-sm text-red-600">{error}</p>
             </div>
           )}
-
-          <div className="flex justify-end">
-            <button
-              onClick={() => setShowPDFImport(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm"
-            >
-              <FileUp className="w-4 h-4" />
-              Import from PDF
-            </button>
-          </div>
 
           <div className="bg-blue-50 rounded-lg p-4 space-y-4">
             <h3 className="font-semibold text-gray-900">Contract Works</h3>
@@ -410,12 +377,6 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
         </div>
       </div>
 
-      {showPDFImport && (
-        <PDFImportModal
-          onClose={() => setShowPDFImport(false)}
-          onImport={handlePDFImport}
-        />
-      )}
     </div>
   );
 }

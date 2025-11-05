@@ -160,6 +160,11 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
         return;
       }
 
+      // Clear all existing data before importing
+      setAgreedContractValue(0);
+      setContractWorksClaimed(0);
+      setVariations([]);
+
       // Update contract works
       if (data.contractWorks && data.contractWorks.length > 0) {
         const totalValue = data.contractWorks.reduce((sum: number, item: any) => sum + item.value, 0);
@@ -169,16 +174,16 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
         setContractWorksClaimed(totalClaimed);
       }
 
-      // Update variations
+      // Update variations (replace all, not append)
       if (data.variations && data.variations.length > 0) {
         const importedVariations = data.variations.map((v: any, index: number) => ({
           description: v.description,
           value: v.value,
           claimed_amount: v.claimed,
-          order_index: variations.length + index
+          order_index: index
         }));
-        console.log('Adding variations:', importedVariations);
-        setVariations([...variations, ...importedVariations]);
+        console.log('Setting variations:', importedVariations);
+        setVariations(importedVariations);
       }
 
       // Show success message

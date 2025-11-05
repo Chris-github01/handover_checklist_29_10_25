@@ -3,7 +3,9 @@ import { useProjectStages } from '../../hooks/useProjects';
 import { useAuth } from '../../contexts/AuthContext';
 import { initializeProjectStages } from '../../lib/database';
 import { supabase } from '../../lib/supabase';
-import { ArrowLeft, Search, Filter, Download } from 'lucide-react';
+import { ArrowLeft, Search, Filter, Download, DollarSign, FileText } from 'lucide-react';
+import { CostAllocationModal } from '../Projects/CostAllocationModal';
+import { CostReportModal } from '../Projects/CostReportModal';
 import StageTile from './StageTile';
 import StageModal from './StageModal';
 import type { StageWithItems, Project } from '../../types/database';
@@ -11,12 +13,15 @@ import type { StageWithItems, Project } from '../../types/database';
 interface StageGridProps {
   projectId: string;
   projectName: string;
+  projectCode?: string;
+  projectClient: string;
+  projectStatus: string;
   projectBwof: boolean;
   isSmallProject: boolean;
   onBack: () => void;
 }
 
-const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectBwof, isSmallProject, onBack }) => {
+const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCode, projectClient, projectStatus, projectBwof, isSmallProject, onBack }) => {
   const { stages, loading, error, refreshStages } = useProjectStages(projectId);
   const { userProfile } = useAuth();
   const [selectedStage, setSelectedStage] = useState<StageWithItems | null>(null);
@@ -24,6 +29,8 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectBw
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'in_progress' | 'complete'>('all');
   const [currentBwof, setCurrentBwof] = useState(projectBwof);
+  const [showCostAllocation, setShowCostAllocation] = useState(false);
+  const [showCostReport, setShowCostReport] = useState(false);
 
   // Fetch current project BWOF status
   useEffect(() => {
@@ -323,14 +330,38 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectBw
             <p className="text-gray-600 mt-1">Project handover checklist</p>
           </div>
         </div>
-        
-        <button
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
-          title="Export PDF"
-        >
-          <Download className="w-5 h-5" />
-          <span>Export PDF</span>
-        </button>
+
+        <div className="flex items-center gap-3">
+          {projectStatus === 'live' && (
+            <>
+              <button
+                onClick={() => setShowCostAllocation(true)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+                title="Cost Allocation"
+              >
+                <DollarSign className="w-5 h-5" />
+                <span>Cost Allocation</span>
+              </button>
+
+              <button
+                onClick={() => setShowCostReport(true)}
+                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+                title="Generate Cost Report"
+              >
+                <FileText className="w-5 h-5" />
+                <span>Generate Cost Report</span>
+              </button>
+            </>
+          )}
+
+          <button
+            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+            title="Export PDF"
+          >
+            <Download className="w-5 h-5" />
+            <span>Export PDF</span>
+          </button>
+        </div>
       </div>
 
       {/* Filters */}
@@ -420,6 +451,26 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectBw
           canEdit={canUserEditStage(selectedStage)}
           onClose={() => setSelectedStage(null)}
           onUpdate={handleStageUpdate}
+        />
+      )}
+
+      {/* Cost Allocation Modal */}
+      {showCostAllocation && (
+        <CostAllocationModal
+          projectId={projectId}
+          projectName={projectName}
+          onClose={() => setShowCostAllocation(false)}
+        />
+      )}
+
+      {/* Cost Report Modal */}
+      {showCostReport && (
+        <CostReportModal
+          projectId={projectId}
+          projectName={projectName}
+          projectCode={projectCode}
+          client={projectClient}
+          onClose={() => setShowCostReport(false)}
         />
       )}
     </div>

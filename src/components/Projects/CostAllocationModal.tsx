@@ -98,19 +98,26 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
     const file = e.target.files?.[0];
     console.log('File selected:', file?.name, 'Type:', file?.type, 'Size:', file?.size);
 
-    if (file && (file.type === 'application/pdf' || file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.name.endsWith('.xlsx') || file.name.endsWith('.xls'))) {
+    if (file && (
+      file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+      file.type === 'application/vnd.ms-excel' ||
+      file.type === 'text/csv' ||
+      file.name.endsWith('.xlsx') ||
+      file.name.endsWith('.xls') ||
+      file.name.endsWith('.csv')
+    )) {
       console.log('File accepted');
       setSelectedFile(file);
       setError(null);
     } else {
       console.log('File rejected');
-      setError(`Please select a valid PDF or Excel file (.xlsx). Current file type: ${file?.type || 'unknown'}`);
+      setError(`Please select a valid Excel or CSV file (.xlsx, .xls, .csv). Current file type: ${file?.type || 'unknown'}`);
     }
   };
 
   const handleExtractPDF = async () => {
     if (!selectedFile) {
-      setError('Please select a PDF or Excel file first');
+      setError('Please select an Excel or CSV file first');
       return;
     }
 
@@ -293,11 +300,11 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
             <h3 className="font-semibold text-gray-900 mb-4">Import from Payment Claim</h3>
             <div className="space-y-3">
               <div className="flex items-center gap-3">
-                <label htmlFor="pdf-upload" className="flex-1">
+                <label htmlFor="file-upload" className="flex-1">
                   <input
-                    id="pdf-upload"
+                    id="file-upload"
                     type="file"
-                    accept="application/pdf,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv"
                     onChange={handleFileSelect}
                     disabled={extracting}
                     className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 disabled:opacity-50"
@@ -322,7 +329,7 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
                 </button>
               </div>
               <p className="text-xs text-gray-600">
-                Upload a PDF cost report to automatically extract contract values and variations
+                Upload an Excel (.xlsx, .xls) or CSV file to automatically extract contract values and variations
               </p>
             </div>
           </div>

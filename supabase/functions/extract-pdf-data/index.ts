@@ -40,18 +40,29 @@ function parsePercentage(val: any): number {
   return 0;
 }
 
-function extractFromExcel(uint8Array: Uint8Array): ExtractedData {
-  const workbook = XLSX.read(uint8Array, { type: 'array' });
+function extractFromSpreadsheet(uint8Array: Uint8Array, fileType: string): ExtractedData {
+  // For CSV files, specify the type as 'string' and decode first
+  let workbook: XLSX.WorkBook;
+  
+  if (fileType === 'csv') {
+    const decoder = new TextDecoder('utf-8');
+    const text = decoder.decode(uint8Array);
+    workbook = XLSX.read(text, { type: 'string' });
+  } else {
+    // For Excel files (.xlsx, .xls)
+    workbook = XLSX.read(uint8Array, { type: 'array' });
+  }
+  
   const sheetName = workbook.SheetNames[0];
   const worksheet = workbook.Sheets[sheetName];
   
-  // Read with range limit: columns A to Q only (0-16 in 0-indexed)
+  // Read with all data
   const data = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '', range: 0 }) as any[][];
   
   // Filter each row to only include columns A-Q (indices 0-16)
   const filteredData = data.map(row => row.slice(0, 17));
   
-  console.log('Excel rows:', filteredData.length);
+  console.log('Total rows:', filteredData.length);
   console.log('First 10 rows (columns A-Q only):', JSON.stringify(filteredData.slice(0, 10), null, 2));
   
   const extractedData: ExtractedData = {
@@ -181,161 +192,6 @@ function extractFromExcel(uint8Array: Uint8Array): ExtractedData {
   return extractedData;
 }
 
-function extractTextFromPDF(uint8Array: Uint8Array): string {
-  let text = "";
-  const decoder = new TextDecoder('utf-8', { fatal: false });
-  
-  try {
-    text = decoder.decode(uint8Array);
-    if (text.length > 0) {
-      return text;
-    }
-  } catch (e) {
-    console.log('UTF-8 decoding failed, trying byte-by-byte');
-  }
-  
-  text = "";
-  for (let i = 0; i < uint8Array.length; i++) {
-    const byte = uint8Array[i];
-    if ((byte >= 32 && byte <= 126) || byte === 10 || byte === 13) {
-      text += String.fromCharCode(byte);
-    }
-  }
-  
-  return text;
-}
-
-function extractFromPDF(uint8Array: Uint8Array): ExtractedData {
-  const text = extractTextFromPDF(uint8Array);
-  console.log('Extracted text length:', text.length);
-  
-  const extractedData: ExtractedData = {
-    contractWorks: [],
-    variations: [],
-  };
-  
-  const lines = text.split(/[\r\n]+/).map(l => l.trim()).filter(l => l.length > 0);
-  console.log('Total lines:', lines.length);
-  
-  let inBaseContract = false;
-  let inVariations = false;
-  const descriptionMap = new Map<string, string>();
-  
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    
-    if (line.match(/^(SI-|VARCO-|OFL-|Quote|Credit:|Alternative|Scope|IFC:|Refer)/i)) {
-      const prevLine = i > 0 ? lines[i - 1] : '';
-      const varMatch = prevLine.match(/^(\d+\.\d+(?:rev\d?)?)/);
-      if (varMatch) {
-        const varNum = varMatch[1];
-        if (!descriptionMap.has(varNum)) {
-          descriptionMap.set(varNum, line.substring(0, 100));
-        }
-      }
-    }
-  }
-  
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    
-    if (line.includes('BASE CONTRACT')) {
-      inBaseContract = true;
-      inVariations = false;
-      continue;
-    }
-    
-    if (line.includes('VARIATIONS') || line.match(/^Var\s+No/i)) {
-      inBaseContract = false;
-      inVariations = true;
-      continue;
-    }
-    
-    if (line.includes('TOTAL VARIATIONS') || line.includes('SUMMARY')) {
-      inVariations = false;
-      continue;
-    }
-    
-    if (line.includes('TOTAL BASE CONTRACT')) {
-      inBaseContract = false;
-      continue;
-    }
-    
-    if (inBaseContract) {
-      const contractPattern = /^(1\.\d+)\s+([\d.]+)\s+Sum\s+([\d,]+\.\d{2})\s*\$\s*([\d.]+)%/;
-      const match = line.match(contractPattern);
-      
-      if (match) {
-        const itemNum = match[1];
-        const amount = parseAmount(match[3]);
-        const percentage = parseFloat(match[4]);
-        const claimed = amount * (percentage / 100);
-        
-        extractedData.contractWorks.push({
-          description: `Item ${itemNum}`,
-          value: amount,
-          claimed: claimed,
-        });
-      }
-    }
-    
-    if (inVariations) {
-      const varPattern = /^(\d+\.\d+(?:rev\d?)?)\s+([\d.]+)\s+(Sum|Under Review)\s+(.+)/;
-      const match = line.match(varPattern);
-      
-      if (match) {
-        const varNum = match[1];
-        const status = match[3];
-        const restOfLine = match[4];
-        
-        let value = 0;
-        let percentage = 0;
-        
-        if (status === 'Under Review') {
-          const reviewPattern1 = /\$\s*([\d.]+)%\s+([\d,]+\.\d{2})/;
-          const reviewPattern2 = /\$\s*([\d,]+\.\d{2})\s+([\d.]+)%/;
-          
-          const match1 = restOfLine.match(reviewPattern1);
-          const match2 = restOfLine.match(reviewPattern2);
-          
-          if (match1) {
-            percentage = parseFloat(match1[1]);
-            value = parseAmount(match1[2]);
-          } else if (match2) {
-            value = parseAmount(match2[1]);
-            percentage = parseFloat(match2[2]);
-          }
-        } else {
-          const sumPattern = /(-?\$?\s*[\d,]+\.\d{2}|-)?\s*\$\s*([\d.]+)%/;
-          const sumMatch = restOfLine.match(sumPattern);
-          
-          if (sumMatch) {
-            const amountStr = sumMatch[1];
-            if (amountStr && amountStr !== '-') {
-              value = parseAmount(amountStr);
-            }
-            percentage = parseFloat(sumMatch[2]);
-          }
-        }
-        
-        if (value === 0 && percentage === 0) continue;
-        if (value === 0 && !restOfLine.includes('$')) continue;
-        
-        const claimed = value * (percentage / 100);
-        const description = descriptionMap.get(varNum) || `Variation ${varNum}`;
-        
-        extractedData.variations.push({
-          description: description,
-          value: Math.abs(value),
-          claimed: Math.abs(claimed),
-        });
-      }
-    }
-  }
-  
-  return extractedData;
-}
-
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response(null, {
@@ -365,14 +221,14 @@ Deno.serve(async (req: Request) => {
     
     let extractedData: ExtractedData;
     
-    // Check file type
-    if (file.name.endsWith('.xlsx') || file.type.includes('spreadsheet')) {
-      console.log('Processing as Excel file (columns A-Q only)');
-      extractedData = extractFromExcel(uint8Array);
-    } else {
-      console.log('Processing as PDF file');
-      extractedData = extractFromPDF(uint8Array);
+    // Determine file type
+    let fileType = 'excel';
+    if (file.name.endsWith('.csv') || file.type === 'text/csv') {
+      fileType = 'csv';
     }
+    
+    console.log('Processing as', fileType, 'file (columns A-Q only)');
+    extractedData = extractFromSpreadsheet(uint8Array, fileType);
 
     console.log('Extraction complete. Contract works:', extractedData.contractWorks.length, 'Variations:', extractedData.variations.length);
 

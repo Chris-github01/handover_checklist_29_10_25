@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useProjects, ProjectWithStats } from '../../hooks/useProjects';
-import { Plus, Search, Building2, AlertCircle, Download, Upload, MoreVertical } from 'lucide-react';
+import { Plus, Search, Building2, AlertCircle, Download, Upload, MoreVertical, FileText } from 'lucide-react';
 import CreateProjectModal from './CreateProjectModal';
 import EditProjectModal from './EditProjectModal';
 import ProjectCard from './ProjectCard';
@@ -60,6 +60,65 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
 
   const handleImportClick = () => {
     fileInputRef.current?.click();
+  };
+
+  const handleDownloadPDFTemplate = () => {
+    const templateContent = `
+PROJECT CREATION TEMPLATE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Project Name: ___________________________________________
+
+Client Name: ____________________________________________
+
+Project Code: ___________________________________________
+  (Optional - Auto-generated if left blank)
+
+Project Type:
+  ☐ Passive Fire
+  ☐ Intumescent
+  ☐ Passive & Intumescent
+
+Region:
+  ☐ Auckland
+  ☐ Wellington
+
+BWOF (Building Warrant of Fitness):
+  ☐ Yes (Skips stages 1-3)
+  ☐ No
+
+Target Start Date: ______________________________________
+  (Format: YYYY-MM-DD)
+
+Project Status:
+  ☐ Await Pre-let (Verbal confirmation)
+  ☐ Awarded
+  ☐ In Progress
+  ☐ Active
+
+Site Manager (SM): ______________________________________
+  (Optional)
+
+QS (Quantity Surveyor): _________________________________
+  (Optional)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NOTES:
+- All fields marked as required must be filled
+- Project Code will be auto-generated if left blank
+- Project Title is auto-generated from: Project Name, Client Name, and Project Code
+- BWOF projects skip stages 1-3 in the handover process
+`;
+
+    const blob = new Blob([templateContent], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'Project_Template.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
   };
 
   const excelDateToJSDate = (excelDate: any): string | null => {
@@ -340,6 +399,17 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
                     onClick={() => setShowActionsMenu(false)}
                   />
                   <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20">
+                    <button
+                      onClick={() => {
+                        handleDownloadPDFTemplate();
+                        setShowActionsMenu(false);
+                      }}
+                      className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center space-x-2 transition-colors"
+                    >
+                      <FileText className="w-5 h-5 text-blue-600" />
+                      <span className="text-gray-700">Projects PDF Template</span>
+                    </button>
+
                     <button
                       onClick={() => {
                         handleExportExcel();

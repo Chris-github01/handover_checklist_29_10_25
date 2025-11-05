@@ -96,11 +96,15 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file && (file.type === 'application/pdf' || file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.name.endsWith('.xlsx'))) {
+    console.log('File selected:', file?.name, 'Type:', file?.type, 'Size:', file?.size);
+
+    if (file && (file.type === 'application/pdf' || file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.name.endsWith('.xlsx') || file.name.endsWith('.xls'))) {
+      console.log('File accepted');
       setSelectedFile(file);
       setError(null);
     } else {
-      setError('Please select a valid PDF or Excel file (.xlsx)');
+      console.log('File rejected');
+      setError(`Please select a valid PDF or Excel file (.xlsx). Current file type: ${file?.type || 'unknown'}`);
     }
   };
 

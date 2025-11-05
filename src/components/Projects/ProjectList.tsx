@@ -514,17 +514,6 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
 
                   <button
                     onClick={() => {
-                      setShowProjectCodeModal(true);
-                      setShowActionsMenu(false);
-                    }}
-                    className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center space-x-2 transition-colors"
-                  >
-                    <Hash className="w-5 h-5 text-purple-600" />
-                    <span className="text-gray-700">Generate Project Code</span>
-                  </button>
-
-                  <button
-                    onClick={() => {
                       handleDownloadPDFTemplate();
                       setShowActionsMenu(false);
                     }}

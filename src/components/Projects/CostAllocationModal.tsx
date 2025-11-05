@@ -96,17 +96,17 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file && file.type === 'application/pdf') {
+    if (file && (file.type === 'application/pdf' || file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.name.endsWith('.xlsx'))) {
       setSelectedFile(file);
       setError(null);
     } else {
-      setError('Please select a valid PDF file');
+      setError('Please select a valid PDF or Excel file (.xlsx)');
     }
   };
 
   const handleExtractPDF = async () => {
     if (!selectedFile) {
-      setError('Please select a PDF file first');
+      setError('Please select a PDF or Excel file first');
       return;
     }
 
@@ -114,7 +114,7 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
       setExtracting(true);
       setError(null);
 
-      console.log('Starting PDF extraction for file:', selectedFile.name);
+      console.log('Starting file extraction for:', selectedFile.name, 'Type:', selectedFile.type);
 
       const formData = new FormData();
       formData.append('file', selectedFile);
@@ -145,7 +145,7 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
 
       // Check if we got any data
       if (!data.contractWorks?.length && !data.variations?.length) {
-        setError(`No data could be extracted from the PDF. Contract works: ${data.contractWorks?.length || 0}, Variations: ${data.variations?.length || 0}. Please check the browser console for details.`);
+        setError(`No data could be extracted from the file. Contract works: ${data.contractWorks?.length || 0}, Variations: ${data.variations?.length || 0}. Please check the browser console for details.`);
         return;
       }
 
@@ -286,14 +286,14 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
           )}
 
           <div className="bg-gray-50 rounded-lg p-4 mb-6">
-            <h3 className="font-semibold text-gray-900 mb-4">Import from PDF</h3>
+            <h3 className="font-semibold text-gray-900 mb-4">Import from Payment Claim</h3>
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <label htmlFor="pdf-upload" className="flex-1">
                   <input
                     id="pdf-upload"
                     type="file"
-                    accept="application/pdf"
+                    accept="application/pdf,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     onChange={handleFileSelect}
                     disabled={extracting}
                     className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 disabled:opacity-50"

@@ -21,11 +21,11 @@ interface ExtractedData {
 }
 
 function parseAmount(val: any): number {
-  if (typeof val === 'number') return Math.round(Math.abs(val) * 100) / 100;
+  if (typeof val === 'number') return Math.round(val * 100) / 100;
   if (typeof val === 'string') {
     const cleaned = val.replace(/[$\s]/g, '').replace(/,/g, '');
     const value = parseFloat(cleaned);
-    return isNaN(value) ? 0 : Math.round(Math.abs(value) * 100) / 100;
+    return isNaN(value) ? 0 : Math.round(value * 100) / 100;
   }
   return 0;
 }
@@ -89,18 +89,26 @@ function extractFromSpreadsheet(uint8Array: Uint8Array, fileType: string): Extra
     if (!isContractWork && !isVariation) continue;
     
     const description = combineWrappedColumns(row, 2, 9);
-    
-    const totalValue = parseAmount(row[12] || 0);
-    
+
+    const isCredit = description.toLowerCase().includes('credit:');
+
+    let totalValue = parseAmount(row[12] || 0);
+    if (isCredit && totalValue > 0) {
+      totalValue = -totalValue;
+    }
+
     const percentage = parsePercentage(row[13] || 0);
-    
+
     const claimedText = combineWrappedColumns(row, 14, 16);
-    const claimedValue = parseAmount(claimedText);
-    
-    const claimed = claimedValue > 0 ? claimedValue : Math.round(totalValue * (percentage / 100) * 100) / 100;
-    
+    let claimedValue = parseAmount(claimedText);
+    if (isCredit && claimedValue > 0) {
+      claimedValue = -claimedValue;
+    }
+
+    const claimed = claimedValue !== 0 ? claimedValue : Math.round(totalValue * (percentage / 100) * 100) / 100;
+
     if (totalValue === 0) continue;
-    
+
     const item = {
       description: description || `Item ${itemNumber}`,
       value: totalValue,

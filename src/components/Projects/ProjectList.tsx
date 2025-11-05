@@ -8,6 +8,7 @@ import * as XLSX from 'xlsx';
 import { getNextProjectCode } from '../../lib/database';
 import { buildFolderName } from '../../lib/naming';
 import { useAuth } from '../../contexts/AuthContext';
+import jsPDF from 'jspdf';
 
 const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: string, projectBwof: boolean) => void }> = ({ onSelectProject }) => {
   const { projects, loading, error, createProject, updateProject, deleteProject } = useProjects();
@@ -63,62 +64,141 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
   };
 
   const handleDownloadPDFTemplate = () => {
-    const templateContent = `
-PROJECT CREATION TEMPLATE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    const doc = new jsPDF();
 
-Project Name: ___________________________________________
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.text('PROJECT CREATION TEMPLATE', 105, 20, { align: 'center' });
 
-Client Name: ____________________________________________
+    doc.setLineWidth(0.5);
+    doc.line(20, 25, 190, 25);
 
-Project Code: ___________________________________________
-  (Optional - Auto-generated if left blank)
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    let yPos = 40;
 
-Project Type:
-  ☐ Passive Fire
-  ☐ Intumescent
-  ☐ Passive & Intumescent
+    doc.text('Project Name:', 20, yPos);
+    doc.setFont('helvetica', 'normal');
+    doc.line(55, yPos, 190, yPos);
+    yPos += 10;
 
-Region:
-  ☐ Auckland
-  ☐ Wellington
+    doc.setFont('helvetica', 'bold');
+    doc.text('Client Name:', 20, yPos);
+    doc.setFont('helvetica', 'normal');
+    doc.line(55, yPos, 190, yPos);
+    yPos += 10;
 
-BWOF (Building Warrant of Fitness):
-  ☐ Yes (Skips stages 1-3)
-  ☐ No
+    doc.setFont('helvetica', 'bold');
+    doc.text('Project Code:', 20, yPos);
+    doc.setFont('helvetica', 'normal');
+    doc.line(55, yPos, 190, yPos);
+    yPos += 5;
+    doc.setFontSize(9);
+    doc.text('(Optional - Auto-generated if left blank)', 22, yPos);
+    yPos += 10;
 
-Target Start Date: ______________________________________
-  (Format: YYYY-MM-DD)
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Project Type:', 20, yPos);
+    yPos += 8;
+    doc.setFont('helvetica', 'normal');
+    doc.rect(25, yPos - 4, 4, 4);
+    doc.text('Passive Fire', 32, yPos);
+    yPos += 7;
+    doc.rect(25, yPos - 4, 4, 4);
+    doc.text('Intumescent', 32, yPos);
+    yPos += 7;
+    doc.rect(25, yPos - 4, 4, 4);
+    doc.text('Passive & Intumescent', 32, yPos);
+    yPos += 12;
 
-Project Status:
-  ☐ Await Pre-let (Verbal confirmation)
-  ☐ Awarded
-  ☐ In Progress
-  ☐ Active
+    doc.setFont('helvetica', 'bold');
+    doc.text('Region:', 20, yPos);
+    yPos += 8;
+    doc.setFont('helvetica', 'normal');
+    doc.rect(25, yPos - 4, 4, 4);
+    doc.text('Auckland', 32, yPos);
+    yPos += 7;
+    doc.rect(25, yPos - 4, 4, 4);
+    doc.text('Wellington', 32, yPos);
+    yPos += 12;
 
-Site Manager (SM): ______________________________________
-  (Optional)
+    doc.setFont('helvetica', 'bold');
+    doc.text('BWOF (Building Warrant of Fitness):', 20, yPos);
+    yPos += 8;
+    doc.setFont('helvetica', 'normal');
+    doc.rect(25, yPos - 4, 4, 4);
+    doc.text('Yes (Skips stages 1-3)', 32, yPos);
+    yPos += 7;
+    doc.rect(25, yPos - 4, 4, 4);
+    doc.text('No', 32, yPos);
+    yPos += 12;
 
-QS (Quantity Surveyor): _________________________________
-  (Optional)
+    doc.setFont('helvetica', 'bold');
+    doc.text('Target Start Date:', 20, yPos);
+    doc.setFont('helvetica', 'normal');
+    doc.line(65, yPos, 120, yPos);
+    yPos += 5;
+    doc.setFontSize(9);
+    doc.text('(Format: YYYY-MM-DD)', 22, yPos);
+    yPos += 10;
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-NOTES:
-- All fields marked as required must be filled
-- Project Code will be auto-generated if left blank
-- Project Title is auto-generated from: Project Name, Client Name, and Project Code
-- BWOF projects skip stages 1-3 in the handover process
-`;
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Project Status:', 20, yPos);
+    yPos += 8;
+    doc.setFont('helvetica', 'normal');
+    doc.rect(25, yPos - 4, 4, 4);
+    doc.text('Await Pre-let (Verbal confirmation)', 32, yPos);
+    yPos += 7;
+    doc.rect(25, yPos - 4, 4, 4);
+    doc.text('Awarded', 32, yPos);
+    yPos += 7;
+    doc.rect(25, yPos - 4, 4, 4);
+    doc.text('In Progress', 32, yPos);
+    yPos += 7;
+    doc.rect(25, yPos - 4, 4, 4);
+    doc.text('Active', 32, yPos);
+    yPos += 12;
 
-    const blob = new Blob([templateContent], { type: 'text/plain' });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'Project_Template.txt';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Site Manager (SM):', 20, yPos);
+    doc.setFont('helvetica', 'normal');
+    doc.line(65, yPos, 190, yPos);
+    yPos += 5;
+    doc.setFontSize(9);
+    doc.text('(Optional)', 22, yPos);
+    yPos += 10;
+
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text('QS (Quantity Surveyor):', 20, yPos);
+    doc.setFont('helvetica', 'normal');
+    doc.line(75, yPos, 190, yPos);
+    yPos += 5;
+    doc.setFontSize(9);
+    doc.text('(Optional)', 22, yPos);
+    yPos += 15;
+
+    doc.setLineWidth(0.5);
+    doc.line(20, yPos, 190, yPos);
+    yPos += 8;
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text('NOTES:', 20, yPos);
+    yPos += 6;
+    doc.setFont('helvetica', 'normal');
+    doc.text('- All fields marked as required must be filled', 22, yPos);
+    yPos += 5;
+    doc.text('- Project Code will be auto-generated if left blank', 22, yPos);
+    yPos += 5;
+    doc.text('- Project Title is auto-generated from: Project Name, Client Name, and Project Code', 22, yPos);
+    yPos += 5;
+    doc.text('- BWOF projects skip stages 1-3 in the handover process', 22, yPos);
+
+    const timestamp = new Date().toISOString().split('T')[0];
+    doc.save(`Project_Template_${timestamp}.pdf`);
   };
 
   const excelDateToJSDate = (excelDate: any): string | null => {

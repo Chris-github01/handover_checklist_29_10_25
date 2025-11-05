@@ -79,13 +79,13 @@ function extractFromSpreadsheet(uint8Array: Uint8Array, fileType: string): Extra
     if (!row || row.length === 0) continue;
     
     const itemNumber = String(row[1] || '').trim();
-    
+
     if (!itemNumber) continue;
-    
-    const isContractWork = itemNumber.match(/^1(\.\d+)*$/);
-    
-    const isVariation = itemNumber.match(/^2(\.\d+)*$/);
-    
+
+    const isContractWork = itemNumber.match(/^1(\.\d+)*/);
+
+    const isVariation = itemNumber.match(/^2(\.\d+)*/);
+
     if (!isContractWork && !isVariation) continue;
     
     const description = combineWrappedColumns(row, 2, 9);

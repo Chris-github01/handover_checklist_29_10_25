@@ -136,13 +136,12 @@ export function PDFImportModal({ onClose, onImport }: PDFImportModalProps) {
     setError(null);
 
     try {
-      const pdfjsLib = await import('pdfjs-dist');
-      const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.mjs?url');
+      const pdfjs = await import('pdfjs-dist');
 
-      pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker.default;
+      pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
 
       const arrayBuffer = await file.arrayBuffer();
-      const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+      const loadingTask = pdfjs.getDocument({ data: arrayBuffer });
       const pdf = await loadingTask.promise;
 
       let fullText = '';

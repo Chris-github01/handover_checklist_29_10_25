@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, Upload, FileText, AlertCircle, Check, Edit2 } from 'lucide-react';
-import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
+import * as pdfjsLib from 'pdfjs-dist/build/pdf.mjs';
 
 interface ExtractedData {
   contractWorks: {
@@ -137,7 +137,10 @@ export function PDFImportModal({ onClose, onImport }: PDFImportModalProps) {
     setError(null);
 
     try {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+      pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+        'pdfjs-dist/build/pdf.worker.mjs',
+        import.meta.url
+      ).toString();
 
       const arrayBuffer = await file.arrayBuffer();
       const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });

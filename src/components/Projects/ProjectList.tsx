@@ -4,6 +4,7 @@ import { Plus, Search, Building2, AlertCircle, Download, Upload, MoreVertical, F
 import CreateProjectModal from './CreateProjectModal';
 import CreateSmallProjectModal from './CreateSmallProjectModal';
 import EditProjectModal from './EditProjectModal';
+import PDFTemplateModal from './PDFTemplateModal';
 import ProjectCard from './ProjectCard';
 import * as XLSX from 'xlsx';
 import { getNextProjectCode } from '../../lib/database';
@@ -23,6 +24,7 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
   const [importing, setImporting] = useState(false);
   const [showActionsMenu, setShowActionsMenu] = useState(false);
   const [showProjectCodeModal, setShowProjectCodeModal] = useState(false);
+  const [showPDFTemplateModal, setShowPDFTemplateModal] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState<'auckland' | 'wellington'>('auckland');
   const [generatedCode, setGeneratedCode] = useState('');
   const [loadingCode, setLoadingCode] = useState(false);
@@ -516,7 +518,7 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
 
                   <button
                     onClick={() => {
-                      handleDownloadPDFTemplate();
+                      setShowPDFTemplateModal(true);
                       setShowActionsMenu(false);
                     }}
                     className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center space-x-2 transition-colors"
@@ -666,6 +668,12 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
           project={editingProject}
           onClose={() => setEditingProject(null)}
           onUpdate={updateProject}
+        />
+      )}
+
+      {showPDFTemplateModal && (
+        <PDFTemplateModal
+          onClose={() => setShowPDFTemplateModal(false)}
         />
       )}
 

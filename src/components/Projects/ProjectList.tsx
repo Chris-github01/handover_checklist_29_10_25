@@ -501,16 +501,18 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
                   onClick={() => setShowActionsMenu(false)}
                 />
                 <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20">
-                  <button
-                    onClick={() => {
-                      setShowCreateSmallModal(true);
-                      setShowActionsMenu(false);
-                    }}
-                    className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center space-x-2 transition-colors"
-                  >
-                    <Plus className="w-5 h-5 text-teal-600" />
-                    <span className="text-gray-700">Add Small Project</span>
-                  </button>
+                  {(userProfile?.email === 'pieter@optimalfire.co.nz' || userProfile?.email === 'ramona@optimalfire.co.nz') && (
+                    <button
+                      onClick={() => {
+                        setShowCreateSmallModal(true);
+                        setShowActionsMenu(false);
+                      }}
+                      className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center space-x-2 transition-colors"
+                    >
+                      <Plus className="w-5 h-5 text-teal-600" />
+                      <span className="text-gray-700">Add Small Project</span>
+                    </button>
+                  )}
 
                   <button
                     onClick={() => {

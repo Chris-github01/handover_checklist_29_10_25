@@ -16,7 +16,7 @@ export interface Project {
   region: 'auckland' | 'wellington';
   bwof: boolean;
   start_date_target: string;
-  status: 'awarded' | 'await_pre_let' | 'in_progress' | 'active' | 'live';
+  status: 'awarded' | 'await_pre_let' | 'in_progress' | 'active' | 'live' | 'closed';
   site_manager?: string;
   qs?: string;
   is_small_project: boolean;

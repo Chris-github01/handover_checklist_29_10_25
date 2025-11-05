@@ -309,6 +309,7 @@ const CreateSmallProjectModal: React.FC<CreateSmallProjectModalProps> = ({ onClo
               <option value="awarded">Awarded</option>
               <option value="in_progress">In Progress</option>
               <option value="live">Live</option>
+              <option value="closed">Close Project</option>
             </select>
           </div>
 

@@ -27,6 +27,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
         return 'bg-green-100 text-green-800';
       case 'live':
         return 'bg-emerald-100 text-emerald-800';
+      case 'closed':
+        return 'bg-slate-100 text-slate-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
@@ -44,6 +46,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
         return 'ACTIVE';
       case 'live':
         return 'LIVE';
+      case 'closed':
+        return 'CLOSED';
       default:
         return status.replace('_', ' ').toUpperCase();
     }

@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabase';
 
 interface Variation {
   id?: string;
+  item_number?: string;
   description: string;
   value: number;
   claimed_amount: number;
@@ -59,6 +60,7 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
       if (variationsData && variationsData.length > 0) {
         setVariations(variationsData.map(v => ({
           id: v.id,
+          item_number: v.item_number,
           description: v.description,
           value: Number(v.value),
           claimed_amount: Number(v.claimed_amount),
@@ -177,6 +179,7 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
       // Update variations (replace all, not append)
       if (data.variations && data.variations.length > 0) {
         const importedVariations = data.variations.map((v: any, index: number) => ({
+          item_number: v.itemNumber,
           description: v.description,
           value: v.value,
           claimed_amount: v.claimed,
@@ -235,6 +238,7 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
       if (variations.length > 0) {
         const variationsToInsert = variations.map(v => ({
           project_id: projectId,
+          item_number: v.item_number || '',
           description: v.description,
           value: v.value,
           claimed_amount: v.claimed_amount,

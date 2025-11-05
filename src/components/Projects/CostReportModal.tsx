@@ -5,6 +5,7 @@ import jsPDF from 'jspdf';
 
 interface Variation {
   id: string;
+  item_number?: string;
   description: string;
   value: number;
   claimed_amount: number;
@@ -59,6 +60,7 @@ export function CostReportModal({ projectId, projectName, projectCode, client, o
       if (variationsData) {
         setVariations(variationsData.map(v => ({
           id: v.id,
+          item_number: v.item_number,
           description: v.description,
           value: Number(v.value),
           claimed_amount: Number(v.claimed_amount),
@@ -153,7 +155,7 @@ export function CostReportModal({ projectId, projectName, projectCode, client, o
           }
 
           doc.setFont('helvetica', 'bold');
-          doc.text(`Variation ${index + 1}`, 20, yPos);
+          doc.text(`Variation ${variation.item_number || (index + 1)}`, 20, yPos);
           yPos += 6;
 
           doc.setFont('helvetica', 'normal');
@@ -342,7 +344,7 @@ export function CostReportModal({ projectId, projectName, projectCode, client, o
 
                   return (
                     <div key={variation.id} className="bg-green-50 rounded-lg p-4">
-                      <p className="font-semibold text-sm mb-2">Variation {index + 1}</p>
+                      <p className="font-semibold text-sm mb-2">Variation {variation.item_number || (index + 1)}</p>
                       {variation.description && (
                         <p className="text-sm text-gray-700 mb-2">{variation.description}</p>
                       )}

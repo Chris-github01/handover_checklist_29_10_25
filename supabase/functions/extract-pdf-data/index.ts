@@ -9,11 +9,13 @@ const corsHeaders = {
 
 interface ExtractedData {
   contractWorks: Array<{
+    itemNumber: string;
     description: string;
     value: number;
     claimed: number;
   }>;
   variations: Array<{
+    itemNumber: string;
     description: string;
     value: number;
     claimed: number;
@@ -110,11 +112,12 @@ function extractFromSpreadsheet(uint8Array: Uint8Array, fileType: string): Extra
     if (totalValue === 0) continue;
 
     const item = {
+      itemNumber: itemNumber,
       description: description || `Item ${itemNumber}`,
       value: totalValue,
       claimed: claimed,
     };
-    
+
     if (isContractWork) {
       console.log('Contract Work:', { row: i + 13, itemNumber, description, totalValue, percentage, claimed });
       extractedData.contractWorks.push(item);

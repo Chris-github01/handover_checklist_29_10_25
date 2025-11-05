@@ -483,80 +483,82 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
         </div>
 
         <div className="flex items-center space-x-3">
-          {(userProfile?.email === 'pieter@optimalfire.co.nz' || userProfile?.email === 'ramona@optimalfire.co.nz') && (
-            <div className="relative">
-              <button
-                onClick={() => setShowActionsMenu(!showActionsMenu)}
-                className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
-              >
-                <MoreVertical className="w-5 h-5" />
-                <span>Actions</span>
-              </button>
+          <div className="relative">
+            <button
+              onClick={() => setShowActionsMenu(!showActionsMenu)}
+              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+            >
+              <MoreVertical className="w-5 h-5" />
+              <span>Actions</span>
+            </button>
 
-              {showActionsMenu && (
-                <>
-                  <div
-                    className="fixed inset-0 z-10"
-                    onClick={() => setShowActionsMenu(false)}
-                  />
-                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20">
-                    <button
-                      onClick={() => {
-                        setShowProjectCodeModal(true);
-                        setShowActionsMenu(false);
-                      }}
-                      className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center space-x-2 transition-colors"
-                    >
-                      <Hash className="w-5 h-5 text-purple-600" />
-                      <span className="text-gray-700">Generate Project Code</span>
-                    </button>
+            {showActionsMenu && (
+              <>
+                <div
+                  className="fixed inset-0 z-10"
+                  onClick={() => setShowActionsMenu(false)}
+                />
+                <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20">
+                  <button
+                    onClick={() => {
+                      setShowProjectCodeModal(true);
+                      setShowActionsMenu(false);
+                    }}
+                    className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center space-x-2 transition-colors"
+                  >
+                    <Hash className="w-5 h-5 text-purple-600" />
+                    <span className="text-gray-700">Generate Project Code</span>
+                  </button>
 
-                    <button
-                      onClick={() => {
-                        handleDownloadPDFTemplate();
-                        setShowActionsMenu(false);
-                      }}
-                      className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center space-x-2 transition-colors"
-                    >
-                      <FileText className="w-5 h-5 text-blue-600" />
-                      <span className="text-gray-700">Projects PDF Template</span>
-                    </button>
+                  <button
+                    onClick={() => {
+                      handleDownloadPDFTemplate();
+                      setShowActionsMenu(false);
+                    }}
+                    className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center space-x-2 transition-colors"
+                  >
+                    <FileText className="w-5 h-5 text-blue-600" />
+                    <span className="text-gray-700">Projects PDF Template</span>
+                  </button>
 
-                    <button
-                      onClick={() => {
-                        handleExportExcel();
-                        setShowActionsMenu(false);
-                      }}
-                      className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center space-x-2 transition-colors"
-                    >
-                      <Download className="w-5 h-5 text-green-600" />
-                      <span className="text-gray-700">Export Projects Excel</span>
-                    </button>
+                  {(userProfile?.email === 'pieter@optimalfire.co.nz' || userProfile?.email === 'ramona@optimalfire.co.nz') && (
+                    <>
+                      <button
+                        onClick={() => {
+                          handleExportExcel();
+                          setShowActionsMenu(false);
+                        }}
+                        className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center space-x-2 transition-colors"
+                      >
+                        <Download className="w-5 h-5 text-green-600" />
+                        <span className="text-gray-700">Export Projects Excel</span>
+                      </button>
 
-                    <button
-                      onClick={() => {
-                        handleImportClick();
-                        setShowActionsMenu(false);
-                      }}
-                      disabled={importing}
-                      className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center space-x-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <Upload className="w-5 h-5 text-orange-600" />
-                      <span className="text-gray-700">{importing ? 'Importing...' : 'Import Projects'}</span>
-                    </button>
-                  </div>
-                </>
-              )}
+                      <button
+                        onClick={() => {
+                          handleImportClick();
+                          setShowActionsMenu(false);
+                        }}
+                        disabled={importing}
+                        className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center space-x-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <Upload className="w-5 h-5 text-orange-600" />
+                        <span className="text-gray-700">{importing ? 'Importing...' : 'Import Projects'}</span>
+                      </button>
+                    </>
+                  )}
+                </div>
+              </>
+            )}
 
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".xlsx,.xls"
-                onChange={handleFileImport}
-                className="hidden"
-              />
-            </div>
-          )}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".xlsx,.xls"
+              onChange={handleFileImport}
+              className="hidden"
+            />
+          </div>
 
           <button
             onClick={() => setShowCreateModal(true)}

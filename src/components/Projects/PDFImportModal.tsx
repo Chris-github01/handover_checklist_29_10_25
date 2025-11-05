@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, Upload, FileText, AlertCircle, Check, Edit2 } from 'lucide-react';
-import * as pdfjsLib from 'pdfjs-dist';
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 
 interface ExtractedData {
   contractWorks: {

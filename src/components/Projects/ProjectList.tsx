@@ -34,8 +34,8 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
       const matchesSearch = project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         project.client.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesTab = activeTab === 'complete'
-        ? project.status === 'handover_complete'
-        : project.status !== 'handover_complete';
+        ? project.status === 'live'
+        : project.status !== 'live';
       return matchesSearch && matchesTab;
     });
 
@@ -365,7 +365,7 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
                         rawStatus === 'Awarded' ? 'awarded' :
                         rawStatus === 'In Progress' ? 'in_progress' :
                         rawStatus === 'Active' ? 'active' :
-                        rawStatus === 'Live' ? 'handover_complete' :
+                        rawStatus === 'Live' ? 'live' :
                         'await_pre_let';
 
           const rawStartDate = row['Target Start Date'];

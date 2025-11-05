@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Trash2, Save } from 'lucide-react';
+import { X, Plus, Trash2, Save, FileUp, Upload } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
 interface Variation {
@@ -23,6 +23,8 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [extracting, setExtracting] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   useEffect(() => {
     loadCostData();
@@ -89,6 +91,76 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
     const updated = variations.filter((_, i) => i !== index);
     const reindexed = updated.map((v, i) => ({ ...v, order_index: i }));
     setVariations(reindexed);
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && file.type === 'application/pdf') {
+      setSelectedFile(file);
+      setError(null);
+    } else {
+      setError('Please select a valid PDF file');
+    }
+  };
+
+  const handleExtractPDF = async () => {
+    if (!selectedFile) {
+      setError('Please select a PDF file first');
+      return;
+    }
+
+    try {
+      setExtracting(true);
+      setError(null);
+
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/extract-pdf-data`;
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to extract PDF data');
+      }
+
+      const data = await response.json();
+
+      // Update contract works
+      if (data.contractWorks && data.contractWorks.length > 0) {
+        const totalValue = data.contractWorks.reduce((sum: number, item: any) => sum + item.value, 0);
+        const totalClaimed = data.contractWorks.reduce((sum: number, item: any) => sum + item.claimed, 0);
+        setAgreedContractValue(totalValue);
+        setContractWorksClaimed(totalClaimed);
+      }
+
+      // Update variations
+      if (data.variations && data.variations.length > 0) {
+        const importedVariations = data.variations.map((v: any, index: number) => ({
+          description: v.description,
+          value: v.value,
+          claimed_amount: v.claimed,
+          order_index: variations.length + index
+        }));
+        setVariations([...variations, ...importedVariations]);
+      }
+
+      setSelectedFile(null);
+      // Reset file input
+      const fileInput = document.getElementById('pdf-upload') as HTMLInputElement;
+      if (fileInput) fileInput.value = '';
+
+    } catch (err) {
+      console.error('Error extracting PDF:', err);
+      setError(err instanceof Error ? err.message : 'Failed to extract PDF data');
+    } finally {
+      setExtracting(false);
+    }
   };
 
   const handleSave = async () => {
@@ -178,6 +250,44 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
               <p className="text-sm text-red-600">{error}</p>
             </div>
           )}
+
+          <div className="bg-gray-50 rounded-lg p-4 mb-6">
+            <h3 className="font-semibold text-gray-900 mb-4">Import from PDF</h3>
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <label htmlFor="pdf-upload" className="flex-1">
+                  <input
+                    id="pdf-upload"
+                    type="file"
+                    accept="application/pdf"
+                    onChange={handleFileSelect}
+                    disabled={extracting}
+                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 disabled:opacity-50"
+                  />
+                </label>
+                <button
+                  onClick={handleExtractPDF}
+                  disabled={!selectedFile || extracting}
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {extracting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                      <span>Extracting...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="w-4 h-4" />
+                      <span>Extract Data</span>
+                    </>
+                  )}
+                </button>
+              </div>
+              <p className="text-xs text-gray-600">
+                Upload a PDF cost report to automatically extract contract values and variations
+              </p>
+            </div>
+          </div>
 
           <div className="bg-blue-50 rounded-lg p-4 space-y-4">
             <h3 className="font-semibold text-gray-900">Contract Works</h3>

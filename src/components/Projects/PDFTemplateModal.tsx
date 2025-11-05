@@ -24,14 +24,26 @@ const PDFTemplateModal: React.FC<PDFTemplateModalProps> = ({ onClose }) => {
 
   const fetchStages = async () => {
     try {
-      const { data, error } = await supabase
+      // Get all stages and extract unique titles
+      const { data: allStages, error } = await supabase
         .from('stages')
-        .select('id, title, order_index')
-        .is('project_id', null)
-        .order('order_index');
+        .select('title, order_index');
 
       if (error) throw error;
-      setStages(data || []);
+
+      // Get unique stages by title
+      const uniqueStages = allStages?.reduce((acc, stage) => {
+        if (!acc.find(s => s.title === stage.title)) {
+          acc.push({
+            id: stage.title, // Use title as ID for selection
+            title: stage.title,
+            order_index: stage.order_index
+          });
+        }
+        return acc;
+      }, [] as Stage[]) || [];
+
+      setStages(uniqueStages.sort((a, b) => a.order_index - b.order_index));
     } catch (error) {
       console.error('Error fetching stages:', error);
     } finally {

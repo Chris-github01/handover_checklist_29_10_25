@@ -18,7 +18,9 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({ project, onClose, o
     region: project.region || 'auckland',
     bwof: project.bwof || false,
     start_date_target: project.start_date_target,
-    status: project.status
+    status: project.status,
+    site_manager: project.site_manager || '',
+    qs: project.qs || ''
   });
 
   const projectTitle = useMemo(() => {
@@ -33,7 +35,12 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({ project, onClose, o
     setError('');
 
     try {
-      await onUpdate(project.id, { ...formData, project_title: projectTitle });
+      await onUpdate(project.id, {
+        ...formData,
+        project_title: projectTitle,
+        site_manager: formData.site_manager || null,
+        qs: formData.qs || null
+      });
       onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update project');
@@ -48,7 +55,7 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({ project, onClose, o
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl p-6 w-full max-w-md">
+      <div className="bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900">Edit Project</h2>
           <button
@@ -60,34 +67,36 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({ project, onClose, o
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              <Building2 className="w-4 h-4 inline mr-2" />
-              Project Name
-            </label>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={(e) => handleInputChange('name', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Enter project name"
-              required
-            />
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                <Building2 className="w-4 h-4 inline mr-2" />
+                Project Name
+              </label>
+              <input
+                type="text"
+                value={formData.name}
+                onChange={(e) => handleInputChange('name', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Enter project name"
+                required
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              <User className="w-4 h-4 inline mr-2" />
-              Client Name
-            </label>
-            <input
-              type="text"
-              value={formData.client}
-              onChange={(e) => handleInputChange('client', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Enter client name"
-              required
-            />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                <User className="w-4 h-4 inline mr-2" />
+                Client Name
+              </label>
+              <input
+                type="text"
+                value={formData.client}
+                onChange={(e) => handleInputChange('client', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Enter client name"
+                required
+              />
+            </div>
           </div>
 
           <div>
@@ -112,35 +121,74 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({ project, onClose, o
             </div>
           )}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Project Type
-            </label>
-            <select
-              value={formData.project_type}
-              onChange={(e) => handleInputChange('project_type', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              required
-            >
-              <option value="passive_fire">Passive Fire</option>
-              <option value="intumescent">Intumescent</option>
-              <option value="passive_intumescent">Passive & Intumescent</option>
-            </select>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Project Type
+              </label>
+              <select
+                value={formData.project_type}
+                onChange={(e) => handleInputChange('project_type', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              >
+                <option value="passive_fire">Passive Fire</option>
+                <option value="intumescent">Intumescent</option>
+                <option value="passive_intumescent">Passive & Intumescent</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Region
+              </label>
+              <select
+                value={formData.region}
+                onChange={(e) => handleInputChange('region', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              >
+                <option value="auckland">Auckland</option>
+                <option value="wellington">Wellington</option>
+              </select>
+            </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Region
-            </label>
-            <select
-              value={formData.region}
-              onChange={(e) => handleInputChange('region', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              required
-            >
-              <option value="auckland">Auckland</option>
-              <option value="wellington">Wellington</option>
-            </select>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Site Manager (SM)
+              </label>
+              <select
+                value={formData.site_manager}
+                onChange={(e) => handleInputChange('site_manager', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">Select site manager</option>
+                <option value="Alfie">Alfie</option>
+                <option value="Ali">Ali</option>
+                <option value="Chris">Chris</option>
+                <option value="Karel">Karel</option>
+                <option value="Zach">Zach</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                QS (Quantity Surveyor)
+              </label>
+              <select
+                value={formData.qs}
+                onChange={(e) => handleInputChange('qs', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">Select QS</option>
+                <option value="Carna">Carna</option>
+                <option value="Contracts">Contracts</option>
+                <option value="Denver">Denver</option>
+                <option value="Reynier">Reynier</option>
+              </select>
+            </div>
           </div>
 
           <div>

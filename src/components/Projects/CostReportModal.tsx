@@ -80,39 +80,39 @@ export function CostReportModal({ projectId, projectName, projectCode, client, o
     try {
       const doc = new jsPDF();
       const pageWidth = doc.internal.pageSize.getWidth();
-      let yPos = 20;
+      let yPos = 15;
 
-      doc.setFontSize(20);
+      doc.setFontSize(16);
       doc.setFont('helvetica', 'bold');
       doc.text('COST REPORT', pageWidth / 2, yPos, { align: 'center' });
-      yPos += 15;
+      yPos += 10;
 
-      doc.setFontSize(10);
+      doc.setFontSize(9);
       doc.setFont('helvetica', 'normal');
       doc.text(`Project: ${projectName}`, 15, yPos);
-      yPos += 6;
+      yPos += 5;
       if (projectCode) {
         doc.text(`Project Code: ${projectCode}`, 15, yPos);
-        yPos += 6;
+        yPos += 5;
       }
       doc.text(`Client: ${client}`, 15, yPos);
-      yPos += 6;
+      yPos += 5;
       doc.text(`Date: ${new Date().toLocaleDateString()}`, 15, yPos);
-      yPos += 15;
+      yPos += 8;
 
       doc.setDrawColor(0, 0, 0);
       doc.line(15, yPos, pageWidth - 15, yPos);
-      yPos += 10;
+      yPos += 6;
 
       const contractWorksOutstanding = agreedContractValue - contractWorksClaimed;
       const contractWorksPercent = agreedContractValue > 0 ? (contractWorksClaimed / agreedContractValue) * 100 : 0;
 
-      doc.setFontSize(14);
+      doc.setFontSize(11);
       doc.setFont('helvetica', 'bold');
       doc.text('CONTRACT WORKS', 15, yPos);
-      yPos += 8;
+      yPos += 6;
 
-      doc.setFontSize(10);
+      doc.setFontSize(9);
       doc.setFont('helvetica', 'normal');
 
       const contractData = [
@@ -124,44 +124,44 @@ export function CostReportModal({ projectId, projectName, projectCode, client, o
       contractData.forEach(([label, value]) => {
         doc.text(label, 20, yPos);
         doc.text(value, pageWidth - 20, yPos, { align: 'right' });
-        yPos += 6;
+        yPos += 5;
       });
 
-      yPos += 10;
+      yPos += 6;
       doc.line(15, yPos, pageWidth - 15, yPos);
-      yPos += 10;
+      yPos += 6;
 
-      doc.setFontSize(14);
+      doc.setFontSize(11);
       doc.setFont('helvetica', 'bold');
       doc.text('VARIATIONS', 15, yPos);
-      yPos += 8;
+      yPos += 6;
 
       if (variations.length === 0) {
-        doc.setFontSize(10);
+        doc.setFontSize(9);
         doc.setFont('helvetica', 'italic');
         doc.text('No variations recorded', 20, yPos);
-        yPos += 10;
+        yPos += 6;
       } else {
-        doc.setFontSize(10);
+        doc.setFontSize(9);
         doc.setFont('helvetica', 'normal');
 
         variations.forEach((variation, index) => {
           const varOutstanding = variation.value - variation.claimed_amount;
           const varPercent = variation.value > 0 ? (variation.claimed_amount / variation.value) * 100 : 0;
 
-          if (yPos > 260) {
+          if (yPos > 270) {
             doc.addPage();
-            yPos = 20;
+            yPos = 15;
           }
 
           doc.setFont('helvetica', 'bold');
           doc.text(`Variation ${variation.item_number || (index + 1)}`, 20, yPos);
-          yPos += 6;
+          yPos += 5;
 
           doc.setFont('helvetica', 'normal');
           if (variation.description) {
             doc.text(`Description: ${variation.description}`, 25, yPos);
-            yPos += 6;
+            yPos += 5;
           }
 
           const varData = [
@@ -173,13 +173,13 @@ export function CostReportModal({ projectId, projectName, projectCode, client, o
           varData.forEach(([label, value]) => {
             doc.text(label, 25, yPos);
             doc.text(value, pageWidth - 20, yPos, { align: 'right' });
-            yPos += 6;
+            yPos += 5;
           });
 
-          yPos += 4;
+          yPos += 3;
         });
 
-        yPos += 6;
+        yPos += 4;
 
         const totalVariationsValue = variations.reduce((sum, v) => sum + v.value, 0);
         const totalVariationsClaimed = variations.reduce((sum, v) => sum + v.claimed_amount, 0);
@@ -188,7 +188,7 @@ export function CostReportModal({ projectId, projectName, projectCode, client, o
 
         doc.setDrawColor(100, 100, 100);
         doc.line(20, yPos, pageWidth - 20, yPos);
-        yPos += 6;
+        yPos += 5;
 
         doc.setFont('helvetica', 'bold');
         const totalVarData = [
@@ -200,14 +200,14 @@ export function CostReportModal({ projectId, projectName, projectCode, client, o
         totalVarData.forEach(([label, value]) => {
           doc.text(label, 20, yPos);
           doc.text(value, pageWidth - 20, yPos, { align: 'right' });
-          yPos += 6;
+          yPos += 5;
         });
       }
 
-      yPos += 10;
+      yPos += 6;
       doc.setDrawColor(0, 0, 0);
       doc.line(15, yPos, pageWidth - 15, yPos);
-      yPos += 10;
+      yPos += 6;
 
       const totalVariationsValue = variations.reduce((sum, v) => sum + v.value, 0);
       const totalVariationsClaimed = variations.reduce((sum, v) => sum + v.claimed_amount, 0);
@@ -216,12 +216,12 @@ export function CostReportModal({ projectId, projectName, projectCode, client, o
       const totalOutstanding = totalProjectValue - totalClaimedToDate;
       const totalPercent = totalProjectValue > 0 ? (totalClaimedToDate / totalProjectValue) * 100 : 0;
 
-      doc.setFontSize(14);
+      doc.setFontSize(11);
       doc.setFont('helvetica', 'bold');
       doc.text('PROJECT SUMMARY', 15, yPos);
-      yPos += 8;
+      yPos += 6;
 
-      doc.setFontSize(11);
+      doc.setFontSize(10);
       const summaryData = [
         ['Total Project Value:', `$${totalProjectValue.toFixed(2)}`],
         ['Total Claimed to Date:', `$${totalClaimedToDate.toFixed(2)} (${totalPercent.toFixed(2)}%)`],
@@ -231,7 +231,7 @@ export function CostReportModal({ projectId, projectName, projectCode, client, o
       summaryData.forEach(([label, value]) => {
         doc.text(label, 20, yPos);
         doc.text(value, pageWidth - 20, yPos, { align: 'right' });
-        yPos += 7;
+        yPos += 6;
       });
 
       const fileName = `Cost_Report_${projectCode || projectName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;

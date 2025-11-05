@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useProjects, ProjectWithStats } from '../../hooks/useProjects';
 import { Plus, Search, Building2, AlertCircle, Download, Upload, MoreVertical, FileText, Hash, X } from 'lucide-react';
 import CreateProjectModal from './CreateProjectModal';
+import CreateSmallProjectModal from './CreateSmallProjectModal';
 import EditProjectModal from './EditProjectModal';
 import ProjectCard from './ProjectCard';
 import * as XLSX from 'xlsx';
@@ -14,6 +15,7 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
   const { projects, loading, error, createProject, updateProject, deleteProject } = useProjects();
   const { userProfile } = useAuth();
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showCreateSmallModal, setShowCreateSmallModal] = useState(false);
   const [editingProject, setEditingProject] = useState<ProjectWithStats | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState<'in_progress' | 'complete'>('in_progress');
@@ -501,6 +503,17 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
                 <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20">
                   <button
                     onClick={() => {
+                      setShowCreateSmallModal(true);
+                      setShowActionsMenu(false);
+                    }}
+                    className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center space-x-2 transition-colors"
+                  >
+                    <Plus className="w-5 h-5 text-teal-600" />
+                    <span className="text-gray-700">Add Small Project</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
                       setShowProjectCodeModal(true);
                       setShowActionsMenu(false);
                     }}
@@ -646,6 +659,13 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
       {showCreateModal && (
         <CreateProjectModal
           onClose={() => setShowCreateModal(false)}
+          onCreate={createProject}
+        />
+      )}
+
+      {showCreateSmallModal && (
+        <CreateSmallProjectModal
+          onClose={() => setShowCreateSmallModal(false)}
           onCreate={createProject}
         />
       )}

@@ -40,8 +40,17 @@ function parsePercentage(val: any): number {
   return 0;
 }
 
+function combineWrappedColumns(row: any[], startCol: number, endCol: number): string {
+  const parts: string[] = [];
+  for (let i = startCol; i <= endCol; i++) {
+    if (row[i] !== null && row[i] !== undefined && row[i] !== '') {
+      parts.push(String(row[i]).trim());
+    }
+  }
+  return parts.join(' ').trim();
+}
+
 function extractFromSpreadsheet(uint8Array: Uint8Array, fileType: string): ExtractedData {
-  // For CSV files, specify the type as 'string' and decode first
   let workbook: XLSX.WorkBook;
   
   if (fileType === 'csv') {
@@ -49,143 +58,72 @@ function extractFromSpreadsheet(uint8Array: Uint8Array, fileType: string): Extra
     const text = decoder.decode(uint8Array);
     workbook = XLSX.read(text, { type: 'string' });
   } else {
-    // For Excel files (.xlsx, .xls)
     workbook = XLSX.read(uint8Array, { type: 'array' });
   }
   
   const sheetName = workbook.SheetNames[0];
   const worksheet = workbook.Sheets[sheetName];
   
-  // Read with all data
-  const data = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '', range: 0 }) as any[][];
+  // Read all data starting from row 13 (index 12)
+  const data = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '', range: 12 }) as any[][];
   
-  // Filter each row to only include columns A-Q (indices 0-16)
-  const filteredData = data.map(row => row.slice(0, 17));
-  
-  console.log('Total rows:', filteredData.length);
-  console.log('First 10 rows (columns A-Q only):', JSON.stringify(filteredData.slice(0, 10), null, 2));
+  console.log('Total rows from row 13:', data.length);
+  console.log('First 5 rows:', JSON.stringify(data.slice(0, 5), null, 2));
   
   const extractedData: ExtractedData = {
     contractWorks: [],
     variations: [],
   };
   
-  let inBaseContract = false;
-  let inVariations = false;
-  const descriptionMap = new Map<string, string>();
-  
-  // First pass: collect descriptions
-  for (let i = 0; i < filteredData.length; i++) {
-    const row = filteredData[i];
+  for (let i = 0; i < data.length; i++) {
+    const row = data[i];
     if (!row || row.length === 0) continue;
     
-    const firstCol = String(row[0] || '').trim();
-    const secondCol = String(row[1] || '').trim();
+    // Column B is index 1 (0-based)
+    const itemNumber = String(row[1] || '').trim();
     
-    // Check if this is a variation number followed by a description
-    if (firstCol.match(/^\d+\.\d+(?:rev\d?)?$/)) {
-      if (secondCol.match(/^(SI-|VARCO-|OFL-|Quote|Credit|Alternative|Scope|IFC|Refer)/i)) {
-        descriptionMap.set(firstCol, secondCol);
-      }
-    }
-  }
-  
-  console.log('Description map:', Array.from(descriptionMap.entries()));
-  
-  // Second pass: extract data
-  for (let i = 0; i < filteredData.length; i++) {
-    const row = filteredData[i];
-    if (!row || row.length === 0) continue;
+    // Skip empty item numbers
+    if (!itemNumber) continue;
     
-    const firstCol = String(row[0] || '').trim();
+    // Check if this is Contract Works (starts with "1" like 1, 1.1, 1.2, etc.)
+    const isContractWork = itemNumber.match(/^1(\.\d+)?$/);
     
-    if (firstCol.includes('BASE CONTRACT')) {
-      inBaseContract = true;
-      inVariations = false;
-      console.log('Found BASE CONTRACT at row', i);
-      continue;
-    }
+    // Check if this is Variation Work (starts with "2" like 2, 2.1, 2.2, etc.)
+    const isVariation = itemNumber.match(/^2(\.\d+)?$/);
     
-    if (firstCol.includes('VARIATIONS') || firstCol.match(/^Var\s+No/i)) {
-      inBaseContract = false;
-      inVariations = true;
-      console.log('Found VARIATIONS at row', i);
-      continue;
-    }
+    if (!isContractWork && !isVariation) continue;
     
-    if (firstCol.includes('TOTAL VARIATIONS') || firstCol.includes('SUMMARY')) {
-      inVariations = false;
-      console.log('End of variations at row', i);
-      continue;
-    }
+    // Column C-J (indices 2-9): Description
+    const description = combineWrappedColumns(row, 2, 9);
     
-    if (firstCol.includes('TOTAL BASE CONTRACT')) {
-      inBaseContract = false;
-      console.log('End of base contract at row', i);
-      continue;
-    }
+    // Column M (index 12): Total value
+    const totalValue = parseAmount(row[12] || 0);
     
-    // Parse BASE CONTRACT items (1.x)
-    if (inBaseContract && firstCol.match(/^1\.\d+$/)) {
-      const amount = parseAmount(row[3] || 0);
-      const percentage = parsePercentage(row[4] || 0);
-      const claimed = amount * (percentage / 100);
-      
-      if (amount > 0) {
-        console.log('Contract item:', { row: i, item: firstCol, amount, percentage, claimed });
-        extractedData.contractWorks.push({
-          description: `Item ${firstCol}`,
-          value: amount,
-          claimed: claimed,
-        });
-      }
-    }
+    // Column N (index 13): Percentage
+    const percentage = parsePercentage(row[13] || 0);
     
-    // Parse VARIATION items (2.x)
-    if (inVariations && firstCol.match(/^\d+\.\d+(?:rev\d?)?$/)) {
-      // Look for amount and percentage in columns A-Q only
-      let amount = 0;
-      let percentage = 0;
-      
-      // Look for $ amounts and % in the row (up to column Q)
-      for (let j = 2; j < Math.min(row.length, 17); j++) {
-        const cell = row[j];
-        if (cell === null || cell === undefined || cell === '') continue;
-        
-        const cellStr = String(cell).trim();
-        
-        // Check if this looks like a percentage
-        if (cellStr.includes('%') || (typeof cell === 'number' && cell <= 100 && j > 3)) {
-          const pct = parsePercentage(cell);
-          if (pct > 0 && pct <= 100) {
-            percentage = pct;
-          }
-        }
-        
-        // Check if this looks like a currency amount
-        if ((cellStr.includes('$') || typeof cell === 'number') && !cellStr.includes('%')) {
-          const amt = parseAmount(cell);
-          if (amt > 0) {
-            amount = amt;
-          }
-        }
-      }
-      
-      // Skip empty items
-      if (amount === 0 && percentage === 0) {
-        continue;
-      }
-      
-      const claimed = amount * (percentage / 100);
-      const description = descriptionMap.get(firstCol) || `Variation ${firstCol}`;
-      
-      console.log('Variation:', { row: i, var: firstCol, description, amount, percentage, claimed });
-      
-      extractedData.variations.push({
-        description: description,
-        value: amount,
-        claimed: claimed,
-      });
+    // Columns O, P, Q (indices 14, 15, 16): Claimed to date
+    const claimedText = combineWrappedColumns(row, 14, 16);
+    const claimedValue = parseAmount(claimedText);
+    
+    // Use claimed value if available, otherwise calculate from percentage
+    const claimed = claimedValue > 0 ? claimedValue : (totalValue * (percentage / 100));
+    
+    // Skip rows with no value
+    if (totalValue === 0) continue;
+    
+    const item = {
+      description: description || `Item ${itemNumber}`,
+      value: totalValue,
+      claimed: claimed,
+    };
+    
+    if (isContractWork) {
+      console.log('Contract Work:', { row: i + 13, itemNumber, description, totalValue, percentage, claimed });
+      extractedData.contractWorks.push(item);
+    } else if (isVariation) {
+      console.log('Variation:', { row: i + 13, itemNumber, description, totalValue, percentage, claimed });
+      extractedData.variations.push(item);
     }
   }
   
@@ -219,16 +157,13 @@ Deno.serve(async (req: Request) => {
     const arrayBuffer = await file.arrayBuffer();
     const uint8Array = new Uint8Array(arrayBuffer);
     
-    let extractedData: ExtractedData;
-    
-    // Determine file type
     let fileType = 'excel';
     if (file.name.endsWith('.csv') || file.type === 'text/csv') {
       fileType = 'csv';
     }
     
-    console.log('Processing as', fileType, 'file (columns A-Q only)');
-    extractedData = extractFromSpreadsheet(uint8Array, fileType);
+    console.log('Processing as', fileType, 'file (starting from row 13)');
+    const extractedData = extractFromSpreadsheet(uint8Array, fileType);
 
     console.log('Extraction complete. Contract works:', extractedData.contractWorks.length, 'Variations:', extractedData.variations.length);
 

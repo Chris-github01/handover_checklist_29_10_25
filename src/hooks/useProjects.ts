@@ -110,11 +110,15 @@ Optimal Fire Systems Team`;
   const handleCreateProject = async (projectData: Omit<Project, 'id' | 'created_at'>) => {
     try {
       const newProject = await createProject(projectData);
-      await initializeProjectStages(newProject.id);
-      
+
+      // Only initialize stages for regular projects, not small projects
+      if (!newProject.is_small_project) {
+        await initializeProjectStages(newProject.id);
+      }
+
       // Send email notifications
       await sendProjectCreationNotification(newProject);
-      
+
       await fetchProjects(); // Refresh the list
       return newProject;
     } catch (err) {

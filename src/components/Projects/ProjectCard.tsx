@@ -100,11 +100,17 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
   return (
     <div
       onClick={onClick}
-      className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg hover:border-blue-300 cursor-pointer transition-all duration-200 group min-h-[240px] hover:h-auto"
+      className={`bg-white rounded-xl border border-gray-200 p-6 transition-all duration-200 group min-h-[240px] ${
+        project.is_small_project
+          ? 'cursor-default'
+          : 'hover:shadow-lg hover:border-blue-300 cursor-pointer hover:h-auto'
+      }`}
     >
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+          <h3 className={`text-lg font-semibold text-gray-900 mb-2 transition-colors ${
+            !project.is_small_project && 'group-hover:text-blue-600'
+          }`}>
             {project.project_title || project.name}{project.bwof && ' BWOF'}
           </h3>
 

@@ -79,7 +79,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ onClose, onCrea
     setError('');
 
     try {
-      await onCreate({ ...formData, project_title: projectTitle });
+      await onCreate({ ...formData, project_title: projectTitle, is_small_project: false });
       onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create project');

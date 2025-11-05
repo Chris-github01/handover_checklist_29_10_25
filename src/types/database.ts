@@ -19,6 +19,7 @@ export interface Project {
   status: 'awarded' | 'await_pre_let' | 'in_progress' | 'active' | 'handover_complete';
   site_manager?: string;
   qs?: string;
+  is_small_project: boolean;
   created_at: string;
 }
 

@@ -639,7 +639,7 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
             <ProjectCard
               key={project.id}
               project={project}
-              onClick={() => onSelectProject(project.id, project.name, project.bwof)}
+              onClick={() => !project.is_small_project && onSelectProject(project.id, project.name, project.bwof)}
               onEdit={setEditingProject}
               onDelete={deleteProject}
             />

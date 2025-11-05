@@ -85,7 +85,8 @@ const CreateSmallProjectModal: React.FC<CreateSmallProjectModalProps> = ({ onClo
         ...formData,
         project_title: projectTitle,
         site_manager: formData.site_manager || null,
-        qs: formData.qs || null
+        qs: formData.qs || null,
+        is_small_project: true
       });
       onClose();
     } catch (err) {

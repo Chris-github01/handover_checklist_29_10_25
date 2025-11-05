@@ -63,58 +63,175 @@ const PDFTemplateModal: React.FC<PDFTemplateModalProps> = ({ onClose }) => {
 
   const generatePDF = () => {
     const doc = new jsPDF();
-    let yPosition = 20;
 
     doc.setFontSize(18);
     doc.setFont('helvetica', 'bold');
-    doc.text('PROJECT CREATION TEMPLATE', 105, yPosition, { align: 'center' });
-    yPosition += 10;
+    doc.text('PROJECT CREATION TEMPLATE', 105, 20, { align: 'center' });
 
     doc.setLineWidth(0.5);
-    doc.line(20, yPosition, 190, yPosition);
-    yPosition += 15;
+    doc.line(20, 25, 190, 25);
 
-    doc.setFontSize(12);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    let yPos = 40;
+
+    doc.text('Project Name:', 20, yPos);
     doc.setFont('helvetica', 'normal');
-    doc.text('Project Name: _________________________________', 20, yPosition);
-    yPosition += 10;
-    doc.text('Client Name: __________________________________', 20, yPosition);
-    yPosition += 10;
-    doc.text('Target Start Date: _____________________________', 20, yPosition);
-    yPosition += 10;
-    doc.text('BWOF: ☐ Yes   ☐ No', 20, yPosition);
-    yPosition += 15;
+    doc.line(55, yPos, 190, yPos);
+    yPos += 10;
+
+    doc.setFont('helvetica', 'bold');
+    doc.text('Client Name:', 20, yPos);
+    doc.setFont('helvetica', 'normal');
+    doc.line(55, yPos, 190, yPos);
+    yPos += 10;
+
+    doc.setFont('helvetica', 'bold');
+    doc.text('Project Code:', 20, yPos);
+    doc.setFont('helvetica', 'normal');
+    doc.line(55, yPos, 190, yPos);
+    yPos += 5;
+    doc.setFontSize(9);
+    doc.text('(Optional - Auto-generated if left blank)', 22, yPos);
+    yPos += 10;
+
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Project Type:', 20, yPos);
+    yPos += 8;
+    doc.setFont('helvetica', 'normal');
+    doc.rect(25, yPos - 4, 4, 4);
+    doc.text('Passive Fire', 32, yPos);
+    yPos += 7;
+    doc.rect(25, yPos - 4, 4, 4);
+    doc.text('Intumescent', 32, yPos);
+    yPos += 7;
+    doc.rect(25, yPos - 4, 4, 4);
+    doc.text('Passive & Intumescent', 32, yPos);
+    yPos += 12;
+
+    doc.setFont('helvetica', 'bold');
+    doc.text('Region:', 20, yPos);
+    yPos += 8;
+    doc.setFont('helvetica', 'normal');
+    doc.rect(25, yPos - 4, 4, 4);
+    doc.text('Auckland', 32, yPos);
+    yPos += 7;
+    doc.rect(25, yPos - 4, 4, 4);
+    doc.text('Wellington', 32, yPos);
+    yPos += 12;
+
+    doc.setFont('helvetica', 'bold');
+    doc.text('BWOF (Building Warrant of Fitness):', 20, yPos);
+    yPos += 8;
+    doc.setFont('helvetica', 'normal');
+    doc.rect(25, yPos - 4, 4, 4);
+    doc.text('Yes (Skips stages 1-3)', 32, yPos);
+    yPos += 7;
+    doc.rect(25, yPos - 4, 4, 4);
+    doc.text('No', 32, yPos);
+    yPos += 12;
+
+    doc.setFont('helvetica', 'bold');
+    doc.text('Target Start Date:', 20, yPos);
+    doc.setFont('helvetica', 'normal');
+    doc.line(65, yPos, 120, yPos);
+    yPos += 5;
+    doc.setFontSize(9);
+    doc.text('(Format: YYYY-MM-DD)', 22, yPos);
+    yPos += 10;
+
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Project Status:', 20, yPos);
+    yPos += 8;
+    doc.setFont('helvetica', 'normal');
+    doc.rect(25, yPos - 4, 4, 4);
+    doc.text('Await Pre-let (Verbal confirmation)', 32, yPos);
+    yPos += 7;
+    doc.rect(25, yPos - 4, 4, 4);
+    doc.text('Awarded', 32, yPos);
+    yPos += 7;
+    doc.rect(25, yPos - 4, 4, 4);
+    doc.text('In Progress', 32, yPos);
+    yPos += 7;
+    doc.rect(25, yPos - 4, 4, 4);
+    doc.text('Active', 32, yPos);
+    yPos += 12;
+
+    doc.setFont('helvetica', 'bold');
+    doc.text('Site Manager (SM):', 20, yPos);
+    doc.setFont('helvetica', 'normal');
+    doc.line(65, yPos, 190, yPos);
+    yPos += 5;
+    doc.setFontSize(9);
+    doc.text('(Optional)', 22, yPos);
+    yPos += 10;
+
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text('QS (Quantity Surveyor):', 20, yPos);
+    doc.setFont('helvetica', 'normal');
+    doc.line(75, yPos, 190, yPos);
+    yPos += 5;
+    doc.setFontSize(9);
+    doc.text('(Optional)', 22, yPos);
+    yPos += 15;
 
     doc.setLineWidth(0.5);
-    doc.line(20, yPosition, 190, yPosition);
-    yPosition += 10;
+    doc.line(20, yPos, 190, yPos);
+    yPos += 8;
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text('NOTES:', 20, yPos);
+    yPos += 6;
+    doc.setFont('helvetica', 'normal');
+    doc.text('- All fields marked as required must be filled', 22, yPos);
+    yPos += 5;
+    doc.text('- Project Code will be auto-generated if left blank', 22, yPos);
+    yPos += 5;
+    doc.text('- Project Title is auto-generated from: Project Name, Client Name, and Project Code', 22, yPos);
+    yPos += 5;
+    doc.text('- BWOF projects skip stages 1-3 in the handover process', 22, yPos);
+    yPos += 10;
 
     if (selectedStages.size > 0) {
-      doc.setFontSize(14);
+      if (yPos > 240) {
+        doc.addPage();
+        yPos = 20;
+      }
+
+      doc.setLineWidth(0.5);
+      doc.line(20, yPos, 190, yPos);
+      yPos += 10;
+
+      doc.setFontSize(12);
       doc.setFont('helvetica', 'bold');
-      doc.text('ITEMS TO BE COMPLETED', 20, yPosition);
-      yPosition += 10;
+      doc.text('ITEMS TO BE COMPLETED', 20, yPos);
+      yPos += 10;
 
       doc.setFontSize(11);
       doc.setFont('helvetica', 'normal');
 
       const selectedStagesList = stages.filter(stage => selectedStages.has(stage.id));
 
-      selectedStagesList.forEach((stage, index) => {
-        if (yPosition > 270) {
+      selectedStagesList.forEach((stage) => {
+        if (yPos > 270) {
           doc.addPage();
-          yPosition = 20;
+          yPos = 20;
         }
 
-        const stepNumber = stage.title.match(/Step (\d+):/)?.[1] || (index + 1);
+        const stepNumber = stage.title.match(/Step (\d+):/)?.[1] || '';
         const stepTitle = stage.title.replace(/Step \d+:\s*/, '');
 
-        doc.text(`${stepNumber}. ${stepTitle}`, 25, yPosition);
-        yPosition += 8;
+        doc.text(`${stepNumber}. ${stepTitle}`, 25, yPos);
+        yPos += 8;
       });
     }
 
-    doc.save('Project_Template.pdf');
+    const timestamp = new Date().toISOString().split('T')[0];
+    doc.save(`Project_Template_${timestamp}.pdf`);
     onClose();
   };
 

@@ -236,26 +236,33 @@ const CreateSmallProjectModal: React.FC<CreateSmallProjectModalProps> = ({ onClo
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Site Manager (SM)
               </label>
-              <input
-                type="text"
+              <select
                 value={formData.site_manager}
                 onChange={(e) => handleInputChange('site_manager', e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Enter site manager name"
-              />
+              >
+                <option value="">Select site manager</option>
+                <option value="Alfie">Alfie</option>
+                <option value="Ali">Ali</option>
+                <option value="Chris">Chris</option>
+                <option value="Zach">Zach</option>
+              </select>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 QS (Quantity Surveyor)
               </label>
-              <input
-                type="text"
+              <select
                 value={formData.qs}
                 onChange={(e) => handleInputChange('qs', e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Enter QS name"
-              />
+              >
+                <option value="">Select QS</option>
+                <option value="Contracts">Contracts</option>
+                <option value="Denver">Denver</option>
+                <option value="Reynier">Reynier</option>
+              </select>
             </div>
           </div>
 

@@ -58,6 +58,14 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectBw
   });
 
   const getStageStatus = (stage: StageWithItems): 'pending' | 'in_progress' | 'complete' => {
+    // For small projects, use the explicit status if set
+    if (isSmallProject && stage.status?.status) {
+      if (stage.status.status === 'na' || stage.status.status === 'complete') return 'complete';
+      if (stage.status.status === 'in_progress') return 'in_progress';
+      if (stage.status.status === 'pending') return 'pending';
+    }
+
+    // For regular projects, calculate based on items
     if (stage.status?.status === 'na') return 'complete';
     if (stage.requiredItems > 0 && stage.completedRequiredItems === stage.requiredItems) return 'complete';
     if (stage.requiredItems === 0 && stage.completedItems === stage.totalItems && stage.totalItems > 0) return 'complete';
@@ -195,12 +203,21 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectBw
     try {
       const newStatus = currentStatus === 'complete' ? 'pending' : 'complete';
 
-      await supabase
+      const { data, error } = await supabase
         .from('stage_statuses')
         .update({ status: newStatus })
         .eq('stage_id', stageId)
-        .eq('project_id', projectId);
+        .eq('project_id', projectId)
+        .select();
 
+      if (error) {
+        console.error('Error updating stage status:', error);
+        return;
+      }
+
+      console.log('Stage status updated:', data);
+
+      // Immediately refresh to show the change
       await refreshStages();
     } catch (error) {
       console.error('Error toggling small project stage:', error);

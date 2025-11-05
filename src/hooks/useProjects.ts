@@ -167,11 +167,11 @@ export const useProjectStages = (projectId: string) => {
 
   const fetchStages = async () => {
     if (!projectId) return;
-    
+
     try {
-      setLoading(true);
       const data = await getProjectStages(projectId);
       setStages(data);
+      setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch stages');
     } finally {

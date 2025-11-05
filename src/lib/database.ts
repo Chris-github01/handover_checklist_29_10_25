@@ -127,7 +127,7 @@ export const getProjectStages = async (projectId: string): Promise<StageWithItem
     .select(`
       *,
       items:stage_items!stage_items_stage_id_fkey(*),
-      status:stage_statuses(*)
+      status:stage_statuses!stage_statuses_stage_id_fkey(*)
     `)
     .eq('project_id', projectId)
     .order('order_index');
@@ -168,10 +168,15 @@ export const getProjectStages = async (projectId: string): Promise<StageWithItem
       item.is_required && stageChecks.some(check => check.item_id === item.id && check.is_checked)
     ).length;
 
+    // Filter status by project_id to ensure we get the right one
+    const projectStatus = Array.isArray(stage.status)
+      ? stage.status.find(s => s.project_id === projectId)
+      : stage.status;
+
     return {
       ...stage,
       items,
-      status: stage.status?.[0] || { status: 'pending' },
+      status: projectStatus || { status: 'pending', stage_id: stage.id, project_id: projectId },
       checks: stageChecks,
       completedItems,
       totalItems: allItems.length,

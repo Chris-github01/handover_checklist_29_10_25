@@ -44,10 +44,15 @@ function extractFromExcel(uint8Array: Uint8Array): ExtractedData {
   const workbook = XLSX.read(uint8Array, { type: 'array' });
   const sheetName = workbook.SheetNames[0];
   const worksheet = workbook.Sheets[sheetName];
-  const data = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' }) as any[][];
   
-  console.log('Excel rows:', data.length);
-  console.log('First 10 rows:', JSON.stringify(data.slice(0, 10), null, 2));
+  // Read with range limit: columns A to Q only (0-16 in 0-indexed)
+  const data = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '', range: 0 }) as any[][];
+  
+  // Filter each row to only include columns A-Q (indices 0-16)
+  const filteredData = data.map(row => row.slice(0, 17));
+  
+  console.log('Excel rows:', filteredData.length);
+  console.log('First 10 rows (columns A-Q only):', JSON.stringify(filteredData.slice(0, 10), null, 2));
   
   const extractedData: ExtractedData = {
     contractWorks: [],
@@ -59,8 +64,8 @@ function extractFromExcel(uint8Array: Uint8Array): ExtractedData {
   const descriptionMap = new Map<string, string>();
   
   // First pass: collect descriptions
-  for (let i = 0; i < data.length; i++) {
-    const row = data[i];
+  for (let i = 0; i < filteredData.length; i++) {
+    const row = filteredData[i];
     if (!row || row.length === 0) continue;
     
     const firstCol = String(row[0] || '').trim();
@@ -77,8 +82,8 @@ function extractFromExcel(uint8Array: Uint8Array): ExtractedData {
   console.log('Description map:', Array.from(descriptionMap.entries()));
   
   // Second pass: extract data
-  for (let i = 0; i < data.length; i++) {
-    const row = data[i];
+  for (let i = 0; i < filteredData.length; i++) {
+    const row = filteredData[i];
     if (!row || row.length === 0) continue;
     
     const firstCol = String(row[0] || '').trim();
@@ -127,12 +132,12 @@ function extractFromExcel(uint8Array: Uint8Array): ExtractedData {
     
     // Parse VARIATION items (2.x)
     if (inVariations && firstCol.match(/^\d+\.\d+(?:rev\d?)?$/)) {
-      // Find the amount and percentage columns
+      // Look for amount and percentage in columns A-Q only
       let amount = 0;
       let percentage = 0;
       
-      // Look for $ amounts and % in the row
-      for (let j = 2; j < row.length; j++) {
+      // Look for $ amounts and % in the row (up to column Q)
+      for (let j = 2; j < Math.min(row.length, 17); j++) {
         const cell = row[j];
         if (cell === null || cell === undefined || cell === '') continue;
         
@@ -362,7 +367,7 @@ Deno.serve(async (req: Request) => {
     
     // Check file type
     if (file.name.endsWith('.xlsx') || file.type.includes('spreadsheet')) {
-      console.log('Processing as Excel file');
+      console.log('Processing as Excel file (columns A-Q only)');
       extractedData = extractFromExcel(uint8Array);
     } else {
       console.log('Processing as PDF file');

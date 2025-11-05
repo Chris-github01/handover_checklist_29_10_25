@@ -5,6 +5,12 @@ import emailjs from '@emailjs/browser';
 
 export interface ProjectWithStats extends Project {
   stageStats?: { completed: number; total: number; completedStages: string[] };
+  costSummary?: {
+    totalProjectValue: number;
+    totalClaimedToDate: number;
+    totalOutstanding: number;
+    percentageClaimed: number;
+  };
 }
 
 export const useProjects = () => {
@@ -86,12 +92,51 @@ Optimal Fire Systems Team`;
       setLoading(true);
       const data = await getProjects();
 
-      // Fetch stage stats for each project
+      // Fetch stage stats and cost data for each project
       const projectsWithStats = await Promise.all(
         data.map(async (project) => {
           try {
             const stageStats = await getProjectStageStats(project.id);
-            return { ...project, stageStats };
+
+            // Fetch cost data
+            let costSummary = undefined;
+            try {
+              const { supabase } = await import('../lib/supabase');
+
+              const { data: costData } = await supabase
+                .from('project_costs')
+                .select('*')
+                .eq('project_id', project.id)
+                .maybeSingle();
+
+              const { data: variationsData } = await supabase
+                .from('project_variations')
+                .select('value, claimed_amount')
+                .eq('project_id', project.id);
+
+              if (costData) {
+                const agreedContractValue = Number(costData.agreed_contract_value) || 0;
+                const contractWorksClaimed = Number(costData.contract_works_claimed) || 0;
+                const totalVariationsValue = variationsData?.reduce((sum, v) => sum + Number(v.value), 0) || 0;
+                const totalVariationsClaimed = variationsData?.reduce((sum, v) => sum + Number(v.claimed_amount), 0) || 0;
+
+                const totalProjectValue = agreedContractValue + totalVariationsValue;
+                const totalClaimedToDate = contractWorksClaimed + totalVariationsClaimed;
+                const totalOutstanding = totalProjectValue - totalClaimedToDate;
+                const percentageClaimed = totalProjectValue > 0 ? (totalClaimedToDate / totalProjectValue) * 100 : 0;
+
+                costSummary = {
+                  totalProjectValue,
+                  totalClaimedToDate,
+                  totalOutstanding,
+                  percentageClaimed
+                };
+              }
+            } catch (err) {
+              console.error(`Error fetching cost data for project ${project.id}:`, err);
+            }
+
+            return { ...project, stageStats, costSummary };
           } catch (err) {
             console.error(`Error fetching stats for project ${project.id}:`, err);
             return project;

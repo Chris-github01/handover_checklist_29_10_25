@@ -134,6 +134,30 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
             </div>
           </div>
 
+          {project.costSummary && project.costSummary.totalProjectValue > 0 && (
+            <div className="mt-3 p-3 bg-purple-50 border border-purple-200 rounded-lg">
+              <div className="text-xs font-semibold text-gray-700 mb-2">Project Summary</div>
+              <div className="space-y-1.5 text-xs">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Total Project Value:</span>
+                  <span className="font-medium text-gray-900">${project.costSummary.totalProjectValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Total Claimed to Date:</span>
+                  <span className="font-medium text-green-700">
+                    ${project.costSummary.totalClaimedToDate.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ({project.costSummary.percentageClaimed.toFixed(2)}%)
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Total Outstanding:</span>
+                  <span className="font-medium text-orange-700">
+                    ${project.costSummary.totalOutstanding.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ({(100 - project.costSummary.percentageClaimed).toFixed(2)}%)
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+
           {project.project_code && (
             <div className="flex items-center text-gray-600 mb-2">
               <span className="text-sm font-medium">Code: {project.project_code}</span>

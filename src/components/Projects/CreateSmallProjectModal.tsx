@@ -245,6 +245,7 @@ const CreateSmallProjectModal: React.FC<CreateSmallProjectModalProps> = ({ onClo
                 <option value="Alfie">Alfie</option>
                 <option value="Ali">Ali</option>
                 <option value="Chris">Chris</option>
+                <option value="Karel">Karel</option>
                 <option value="Zach">Zach</option>
               </select>
             </div>
@@ -259,6 +260,7 @@ const CreateSmallProjectModal: React.FC<CreateSmallProjectModalProps> = ({ onClo
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">Select QS</option>
+                <option value="Carna">Carna</option>
                 <option value="Contracts">Contracts</option>
                 <option value="Denver">Denver</option>
                 <option value="Reynier">Reynier</option>

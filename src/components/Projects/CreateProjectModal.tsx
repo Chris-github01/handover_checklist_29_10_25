@@ -259,7 +259,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ onClose, onCrea
               <option value="await_pre_let">Await Pre-let (Verbal confirmation)</option>
               <option value="awarded">Awarded</option>
               <option value="in_progress">In Progress</option>
-              <option value="handover_complete">Handover Complete</option>
+              <option value="handover_complete">Live</option>
             </select>
           </div>
 

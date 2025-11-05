@@ -43,7 +43,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
       case 'active':
         return 'ACTIVE';
       case 'handover_complete':
-        return 'HANDOVER COMPLETE';
+        return 'LIVE';
       default:
         return status.replace('_', ' ').toUpperCase();
     }

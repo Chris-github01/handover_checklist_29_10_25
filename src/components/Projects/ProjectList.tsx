@@ -54,7 +54,7 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
                         project.status === 'awarded' ? 'Awarded' :
                         project.status === 'in_progress' ? 'In Progress' :
                         project.status === 'active' ? 'Active' :
-                        'Handover Complete',
+                        'Live',
       'Site Manager (SM)': project.site_manager || '',
       'QS': project.qs || ''
     }));
@@ -365,7 +365,7 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
                         rawStatus === 'Awarded' ? 'awarded' :
                         rawStatus === 'In Progress' ? 'in_progress' :
                         rawStatus === 'Active' ? 'active' :
-                        rawStatus === 'Handover Complete' ? 'handover_complete' :
+                        rawStatus === 'Live' ? 'handover_complete' :
                         'await_pre_let';
 
           const rawStartDate = row['Target Start Date'];
@@ -597,7 +597,7 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
-              Handover Complete
+              Live Projects
             </button>
           </div>
         </div>

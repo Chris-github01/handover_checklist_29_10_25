@@ -8,9 +8,11 @@ interface StageTileProps {
   canAccess: boolean; // Can view the stage
   canEdit: boolean;   // Can edit the stage
   status: 'pending' | 'in_progress' | 'complete';
+  isSmallProject?: boolean;
+  onToggleComplete?: (e: React.MouseEvent) => void;
 }
 
-const StageTile: React.FC<StageTileProps> = ({ stage, onClick, canAccess, canEdit, status }) => {
+const StageTile: React.FC<StageTileProps> = ({ stage, onClick, canAccess, canEdit, status, isSmallProject, onToggleComplete }) => {
   const getStatusIcon = () => {
     switch (status) {
       case 'complete':
@@ -76,7 +78,18 @@ const StageTile: React.FC<StageTileProps> = ({ stage, onClick, canAccess, canEdi
         </div>
         
         {(canAccess || canEdit) && (
-          <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
+          <div className="flex items-center space-x-2">
+            {isSmallProject && onToggleComplete && (
+              <input
+                type="checkbox"
+                checked={status === 'complete'}
+                onChange={onToggleComplete}
+                onClick={(e) => e.stopPropagation()}
+                className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer"
+              />
+            )}
+            <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
+          </div>
         )}
       </div>
 

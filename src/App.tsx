@@ -9,7 +9,7 @@ import { supabase } from './lib/supabase';
 
 const AppContent: React.FC = () => {
   const { user, loading } = useAuth();
-  const [selectedProject, setSelectedProject] = useState<{ id: string; name: string; bwof: boolean } | null>(null);
+  const [selectedProject, setSelectedProject] = useState<{ id: string; name: string; bwof: boolean; isSmallProject: boolean } | null>(null);
   const [passwordResetSuccess, setPasswordResetSuccess] = useState(false);
   const [isPasswordRecovery, setIsPasswordRecovery] = useState(false);
 
@@ -200,12 +200,13 @@ const AppContent: React.FC = () => {
             projectId={selectedProject.id}
             projectName={selectedProject.name}
             projectBwof={selectedProject.bwof}
+            isSmallProject={selectedProject.isSmallProject}
             onBack={() => setSelectedProject(null)}
           />
         ) : (
           <ProjectList
-            onSelectProject={(projectId, projectName, projectBwof) => {
-              setSelectedProject({ id: projectId, name: projectName, bwof: projectBwof });
+            onSelectProject={(projectId, projectName, projectBwof, isSmallProject) => {
+              setSelectedProject({ id: projectId, name: projectName, bwof: projectBwof, isSmallProject });
             }}
           />
         )}

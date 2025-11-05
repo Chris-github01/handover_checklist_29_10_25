@@ -12,10 +12,11 @@ interface StageGridProps {
   projectId: string;
   projectName: string;
   projectBwof: boolean;
+  isSmallProject: boolean;
   onBack: () => void;
 }
 
-const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectBwof, onBack }) => {
+const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectBwof, isSmallProject, onBack }) => {
   const { stages, loading, error, refreshStages } = useProjectStages(projectId);
   const { userProfile } = useAuth();
   const [selectedStage, setSelectedStage] = useState<StageWithItems | null>(null);
@@ -189,6 +190,22 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectBw
   const handleStageUpdate = useCallback(async () => {
     await refreshStages();
   }, [refreshStages]);
+
+  const handleSmallProjectStageToggle = async (stageId: string, currentStatus: 'pending' | 'in_progress' | 'complete') => {
+    try {
+      const newStatus = currentStatus === 'complete' ? 'pending' : 'complete';
+
+      await supabase
+        .from('stage_statuses')
+        .update({ status: newStatus })
+        .eq('stage_id', stageId)
+        .eq('project_id', projectId);
+
+      await refreshStages();
+    } catch (error) {
+      console.error('Error toggling small project stage:', error);
+    }
+  };
 
   const handleInitializeStages = async () => {
     setInitializing(true);
@@ -369,6 +386,11 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectBw
             canAccess={canUserAccessStage(stage)}
             canEdit={canUserEditStage(stage)}
             status={getStageStatus(stage)}
+            isSmallProject={isSmallProject}
+            onToggleComplete={isSmallProject ? (e) => {
+              e.stopPropagation();
+              handleSmallProjectStageToggle(stage.id, getStageStatus(stage));
+            } : undefined}
           />
         ))}
       </div>

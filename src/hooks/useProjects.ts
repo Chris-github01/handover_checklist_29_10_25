@@ -111,10 +111,8 @@ Optimal Fire Systems Team`;
     try {
       const newProject = await createProject(projectData);
 
-      // Only initialize stages for regular projects, not small projects
-      if (!newProject.is_small_project) {
-        await initializeProjectStages(newProject.id);
-      }
+      // Initialize stages for all projects
+      await initializeProjectStages(newProject.id);
 
       // Send email notifications
       await sendProjectCreationNotification(newProject);

@@ -140,10 +140,12 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
 
       const data = await response.json();
       console.log('Extracted data:', data);
+      console.log('Contract works count:', data.contractWorks?.length || 0);
+      console.log('Variations count:', data.variations?.length || 0);
 
       // Check if we got any data
       if (!data.contractWorks?.length && !data.variations?.length) {
-        setError('No data could be extracted from the PDF. Please check the file format.');
+        setError(`No data could be extracted from the PDF. Contract works: ${data.contractWorks?.length || 0}, Variations: ${data.variations?.length || 0}. Please check the browser console for details.`);
         return;
       }
 

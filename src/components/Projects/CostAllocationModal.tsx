@@ -25,6 +25,7 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
   const [error, setError] = useState<string | null>(null);
   const [extracting, setExtracting] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     loadCostData();
@@ -113,10 +114,14 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
       setExtracting(true);
       setError(null);
 
+      console.log('Starting PDF extraction for file:', selectedFile.name);
+
       const formData = new FormData();
       formData.append('file', selectedFile);
 
       const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/extract-pdf-data`;
+      console.log('Calling API:', apiUrl);
+
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
@@ -125,16 +130,28 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
         body: formData,
       });
 
+      console.log('Response status:', response.status);
+
       if (!response.ok) {
-        throw new Error('Failed to extract PDF data');
+        const errorText = await response.text();
+        console.error('API error:', errorText);
+        throw new Error(`Failed to extract PDF data: ${response.status} - ${errorText}`);
       }
 
       const data = await response.json();
+      console.log('Extracted data:', data);
+
+      // Check if we got any data
+      if (!data.contractWorks?.length && !data.variations?.length) {
+        setError('No data could be extracted from the PDF. Please check the file format.');
+        return;
+      }
 
       // Update contract works
       if (data.contractWorks && data.contractWorks.length > 0) {
         const totalValue = data.contractWorks.reduce((sum: number, item: any) => sum + item.value, 0);
         const totalClaimed = data.contractWorks.reduce((sum: number, item: any) => sum + item.claimed, 0);
+        console.log('Setting contract values:', { totalValue, totalClaimed });
         setAgreedContractValue(totalValue);
         setContractWorksClaimed(totalClaimed);
       }
@@ -147,13 +164,22 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
           claimed_amount: v.claimed,
           order_index: variations.length + index
         }));
+        console.log('Adding variations:', importedVariations);
         setVariations([...variations, ...importedVariations]);
       }
+
+      // Show success message
+      const successMsg = `Successfully extracted ${data.contractWorks?.length || 0} contract items and ${data.variations?.length || 0} variations`;
+      console.log(successMsg);
+      setSuccessMessage(successMsg);
 
       setSelectedFile(null);
       // Reset file input
       const fileInput = document.getElementById('pdf-upload') as HTMLInputElement;
       if (fileInput) fileInput.value = '';
+
+      // Clear success message after 5 seconds
+      setTimeout(() => setSuccessMessage(null), 5000);
 
     } catch (err) {
       console.error('Error extracting PDF:', err);
@@ -248,6 +274,12 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
           {error && (
             <div className="bg-red-50 border border-red-200 rounded-lg p-3">
               <p className="text-sm text-red-600">{error}</p>
+            </div>
+          )}
+
+          {successMessage && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+              <p className="text-sm text-green-600">{successMessage}</p>
             </div>
           )}
 

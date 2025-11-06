@@ -7,9 +7,12 @@ const corsHeaders = {
 }
 
 interface NotificationRequest {
-  project_id: string;
-  stage_id: string;
-  event: string;
+  project_id?: string;
+  stage_id?: string;
+  event?: string;
+  recipients?: string[];
+  subject?: string;
+  message?: string;
 }
 
 serve(async (req) => {
@@ -29,9 +32,37 @@ serve(async (req) => {
       }
     )
 
-    const { project_id, stage_id, event }: NotificationRequest = await req.json()
+    const requestData: NotificationRequest = await req.json()
+    const { project_id, stage_id, event, recipients, subject, message } = requestData
 
-    // Get project and stage details
+    // Handle direct email requests (like Final Account)
+    if (recipients && subject && message) {
+      // Log the email details (in production, integrate with email service)
+      console.log('Sending direct email:');
+      console.log('Recipients:', recipients);
+      console.log('Subject:', subject);
+      console.log('Message:', message);
+
+      // Here you would integrate with your email service (Resend, SendGrid, etc.)
+      // For now, we'll return success
+      return new Response(
+        JSON.stringify({
+          success: true,
+          message: 'Email notification logged',
+          recipients: recipients.length
+        }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 200,
+        },
+      )
+    }
+
+    // Original notification logic for stage events
+    if (!project_id || !stage_id || !event) {
+      throw new Error('Missing required fields: project_id, stage_id, and event are required for stage notifications')
+    }
+
     const { data: project } = await supabaseClient
       .from('projects')
       .select('name, client')
@@ -93,7 +124,7 @@ serve(async (req) => {
     }
 
     // Get recipients
-    const recipients = []
+    const recipientsToNotify = []
     for (const recipient of rule.recipients) {
       if (recipient.type === 'role') {
         const { data: users } = await supabaseClient
@@ -101,7 +132,7 @@ serve(async (req) => {
           .select('id, name, email')
           .eq('role', recipient.value)
         
-        recipients.push(...(users || []))
+        recipientsToNotify.push(...(users || []))
       } else if (recipient.type === 'user') {
         const { data: user } = await supabaseClient
           .from('users')
@@ -109,12 +140,12 @@ serve(async (req) => {
           .eq('id', recipient.value)
           .single()
         
-        if (user) recipients.push(user)
+        if (user) recipientsToNotify.push(user)
       }
     }
 
     // Create notification records
-    const notifications = recipients.map(recipient => ({
+    const notifications = recipientsToNotify.map(recipient => ({
       project_id,
       stage_id,
       event,

@@ -287,7 +287,7 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
       const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
       const emailData = {
-        recipients: ['karel@optimalfire.co.nz', 'okkie@optimalfire.co.nz'],
+        recipients: ['karel@optimalfire.co.nz', 'okkie@optimalfire.co.nz', 'chris@optimalfire.co.nz'],
         subject: `Final Account Closed - ${projectName}`,
         message: `Final account closed for '${projectName}'. Please remove all Managers and Installers from Onetrace.`
       };

@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import emailjs from '@emailjs/browser';
 import { useProjectStages } from '../../hooks/useProjects';
 import { useAuth } from '../../contexts/AuthContext';
 import { initializeProjectStages } from '../../lib/database';
@@ -282,30 +283,30 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
   const handleFinalAccount = async () => {
     setUpdatingStatus(true);
     try {
-      // Send email notification via edge function
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      // Send email notification using EmailJS
+      const recipients = ['karel@optimalfire.co.nz', 'okkie@optimalfire.co.nz', 'chris@optimalfire.co.nz'];
+      const subject = `Final Account Closed - ${projectName}`;
+      const message = `Final account closed for '${projectName}'. Please remove all Managers and Installers from Onetrace.`;
 
-      const emailData = {
-        recipients: ['karel@optimalfire.co.nz', 'okkie@optimalfire.co.nz', 'chris@optimalfire.co.nz'],
-        subject: `Final Account Closed - ${projectName}`,
-        message: `Final account closed for '${projectName}'. Please remove all Managers and Installers from Onetrace.`
-      };
+      // Send email to each recipient
+      const emailPromises = recipients.map(email => {
+        const templateParams = {
+          to_email: email,
+          subject: subject,
+          message: message,
+          project_name: projectName,
+          reply_to: 'chris@optimalfire.co.nz'
+        };
 
-      const response = await fetch(`${supabaseUrl}/functions/v1/send-notifications`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${supabaseAnonKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(emailData)
+        return emailjs.send(
+          'service_eh5hex9',
+          'template_msss66t',
+          templateParams,
+          'fksPkj0nAvRfXvhjx'
+        );
       });
 
-      if (!response.ok) {
-        console.error('Failed to send email notification');
-        alert('Email notification failed, but you can continue.');
-      }
-
+      await Promise.all(emailPromises);
       alert(`Final account email sent for ${projectName}`);
     } catch (error) {
       console.error('Error sending final account email:', error);

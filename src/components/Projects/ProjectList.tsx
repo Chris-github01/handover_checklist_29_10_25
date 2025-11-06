@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useProjects, ProjectWithStats } from '../../hooks/useProjects';
-import { Plus, Search, Building2, AlertCircle, Download, Upload, MoreVertical, FileText, Hash, X } from 'lucide-react';
+import { Plus, Search, Building2, AlertCircle, Download, Upload, MoreVertical, FileText, Hash, X, ArrowUpDown } from 'lucide-react';
 import CreateProjectModal from './CreateProjectModal';
 import CreateSmallProjectModal from './CreateSmallProjectModal';
 import EditProjectModal from './EditProjectModal';
@@ -34,6 +34,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
   const [selectedRegion, setSelectedRegion] = useState<'auckland' | 'wellington'>('auckland');
   const [generatedCode, setGeneratedCode] = useState('');
   const [loadingCode, setLoadingCode] = useState(false);
+  const [sortBy, setSortBy] = useState<'alphabetical' | 'recent'>('alphabetical');
 
   const filteredProjects = projects
     .filter(project => {
@@ -47,9 +48,14 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
       return matchesSearch && matchesTab;
     })
     .sort((a, b) => {
-      const nameA = (a.project_title || a.name).toLowerCase();
-      const nameB = (b.project_title || b.name).toLowerCase();
-      return nameA.localeCompare(nameB);
+      if (sortBy === 'alphabetical') {
+        const nameA = (a.project_title || a.name).toLowerCase();
+        const nameB = (b.project_title || b.name).toLowerCase();
+        return nameA.localeCompare(nameB);
+      } else {
+        // Sort by creation date (most recent first)
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      }
     });
 
   const handleExportExcel = () => {
@@ -628,15 +634,25 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
           </div>
         </div>
 
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-          <input
-            type="text"
-            placeholder="Search projects..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
+        <div className="flex items-center space-x-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              type="text"
+              placeholder="Search projects..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <button
+            onClick={() => setSortBy(sortBy === 'alphabetical' ? 'recent' : 'alphabetical')}
+            className="px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center space-x-2 whitespace-nowrap"
+            title={sortBy === 'alphabetical' ? 'Switch to Recent' : 'Switch to Alphabetical'}
+          >
+            <ArrowUpDown className="w-5 h-5 text-gray-600" />
+            <span className="text-sm font-medium text-gray-700">{sortBy === 'alphabetical' ? 'A-Z' : 'Recent'}</span>
+          </button>
         </div>
       </div>
 

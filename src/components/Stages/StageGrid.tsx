@@ -32,6 +32,7 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
   const [currentBwof, setCurrentBwof] = useState(projectBwof);
   const [showCostAllocation, setShowCostAllocation] = useState(false);
   const [showCostReport, setShowCostReport] = useState(false);
+  const [updatingStatus, setUpdatingStatus] = useState(false);
 
   // Fetch current project BWOF status
   useEffect(() => {
@@ -252,6 +253,32 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
     }
   };
 
+  const handleStatusChange = async () => {
+    setUpdatingStatus(true);
+    try {
+      const newStatus = projectStatus === 'live' ? 'closed' : 'live';
+
+      const { error } = await supabase
+        .from('projects')
+        .update({ status: newStatus })
+        .eq('id', projectId);
+
+      if (error) {
+        console.error('Error updating project status:', error);
+        alert('Failed to update project status');
+        return;
+      }
+
+      // Refresh the page to reflect the new status
+      window.location.reload();
+    } catch (error) {
+      console.error('Error changing project status:', error);
+      alert('Failed to update project status');
+    } finally {
+      setUpdatingStatus(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -450,6 +477,25 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
             } : undefined}
           />
         ))}
+      </div>
+
+      {/* Status Change Button */}
+      <div className="flex justify-center mt-8">
+        <button
+          onClick={handleStatusChange}
+          disabled={updatingStatus}
+          className={`px-8 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+            projectStatus === 'live'
+              ? 'bg-red-600 hover:bg-red-700 text-white'
+              : 'bg-green-600 hover:bg-green-700 text-white'
+          }`}
+        >
+          {updatingStatus
+            ? 'Updating...'
+            : projectStatus === 'live'
+            ? 'Close Project'
+            : 'Live'}
+        </button>
       </div>
 
       {/* Stage Modal */}

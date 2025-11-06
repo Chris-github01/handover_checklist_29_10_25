@@ -35,6 +35,9 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
   const [showCostReport, setShowCostReport] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState(false);
 
+  // Check if user can use stage completion checkboxes
+  const canUseStageCheckbox = userProfile?.email === 'ramona@optimalfire.co.nz' || userProfile?.email === 'pieter@optimalfire.co.nz';
+
   // Fetch current project BWOF status
   useEffect(() => {
     const fetchProjectBwof = async () => {
@@ -512,10 +515,10 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
             canEdit={canUserEditStage(stage)}
             status={getStageStatus(stage)}
             isSmallProject={isSmallProject}
-            onToggleComplete={(e) => {
+            onToggleComplete={canUseStageCheckbox ? (e) => {
               e.stopPropagation();
               handleStageToggle(stage.id, getStageStatus(stage));
-            }}
+            } : undefined}
           />
         ))}
       </div>

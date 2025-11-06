@@ -39,6 +39,11 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
         ? project.status === 'closed'
         : project.status !== 'live' && project.status !== 'closed';
       return matchesSearch && matchesTab;
+    })
+    .sort((a, b) => {
+      const nameA = (a.project_title || a.name).toLowerCase();
+      const nameB = (b.project_title || b.name).toLowerCase();
+      return nameA.localeCompare(nameB);
     });
 
   const handleExportExcel = () => {

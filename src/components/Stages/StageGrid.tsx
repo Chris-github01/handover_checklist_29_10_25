@@ -81,15 +81,14 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
   });
 
   const getStageStatus = (stage: StageWithItems): 'pending' | 'in_progress' | 'complete' => {
-    // For small projects, use the explicit status if set
-    if (isSmallProject && stage.status?.status) {
+    // Check for explicit status first (for both small and regular projects when checkbox is used)
+    if (stage.status?.status) {
       if (stage.status.status === 'na' || stage.status.status === 'complete') return 'complete';
       if (stage.status.status === 'in_progress') return 'in_progress';
       if (stage.status.status === 'pending') return 'pending';
     }
 
-    // For regular projects, calculate based on items
-    if (stage.status?.status === 'na') return 'complete';
+    // For regular projects without explicit status, calculate based on items
     if (stage.requiredItems > 0 && stage.completedRequiredItems === stage.requiredItems) return 'complete';
     if (stage.requiredItems === 0 && stage.completedItems === stage.totalItems && stage.totalItems > 0) return 'complete';
     if (stage.completedItems > 0) return 'in_progress';
@@ -222,7 +221,7 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
     await refreshStages();
   }, [refreshStages]);
 
-  const handleSmallProjectStageToggle = async (stageId: string, currentStatus: 'pending' | 'in_progress' | 'complete') => {
+  const handleStageToggle = async (stageId: string, currentStatus: 'pending' | 'in_progress' | 'complete') => {
     try {
       const newStatus = currentStatus === 'complete' ? 'pending' : 'complete';
 
@@ -243,7 +242,7 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
       // Immediately refresh to show the change
       await refreshStages();
     } catch (error) {
-      console.error('Error toggling small project stage:', error);
+      console.error('Error toggling stage:', error);
     }
   };
 
@@ -513,10 +512,10 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
             canEdit={canUserEditStage(stage)}
             status={getStageStatus(stage)}
             isSmallProject={isSmallProject}
-            onToggleComplete={isSmallProject ? (e) => {
+            onToggleComplete={(e) => {
               e.stopPropagation();
-              handleSmallProjectStageToggle(stage.id, getStageStatus(stage));
-            } : undefined}
+              handleStageToggle(stage.id, getStageStatus(stage));
+            }}
           />
         ))}
       </div>

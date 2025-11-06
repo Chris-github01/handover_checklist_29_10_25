@@ -279,6 +279,42 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
     }
   };
 
+  const handleFinalAccount = async () => {
+    setUpdatingStatus(true);
+    try {
+      // Send email notification via edge function
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+      const emailData = {
+        recipients: ['karel@optimalfire.co.nz', 'okkie@optimalfire.co.nz'],
+        subject: `Final Account Closed - ${projectName}`,
+        message: `Final account closed for '${projectName}'. Please remove all Managers and Installers from Onetrace.`
+      };
+
+      const response = await fetch(`${supabaseUrl}/functions/v1/send-notifications`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${supabaseAnonKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(emailData)
+      });
+
+      if (!response.ok) {
+        console.error('Failed to send email notification');
+        alert('Email notification failed, but you can continue.');
+      }
+
+      alert(`Final account email sent for ${projectName}`);
+    } catch (error) {
+      console.error('Error sending final account email:', error);
+      alert('Failed to send email notification');
+    } finally {
+      setUpdatingStatus(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -482,16 +518,20 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
       {/* Status Change Button */}
       <div className="flex justify-center mt-8">
         <button
-          onClick={handleStatusChange}
+          onClick={projectStatus === 'closed' ? handleFinalAccount : handleStatusChange}
           disabled={updatingStatus}
           className={`px-8 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
-            projectStatus === 'live'
+            projectStatus === 'closed'
+              ? 'bg-blue-600 hover:bg-blue-700 text-white'
+              : projectStatus === 'live'
               ? 'bg-red-600 hover:bg-red-700 text-white'
               : 'bg-green-600 hover:bg-green-700 text-white'
           }`}
         >
           {updatingStatus
-            ? 'Updating...'
+            ? 'Sending...'
+            : projectStatus === 'closed'
+            ? 'Final Account'
             : projectStatus === 'live'
             ? 'Close Project'
             : 'Live'}

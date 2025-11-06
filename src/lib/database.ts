@@ -495,6 +495,16 @@ export const initializeProjectStages = async (projectId: string) => {
         { title: 'Arrange machines on hire', is_required: true, order_index: 2 },
         { title: 'Set up Site on Site App Pro', is_required: true, order_index: 3 }
       ]
+    },
+    {
+      code: 'STEP_10',
+      title: 'Step 10: PS3 and Warranty',
+      owner_role: 'Director',
+      order_index: 10,
+      is_required: true,
+      items: [
+        { title: 'PS3 and Warranty Documents Issued', is_required: true, order_index: 1 }
+      ]
     }
   ];
 

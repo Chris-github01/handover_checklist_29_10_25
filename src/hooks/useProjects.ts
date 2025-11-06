@@ -172,7 +172,37 @@ Optimal Fire Systems Team`;
 
   const handleUpdateProject = async (projectId: string, updates: Partial<Omit<Project, 'id' | 'created_at'>>) => {
     try {
+      // Get the current project to check if status is changing to 'closed'
+      const currentProject = projects.find(p => p.id === projectId);
+      const isChangingToClosed = updates.status === 'closed' && currentProject?.status !== 'closed';
+
       await updateProjectInDB(projectId, updates);
+
+      // Send email notification if project is being closed
+      if (isChangingToClosed && currentProject) {
+        try {
+          const templateParams = {
+            to_email: 'arlene@optimalfire.co.nz',
+            subject: `Project Closed - ${currentProject.name}`,
+            message: `Project "${currentProject.name}" has been moved to Completed Projects. Please send PS3 and Warranty documents to the client.`,
+            project_name: currentProject.name,
+            reply_to: 'chris@optimalfire.co.nz'
+          };
+
+          await emailjs.send(
+            'service_eh5hex9',
+            'template_msss66t',
+            templateParams,
+            'fksPkj0nAvRfXvhjx'
+          );
+
+          console.log('✅ Project closed notification sent to arlene@optimalfire.co.nz');
+        } catch (emailError) {
+          console.error('Failed to send project closed notification:', emailError);
+          // Don't throw - project update was successful
+        }
+      }
+
       await fetchProjects(); // Refresh the list
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update project');

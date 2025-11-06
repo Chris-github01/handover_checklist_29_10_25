@@ -370,7 +370,7 @@ export const deleteAttachment = async (attachmentId: string) => {
 };
 
 // Initialize project with template stages
-export const initializeProjectStages = async (projectId: string) => {
+export const initializeProjectStages = async (projectId: string, projectStatus?: string) => {
   const templateStages = [
     {
       code: 'STEP_1',
@@ -495,8 +495,12 @@ export const initializeProjectStages = async (projectId: string) => {
         { title: 'Arrange machines on hire', is_required: true, order_index: 2 },
         { title: 'Set up Site on Site App Pro', is_required: true, order_index: 3 }
       ]
-    },
-    {
+    }
+  ];
+
+  // Only add Step 10 for closed projects
+  if (projectStatus === 'closed') {
+    templateStages.push({
       code: 'STEP_10',
       title: 'Step 10: PS3 and Warranty',
       owner_role: 'Director',
@@ -505,8 +509,8 @@ export const initializeProjectStages = async (projectId: string) => {
       items: [
         { title: 'PS3 and Warranty Documents Issued', is_required: true, order_index: 1 }
       ]
-    }
-  ];
+    });
+  }
 
   for (const stageTemplate of templateStages) {
     const { items, ...stageData } = stageTemplate;

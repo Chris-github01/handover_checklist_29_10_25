@@ -56,6 +56,11 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
     const matchesSearch = stage.title.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || getStageStatus(stage) === statusFilter;
 
+    // Only show Step 10 for closed projects
+    if (stage.code === 'STEP_10' && projectStatus !== 'closed') {
+      return false;
+    }
+
     // For small projects, only show stages matching selected steps
     if (isSmallProject && smallProjectSteps && smallProjectSteps.length > 0) {
       const stageNumber = parseInt(stage.code.replace('STEP_', ''));

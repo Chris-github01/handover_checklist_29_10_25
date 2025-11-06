@@ -12,7 +12,13 @@ import { buildFolderName } from '../../lib/naming';
 import { useAuth } from '../../contexts/AuthContext';
 import jsPDF from 'jspdf';
 
-const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: string, projectBwof: boolean, isSmallProject: boolean, projectCode?: string, client?: string, status?: string, smallProjectSteps?: number[]) => void }> = ({ onSelectProject }) => {
+interface ProjectListProps {
+  activeTab: 'in_progress' | 'complete' | 'closed';
+  onTabChange: (tab: 'in_progress' | 'complete' | 'closed') => void;
+  onSelectProject: (projectId: string, projectName: string, projectBwof: boolean, isSmallProject: boolean, projectCode?: string, client?: string, status?: string, smallProjectSteps?: number[]) => void;
+}
+
+const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSelectProject }) => {
   const { projects, loading, error, createProject, updateProject, deleteProject, refreshProjects } = useProjects();
   const onRefresh = refreshProjects;
   const { userProfile } = useAuth();
@@ -20,7 +26,6 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
   const [showCreateSmallModal, setShowCreateSmallModal] = useState(false);
   const [editingProject, setEditingProject] = useState<ProjectWithStats | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeTab, setActiveTab] = useState<'in_progress' | 'complete' | 'closed'>('in_progress');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [importing, setImporting] = useState(false);
   const [showActionsMenu, setShowActionsMenu] = useState(false);
@@ -591,7 +596,7 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
         <div className="border-b border-gray-200">
           <div className="flex space-x-8">
             <button
-              onClick={() => setActiveTab('in_progress')}
+              onClick={() => onTabChange('in_progress')}
               className={`pb-4 px-1 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === 'in_progress'
                   ? 'border-blue-600 text-blue-600'
@@ -601,7 +606,7 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
               Handover in Progress
             </button>
             <button
-              onClick={() => setActiveTab('complete')}
+              onClick={() => onTabChange('complete')}
               className={`pb-4 px-1 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === 'complete'
                   ? 'border-blue-600 text-blue-600'
@@ -611,7 +616,7 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
               Live Projects
             </button>
             <button
-              onClick={() => setActiveTab('closed')}
+              onClick={() => onTabChange('closed')}
               className={`pb-4 px-1 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === 'closed'
                   ? 'border-blue-600 text-blue-600'

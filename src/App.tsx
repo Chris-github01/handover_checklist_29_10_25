@@ -10,6 +10,7 @@ import { supabase } from './lib/supabase';
 const AppContent: React.FC = () => {
   const { user, loading } = useAuth();
   const [selectedProject, setSelectedProject] = useState<{ id: string; name: string; bwof: boolean; isSmallProject: boolean; code?: string; client: string; status: string; smallProjectSteps?: number[] } | null>(null);
+  const [activeTab, setActiveTab] = useState<'in_progress' | 'complete' | 'closed'>('in_progress');
   const [passwordResetSuccess, setPasswordResetSuccess] = useState(false);
   const [isPasswordRecovery, setIsPasswordRecovery] = useState(false);
 
@@ -209,6 +210,8 @@ const AppContent: React.FC = () => {
           />
         ) : (
           <ProjectList
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
             onSelectProject={(projectId, projectName, projectBwof, isSmallProject, projectCode, client, status, smallProjectSteps) => {
               setSelectedProject({ id: projectId, name: projectName, bwof: projectBwof, isSmallProject, code: projectCode, client, status, smallProjectSteps });
             }}

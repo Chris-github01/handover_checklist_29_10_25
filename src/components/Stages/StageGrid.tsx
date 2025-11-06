@@ -18,10 +18,11 @@ interface StageGridProps {
   projectStatus: string;
   projectBwof: boolean;
   isSmallProject: boolean;
+  smallProjectSteps?: number[];
   onBack: () => void;
 }
 
-const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCode, projectClient, projectStatus, projectBwof, isSmallProject, onBack }) => {
+const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCode, projectClient, projectStatus, projectBwof, isSmallProject, smallProjectSteps, onBack }) => {
   const { stages, loading, error, refreshStages } = useProjectStages(projectId);
   const { userProfile } = useAuth();
   const [selectedStage, setSelectedStage] = useState<StageWithItems | null>(null);
@@ -52,6 +53,14 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
   const filteredStages = stages.filter(stage => {
     const matchesSearch = stage.title.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || getStageStatus(stage) === statusFilter;
+
+    // For small projects, only show stages matching selected steps
+    if (isSmallProject && smallProjectSteps && smallProjectSteps.length > 0) {
+      const stageNumber = parseInt(stage.code.replace('STEP_', ''));
+      if (!smallProjectSteps.includes(stageNumber)) {
+        return false;
+      }
+    }
 
     // Skip stages 1-3 if BWOF is true
     if (currentBwof) {

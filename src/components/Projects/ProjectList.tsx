@@ -12,8 +12,9 @@ import { buildFolderName } from '../../lib/naming';
 import { useAuth } from '../../contexts/AuthContext';
 import jsPDF from 'jspdf';
 
-const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: string, projectBwof: boolean, isSmallProject: boolean, projectCode?: string, client?: string, status?: string) => void }> = ({ onSelectProject }) => {
-  const { projects, loading, error, createProject, updateProject, deleteProject } = useProjects();
+const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: string, projectBwof: boolean, isSmallProject: boolean, projectCode?: string, client?: string, status?: string, smallProjectSteps?: number[]) => void }> = ({ onSelectProject }) => {
+  const { projects, loading, error, createProject, updateProject, deleteProject, refreshProjects } = useProjects();
+  const onRefresh = refreshProjects;
   const { userProfile } = useAuth();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showCreateSmallModal, setShowCreateSmallModal] = useState(false);
@@ -661,7 +662,7 @@ const ProjectList: React.FC<{ onSelectProject: (projectId: string, projectName: 
             <ProjectCard
               key={project.id}
               project={project}
-              onClick={() => onSelectProject(project.id, project.name, project.bwof, project.is_small_project, project.project_code, project.client, project.status)}
+              onClick={() => onSelectProject(project.id, project.name, project.bwof, project.is_small_project, project.project_code, project.client, project.status, project.small_project_steps)}
               onEdit={setEditingProject}
               onDelete={deleteProject}
             />

@@ -20,7 +20,8 @@ const CreateSmallProjectModal: React.FC<CreateSmallProjectModalProps> = ({ onClo
     start_date_target: '',
     status: 'await_pre_let' as const,
     site_manager: '',
-    qs: ''
+    qs: '',
+    small_project_steps: [] as number[]
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -86,8 +87,9 @@ const CreateSmallProjectModal: React.FC<CreateSmallProjectModalProps> = ({ onClo
         project_title: projectTitle,
         site_manager: formData.site_manager || null,
         qs: formData.qs || null,
-        is_small_project: true
-      });
+        is_small_project: true,
+        small_project_steps: formData.small_project_steps.length > 0 ? formData.small_project_steps : null
+      } as any);
       onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create project');
@@ -96,9 +98,30 @@ const CreateSmallProjectModal: React.FC<CreateSmallProjectModalProps> = ({ onClo
     }
   };
 
-  const handleInputChange = (field: string, value: string | boolean) => {
+  const handleInputChange = (field: string, value: string | boolean | number[]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
+
+  const handleStepToggle = (stepNumber: number) => {
+    setFormData(prev => ({
+      ...prev,
+      small_project_steps: prev.small_project_steps.includes(stepNumber)
+        ? prev.small_project_steps.filter(s => s !== stepNumber)
+        : [...prev.small_project_steps, stepNumber].sort((a, b) => a - b)
+    }));
+  };
+
+  const steps = [
+    { number: 1, label: 'Step 1: Pre-Let (Pieter & Ray)' },
+    { number: 2, label: 'Step 2: Contract' },
+    { number: 3, label: 'Step 3: Estimating (Sanet)' },
+    { number: 4, label: 'Step 4: Commercial (Reegan & Quenique)' },
+    { number: 5, label: 'Step 5: Project Director (Pedro)' },
+    { number: 6, label: 'Step 6: QA (Okkie)' },
+    { number: 7, label: 'Step 7: Project Director - Handover to Site Managers' },
+    { number: 8, label: 'Step 8: Site Managers (Ali/Alfie/Zach/Chris/Karel)' },
+    { number: 9, label: 'Step 9: Health & Safety (Jacilise)' }
+  ];
 
   const useSuggestedCode = () => {
     setFormData(prev => ({ ...prev, project_code: suggestedCode }));
@@ -311,6 +334,31 @@ const CreateSmallProjectModal: React.FC<CreateSmallProjectModalProps> = ({ onClo
               <option value="live">Live</option>
               <option value="closed">Close Project</option>
             </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Select Steps to Include
+            </label>
+            <div className="space-y-2 max-h-64 overflow-y-auto border border-gray-200 rounded-lg p-3">
+              {steps.map(step => (
+                <label
+                  key={step.number}
+                  className="flex items-center text-sm text-gray-700 hover:bg-gray-50 p-2 rounded cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    checked={formData.small_project_steps.includes(step.number)}
+                    onChange={() => handleStepToggle(step.number)}
+                    className="w-4 h-4 mr-3 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                  />
+                  {step.label}
+                </label>
+              ))}
+            </div>
+            <p className="text-xs text-gray-500 mt-2">
+              Selected {formData.small_project_steps.length} of {steps.length} steps
+            </p>
           </div>
 
           {error && (

@@ -20,6 +20,7 @@ export interface Project {
   site_manager?: string;
   qs?: string;
   is_small_project: boolean;
+  small_project_steps?: number[];
   created_at: string;
 }
 

@@ -14,6 +14,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
   const { userProfile } = useAuth();
   const isDirector = userProfile?.role === 'Director';
   const [copied, setCopied] = useState(false);
+  const [emailCopied, setEmailCopied] = useState(false);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -98,6 +99,20 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error('Failed to copy text:', err);
+    }
+  };
+
+  const handleEmailCopy = async (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click
+
+    if (!project.client_qs_email) return;
+
+    try {
+      await navigator.clipboard.writeText(project.client_qs_email);
+      setEmailCopied(true);
+      setTimeout(() => setEmailCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy email:', err);
     }
   };
 
@@ -192,9 +207,18 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
                   </div>
                 )}
                 {project.client_qs_email && (
-                  <div className="flex items-center text-gray-600">
-                    <Mail className="w-3 h-3 mr-1.5 flex-shrink-0" />
-                    <span className="break-all">{project.client_qs_email}</span>
+                  <div className="flex items-center justify-between text-gray-600">
+                    <div className="flex items-center flex-1 min-w-0">
+                      <Mail className="w-3 h-3 mr-1.5 flex-shrink-0" />
+                      <span className="break-all">{project.client_qs_email}</span>
+                    </div>
+                    <button
+                      onClick={handleEmailCopy}
+                      className="ml-2 p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-colors flex-shrink-0"
+                      title="Copy email address"
+                    >
+                      {emailCopied ? <Check className="w-3 h-3 text-green-600" /> : <Copy className="w-3 h-3" />}
+                    </button>
                   </div>
                 )}
               </div>

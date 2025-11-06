@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, Building2, ArrowRight, Trash2, CreditCard as Edit, CheckCircle2, Copy, Check } from 'lucide-react';
+import { Calendar, Building2, ArrowRight, Trash2, CreditCard as Edit, CheckCircle2, Copy, Check, User, Phone, Mail } from 'lucide-react';
 import { ProjectWithStats } from '../../hooks/useProjects';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -174,6 +174,32 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
             <Calendar className="w-4 h-4 mr-2" />
             <span className="text-sm">Target: {formatDate(project.start_date_target)}</span>
           </div>
+
+          {(project.client_qs_name || project.client_qs_number || project.client_qs_email) && (
+            <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+              <div className="text-xs font-semibold text-gray-700 mb-2">Client QS Information</div>
+              <div className="space-y-1.5 text-xs">
+                {project.client_qs_name && (
+                  <div className="flex items-center text-gray-600">
+                    <User className="w-3 h-3 mr-1.5 flex-shrink-0" />
+                    <span className="font-medium">{project.client_qs_name}</span>
+                  </div>
+                )}
+                {project.client_qs_number && (
+                  <div className="flex items-center text-gray-600">
+                    <Phone className="w-3 h-3 mr-1.5 flex-shrink-0" />
+                    <span>{project.client_qs_number}</span>
+                  </div>
+                )}
+                {project.client_qs_email && (
+                  <div className="flex items-center text-gray-600">
+                    <Mail className="w-3 h-3 mr-1.5 flex-shrink-0" />
+                    <span className="break-all">{project.client_qs_email}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="flex items-center space-x-2">

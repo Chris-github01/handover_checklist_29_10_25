@@ -19,6 +19,9 @@ export interface Project {
   status: 'awarded' | 'await_pre_let' | 'in_progress' | 'active' | 'live' | 'closed';
   site_manager?: string;
   qs?: string;
+  client_qs_name?: string;
+  client_qs_number?: string;
+  client_qs_email?: string;
   is_small_project: boolean;
   small_project_steps?: number[];
   created_at: string;

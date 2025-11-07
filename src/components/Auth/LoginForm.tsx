@@ -73,7 +73,7 @@ const LoginForm: React.FC = () => {
     // Validate email domain
     const emailDomain = createAccountData.email.split('@')[1]?.toLowerCase();
     if (emailDomain !== 'optimalfire.co.nz') {
-      setError('Registration is restricted to @optimalfire.co.nz email addresses only');
+      setError('You are not authorized to create an account');
       setCreateAccountLoading(false);
       return;
     }
@@ -395,12 +395,9 @@ const LoginForm: React.FC = () => {
                   value={createAccountData.email}
                   onChange={(e) => handleCreateAccountInputChange('email', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="your.name@optimalfire.co.nz"
+                  placeholder="Enter your email"
                   required
                 />
-                <p className="text-xs text-gray-600 mt-1">
-                  Must use @optimalfire.co.nz email address
-                </p>
               </div>
 
               <div>

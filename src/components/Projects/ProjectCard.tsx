@@ -12,7 +12,7 @@ interface ProjectCardProps {
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onDelete }) => {
   const { userProfile } = useAuth();
-  const isDirector = userProfile?.role === 'Director';
+  const canDelete = userProfile?.role === 'Admin' || userProfile?.role === 'Director';
   const [copied, setCopied] = useState(false);
   const [emailCopied, setEmailCopied] = useState(false);
 
@@ -241,7 +241,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
           >
             <Edit className="w-4 h-4" />
           </button>
-          {isDirector && (
+          {canDelete && (
             <button
               onClick={handleDelete}
               className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors opacity-0 group-hover:opacity-100"

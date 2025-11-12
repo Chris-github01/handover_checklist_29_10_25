@@ -736,6 +736,24 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
       handleMultiFileUpload(files, itemId);
     }
   };
+  const handleFileDownload = async (url: string, filename: string) => {
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      showNotification('Failed to download file', 'error');
+    }
+  };
+
   const handleFileDelete = async (attachmentId: string, filePath: string) => {
     if (!confirm('Are you sure you want to delete this file? This action cannot be undone.')) {
       return;
@@ -1053,16 +1071,13 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                         <span className="truncate">{att.filename}</span>
                       </div>
                       <div className="flex items-center space-x-1">
-                        <a
-                          href={att.url}
-                          download={att.filename}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                        <button
+                          onClick={() => handleFileDownload(att.url, att.filename)}
                           className="p-1 text-blue-600 hover:text-blue-700"
                           title="Download"
                         >
                           <Download className="w-3 h-3" />
-                        </a>
+                        </button>
                         {canEdit && (
                           <button
                             onClick={() => handleFileDelete(att.id, att.file_path)}

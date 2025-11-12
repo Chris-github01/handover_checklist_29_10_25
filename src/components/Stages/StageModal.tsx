@@ -1055,6 +1055,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                       <div className="flex items-center space-x-1">
                         <a
                           href={att.url}
+                          download={att.filename}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="p-1 text-blue-600 hover:text-blue-700"

@@ -104,11 +104,12 @@ export const EMAIL_RULES: EmailRule[] = [
     title: 'Step 8: Site Managers',
     trigger: 'When step is complete',
     recipients: [
-      'jacilise@optimalfire.co.nz'
+      'jacilise@optimalfire.co.nz',
+      'arlene@optimalfire.co.nz'
     ],
     subject: '{{project_name}} - Step 8 Complete - Step 9 Should Commence',
     nextStep: 'Step 9: Health & Safety',
-    purpose: 'Notify Jacilise that Step 8 is complete and Step 9 should commence'
+    purpose: 'Notify Jacilise and Arlene that Step 8 is complete and Step 9 should commence'
   },
   {
     step: 'STEP_9',

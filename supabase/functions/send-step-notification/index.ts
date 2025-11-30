@@ -30,7 +30,7 @@ Deno.serve(async (req) => {
 
   try {
     console.log('=== EMAIL FUNCTION CALLED ===')
-    
+
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
@@ -43,12 +43,12 @@ Deno.serve(async (req) => {
     )
 
     const requestBody: NotificationRequest = await req.json()
-    const { 
-      project_id, 
-      stage_id, 
-      stage_code, 
-      project_name, 
-      completed_items 
+    const {
+      project_id,
+      stage_id,
+      stage_code,
+      project_name,
+      completed_items
     } = requestBody
 
     console.log('Processing notification for:', { project_name, stage_code })
@@ -118,15 +118,15 @@ Deno.serve(async (req) => {
 
       case 'STEP_7':
         // Get selected manager from completed items
-        const managerItem = completed_items.find(item => 
+        const managerItem = completed_items.find(item =>
           item.title.toLowerCase().includes('assign manager') && item.is_completed && item.note
         )
-        
+
         let selectedManagerEmail = null
         if (managerItem?.note) {
           const match = managerItem.note.match(/Selected: (\w+)/i)
           const selectedManager = match ? match[1].toLowerCase() : null
-          
+
           const managerEmails: Record<string, string> = {
             'chris': 'chris@optimalfire.co.nz',
             'ali': 'ali@optimalfire.co.nz',
@@ -134,17 +134,17 @@ Deno.serve(async (req) => {
             'zach': 'zach@optimalfire.co.nz',
             'karel': 'karel@optimalfire.co.nz'
           }
-          
+
           selectedManagerEmail = selectedManager ? managerEmails[selectedManager] : null
         }
-        
+
         if (selectedManagerEmail) {
           recipients = [selectedManagerEmail]
         } else {
           // If no specific manager selected, notify all site managers
           recipients = ['ali@optimalfire.co.nz', 'alfie@optimalfire.co.nz', 'zach@optimalfire.co.nz', 'chris@optimalfire.co.nz', 'karel@optimalfire.co.nz']
         }
-        
+
         emailSubject = `${project_name} - Step 7 Complete - Step 8 Should Commence`
         nextStep = 'Step 8: Site Managers'
         break
@@ -153,6 +153,7 @@ Deno.serve(async (req) => {
         recipients = ['jacilise@optimalfire.co.nz', 'arlene@optimalfire.co.nz']
         emailSubject = `${project_name} - Step 8 Complete - Step 9 Should Commence`
         nextStep = 'Step 9: Health & Safety'
+        console.log('STEP_8 RECIPIENTS SET TO:', recipients)
         break
 
       case 'STEP_9':
@@ -167,6 +168,7 @@ Deno.serve(async (req) => {
     }
 
     console.log('Final recipients:', recipients)
+    console.log('Recipient count:', recipients.length)
     console.log('Email subject:', emailSubject)
 
     // Check if we should send emails
@@ -174,8 +176,8 @@ Deno.serve(async (req) => {
     if (!hasCompletedItems || recipients.length === 0) {
       console.log('No completed items or recipients, skipping email')
       return new Response(
-        JSON.stringify({ 
-          success: true, 
+        JSON.stringify({
+          success: true,
           message: 'No email sent - no completed items or recipients',
           debug: { hasCompletedItems, recipients: recipients.length }
         }),
@@ -258,7 +260,7 @@ Deno.serve(async (req) => {
       }
 
       console.log(`Sending email to: ${recipient}`)
-      
+
       const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -288,8 +290,8 @@ Deno.serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         message: `✅ Notifications sent to ${successful} recipients`,
         details: {
           project: project_name,
@@ -306,7 +308,7 @@ Deno.serve(async (req) => {
   } catch (error) {
     console.error('Email function error:', error)
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         success: false,
         error: error.message,
         message: '❌ Email function failed'

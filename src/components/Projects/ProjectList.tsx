@@ -502,6 +502,17 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
 
   return (
     <div className="p-6">
+      <div className="mb-6 bg-red-50 border-2 border-red-500 rounded-lg p-4">
+        <div className="flex items-start space-x-3">
+          <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
+          <div className="flex-1">
+            <p className="text-red-900 font-semibold text-sm">
+              If a project is awarded or added to Burnratepro, the folder must be immediately moved to current projects, regardless of whether steps 1 and 2 are completed
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div className="flex items-center justify-between mb-8">
         <div>
           <h2 className="text-3xl font-bold text-gray-900">Projects</h2>

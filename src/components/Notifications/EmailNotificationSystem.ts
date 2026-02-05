@@ -104,12 +104,11 @@ export const EMAIL_RULES: EmailRule[] = [
     title: 'Step 8: Site Managers',
     trigger: 'When step is complete',
     recipients: [
-      'jacilise@optimalfire.co.nz',
       'arlene@optimalfire.co.nz'
     ],
     subject: '{{project_name}} - Step 8 Complete - Step 9 Should Commence',
     nextStep: 'Step 9: Health & Safety',
-    purpose: 'Notify Jacilise and Arlene that Step 8 is complete and Step 9 should commence'
+    purpose: 'Notify Arlene that Step 8 is complete and Step 9 should commence'
   },
   {
     step: 'STEP_9',
@@ -189,6 +188,6 @@ export const EMAIL_BY_ROLE = {
   estimating: ['sanet@optimalfire.co.nz'],
   qa: ['okkie@optimalfire.co.nz', 'karel@optimalfire.co.nz'],
   site_managers: ['ali@optimalfire.co.nz', 'alfie@optimalfire.co.nz', 'zach@optimalfire.co.nz', 'chris@optimalfire.co.nz', 'karel@optimalfire.co.nz'],
-  health_safety: ['jacilise@optimalfire.co.nz'],
+  health_safety: ['arlene@optimalfire.co.nz'],
   qs_options: ['reynier@optimalfire.co.nz', 'carna@optimalfire.co.nz', 'denver@optimalfire.co.nz', 'contracts@optimalfire.co.nz']
 };

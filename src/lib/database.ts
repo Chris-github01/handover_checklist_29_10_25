@@ -486,7 +486,7 @@ export const initializeProjectStages = async (projectId: string, projectStatus?:
     },
     {
       code: 'STEP_9',
-      title: 'Step 9: Health & Safety (Jacilise)',
+      title: 'Step 9: Health & Safety (Arlene)',
       owner_role: 'H&S',
       order_index: 9,
       is_required: true,

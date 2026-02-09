@@ -429,11 +429,13 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
               'alfie': 'alfie@optimalfire.co.nz',
               'zach': 'zach@optimalfire.co.nz',
               'karel': 'karel@optimalfire.co.nz',
+              'stuart': 'stuart@optimalfire.co.nz',
               'Chris': 'chris@optimalfire.co.nz',
               'Ali': 'ali@optimalfire.co.nz',
               'Alfie': 'alfie@optimalfire.co.nz',
               'Zach': 'zach@optimalfire.co.nz',
-              'Karel': 'karel@optimalfire.co.nz'
+              'Karel': 'karel@optimalfire.co.nz',
+              'Stuart': 'stuart@optimalfire.co.nz'
             };
             
             selectedManagerEmail = managerEmails[selectedManager.toLowerCase()] || managerEmails[selectedManager];
@@ -815,9 +817,10 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
         { value: 'ali', label: 'Ali' },
         { value: 'alfie', label: 'Alfie' },
         { value: 'zach', label: 'Zach' },
-        { value: 'karel', label: 'Karel' }
+        { value: 'karel', label: 'Karel' },
+        { value: 'stuart', label: 'Stuart' }
       ];
-      
+
       return managerOptions;
     }
     

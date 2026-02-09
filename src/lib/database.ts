@@ -473,7 +473,7 @@ export const initializeProjectStages = async (projectId: string, projectStatus?:
     },
     {
       code: 'STEP_8',
-      title: 'Step 8: Site Managers (Ali/Alfie/Zach/Chris/Karel)',
+      title: 'Step 8: Site Managers (Ali/Alfie/Zach/Chris/Karel/Stuart)',
       owner_role: 'PM/SM',
       order_index: 8,
       is_required: true,

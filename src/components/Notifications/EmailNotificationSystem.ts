@@ -187,7 +187,7 @@ export const EMAIL_BY_ROLE = {
   commercial: ['reegan@optimalfire.co.nz', 'quenique@optimalfire.co.nz'],
   estimating: ['sanet@optimalfire.co.nz'],
   qa: ['okkie@optimalfire.co.nz', 'karel@optimalfire.co.nz'],
-  site_managers: ['ali@optimalfire.co.nz', 'alfie@optimalfire.co.nz', 'zach@optimalfire.co.nz', 'chris@optimalfire.co.nz', 'karel@optimalfire.co.nz'],
+  site_managers: ['ali@optimalfire.co.nz', 'alfie@optimalfire.co.nz', 'zach@optimalfire.co.nz', 'chris@optimalfire.co.nz', 'karel@optimalfire.co.nz', 'stuart@optimalfire.co.nz'],
   health_safety: ['arlene@optimalfire.co.nz'],
   qs_options: ['reynier@optimalfire.co.nz', 'carna@optimalfire.co.nz', 'denver@optimalfire.co.nz', 'contracts@optimalfire.co.nz']
 };

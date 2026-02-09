@@ -132,7 +132,8 @@ Deno.serve(async (req) => {
             'ali': 'ali@optimalfire.co.nz',
             'alfie': 'alfie@optimalfire.co.nz',
             'zach': 'zach@optimalfire.co.nz',
-            'karel': 'karel@optimalfire.co.nz'
+            'karel': 'karel@optimalfire.co.nz',
+            'stuart': 'stuart@optimalfire.co.nz'
           }
 
           selectedManagerEmail = selectedManager ? managerEmails[selectedManager] : null
@@ -142,7 +143,7 @@ Deno.serve(async (req) => {
           recipients = [selectedManagerEmail]
         } else {
           // If no specific manager selected, notify all site managers
-          recipients = ['ali@optimalfire.co.nz', 'alfie@optimalfire.co.nz', 'zach@optimalfire.co.nz', 'chris@optimalfire.co.nz', 'karel@optimalfire.co.nz']
+          recipients = ['ali@optimalfire.co.nz', 'alfie@optimalfire.co.nz', 'zach@optimalfire.co.nz', 'chris@optimalfire.co.nz', 'karel@optimalfire.co.nz', 'stuart@optimalfire.co.nz']
         }
 
         emailSubject = `${project_name} - Step 7 Complete - Step 8 Should Commence`

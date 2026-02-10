@@ -93,13 +93,13 @@ Deno.serve(async (req) => {
         break
 
       case 'STEP_3':
-        recipients = ['reegan@optimalfire.co.nz', 'quenique@optimalfire.co.nz']
+        recipients = ['contracts@optimalfire.co.nz', 'pedro@optimalfire.co.nz', 'ray@optimalfire.co.nz']
         emailSubject = `${project_name} - Step 3 Complete - Step 4 Should Commence`
         nextStep = 'Step 4: Commercial'
         break
 
       case 'STEP_4':
-        recipients = ['pedro@optimalfire.co.nz']
+        recipients = ['pedro@optimalfire.co.nz', 'ray@optimalfire.co.nz']
         emailSubject = `${project_name} - Step 4 Complete - Step 5 Should Commence`
         nextStep = 'Step 5: Project Director'
         break

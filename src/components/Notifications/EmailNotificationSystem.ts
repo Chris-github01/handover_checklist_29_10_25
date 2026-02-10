@@ -49,22 +49,25 @@ export const EMAIL_RULES: EmailRule[] = [
     title: 'Step 3: Estimating (Sanet)',
     trigger: 'When step is complete',
     recipients: [
-      'contracts@optimalfire.co.nz'
+      'contracts@optimalfire.co.nz',
+      'pedro@optimalfire.co.nz',
+      'ray@optimalfire.co.nz'
     ],
     subject: '{{project_name}} - Step 3 Complete - Step 4 Should Commence',
     nextStep: 'Step 4: Commercial',
-    purpose: 'Notify Contracts that Step 3 is complete and Step 4 should commence'
+    purpose: 'Notify Contracts and Directors that Step 3 is complete and Step 4 should commence'
   },
   {
     step: 'STEP_4',
     title: 'Step 4: Commercial',
     trigger: 'When step is complete',
     recipients: [
-      'pedro@optimalfire.co.nz'
+      'pedro@optimalfire.co.nz',
+      'ray@optimalfire.co.nz'
     ],
     subject: '{{project_name}} - Step 4 Complete - Step 5 Should Commence',
     nextStep: 'Step 5: Project Director',
-    purpose: 'Notify Pedro that Step 4 is complete and Step 5 should commence'
+    purpose: 'Notify Directors that Step 4 is complete and Step 5 should commence'
   },
   {
     step: 'STEP_5',

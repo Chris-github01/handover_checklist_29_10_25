@@ -778,7 +778,6 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
   const sendQSAssignmentEmail = async (qsName: string, projectName: string) => {
     const qsEmails: Record<string, string> = {
       'reynier': 'reynier@optimalfire.co.nz',
-      'carna': 'carna@optimalfire.co.nz',
       'denver': 'denver@optimalfire.co.nz',
       'contracts': 'contracts@optimalfire.co.nz'
     };
@@ -878,11 +877,10 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
       // Hardcoded QS options as requested
       const qsOptions = [
         { value: 'reynier', label: 'Reynier' },
-        { value: 'carna', label: 'Carna' },
         { value: 'denver', label: 'Denver' },
         { value: 'contracts', label: 'Contracts' }
       ];
-      
+
       return qsOptions;
     }
     

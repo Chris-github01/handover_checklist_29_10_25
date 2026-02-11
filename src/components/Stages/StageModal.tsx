@@ -775,19 +775,95 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
     }
   };
 
-  const handleDropdownChange = (itemId: string, value: string) => {
+  const sendQSAssignmentEmail = async (qsName: string, projectName: string) => {
+    const qsEmails: Record<string, string> = {
+      'reynier': 'reynier@optimalfire.co.nz',
+      'carna': 'carna@optimalfire.co.nz',
+      'denver': 'denver@optimalfire.co.nz',
+      'contracts': 'contracts@optimalfire.co.nz'
+    };
+
+    const qsEmail = qsEmails[qsName.toLowerCase()];
+
+    if (!qsEmail) {
+      console.log('No email found for QS:', qsName);
+      return;
+    }
+
+    try {
+      console.log('=== SENDING QS ASSIGNMENT EMAIL ===');
+      console.log('Project:', projectName);
+      console.log('QS:', qsName);
+      console.log('Email:', qsEmail);
+
+      const emailSubject = `${projectName} - Project Allocated to You`;
+      const emailBody = `Dear ${qsName.charAt(0).toUpperCase() + qsName.slice(1)},\n\n` +
+        `You have been assigned as the Quantity Surveyor for the following project:\n\n` +
+        `Project: ${projectName}\n\n` +
+        `This allocation was made in Step 1: Pre-Let of the Project Handover Checklist.\n\n` +
+        `Please review the project details and proceed with the necessary preparations.\n\n` +
+        `Best regards,\n` +
+        `Optimal Fire Systems Team\n\n` +
+        `This is an automated notification from the Project Handover Checklist system.`;
+
+      const templateParams = {
+        to_email: qsEmail,
+        to_name: qsName.charAt(0).toUpperCase() + qsName.slice(1),
+        from_name: 'Optimal Fire Systems',
+        subject: emailSubject,
+        message: emailBody,
+        project_name: projectName,
+        reply_to: 'chris@optimalfire.co.nz'
+      };
+
+      await emailjs.send(
+        'service_eh5hex9',
+        'template_msss66t',
+        templateParams,
+        'fksPkj0nAvRfXvhjx'
+      );
+
+      console.log('✅ QS assignment email sent successfully');
+      showNotification(`Email sent to ${qsName}`, 'success');
+    } catch (error: any) {
+      console.error('Error sending QS assignment email:', error);
+      showNotification(`Failed to send email to ${qsName}: ${error.message}`, 'error');
+    }
+  };
+
+  const handleDropdownChange = async (itemId: string, value: string) => {
     setSelectedValues(prev => ({ ...prev, [itemId]: value }));
-    
+
     // Update the note to include the selection
     const noteText = `Selected: ${value}`;
     setItemNotes(prev => ({ ...prev, [itemId]: noteText }));
-    
+
     // Auto-check the item when a selection is made
     if (value && !checkedItems.has(itemId)) {
       handleItemToggle(itemId, true, noteText);
     } else if (value && checkedItems.has(itemId)) {
       // Update the note for already checked items
       setPendingChanges(prev => new Set(prev).add(itemId));
+    }
+
+    // Send email to QS if this is Step 1 and the Assign QS item is being checked
+    const item = items.find(i => i.id === itemId);
+    if (stage.code === 'STEP_1' && item?.title.toLowerCase().includes('assign qs') && value) {
+      try {
+        // Get project name
+        const { data: projectData } = await supabase
+          .from('projects')
+          .select('name')
+          .eq('id', projectId)
+          .single();
+
+        const projectName = projectData?.name || 'Unknown Project';
+
+        // Send email to the selected QS
+        await sendQSAssignmentEmail(value, projectName);
+      } catch (error: any) {
+        console.error('Error sending QS assignment email:', error);
+      }
     }
   };
 

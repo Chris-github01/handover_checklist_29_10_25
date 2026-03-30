@@ -17,7 +17,7 @@ export default function Button({
   disabled = false,
   as = 'button',
 }: ButtonProps) {
-  const baseStyles = 'px-4 py-2 rounded-lg transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed';
+  const baseStyles = 'px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed';
 
   const variantStyles = {
     primary: 'bg-brp-primary hover:bg-brp-primaryHover text-white',

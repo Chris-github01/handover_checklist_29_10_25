@@ -1315,7 +1315,6 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                   }
                 }}
                 disabled={sendingNotification}
-                className="flex items-center space-x-2"
               >
                 {sendingNotification ? (
                   <>

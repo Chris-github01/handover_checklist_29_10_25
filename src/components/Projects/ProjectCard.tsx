@@ -122,13 +122,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
       className={`bg-white rounded-xl border border-gray-200 p-6 transition-all duration-200 group min-h-[240px] ${
         project.is_small_project
           ? 'cursor-default'
-          : 'hover:shadow-lg hover:border-blue-300 hover:border-[#F4B223] cursor-pointer hover:h-auto'
+          : 'hover:shadow-lg hover:border-[#F4B223] cursor-pointer hover:h-auto'
       }`}
     >
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <h3 className={`text-lg font-semibold text-gray-900 mb-2 transition-colors ${
-            !project.is_small_project && 'group-hover:text-blue-600 group-hover:text-[#F4B223]'
+            !project.is_small_project && 'group-hover:text-[#F4B223]'
           }`}>
             {project.project_title || project.name}{project.bwof && ' BWOF'}
           </h3>
@@ -236,7 +236,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
           </button>
           <button
             onClick={handleEdit}
-            className="p-2 text-blue-400 hover:text-blue-600 hover:bg-blue-50 text-[#F4B223] hover:text-[#D69620] hover:bg-[rgba(244,178,35,0.15)] rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+            className="p-2 text-[#F4B223] hover:text-[#D69620] hover:bg-[rgba(244,178,35,0.15)] rounded-lg transition-colors opacity-0 group-hover:opacity-100"
             title="Edit Project"
           >
             <Edit className="w-4 h-4" />
@@ -250,7 +250,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
               <Trash2 className="w-4 h-4" />
             </button>
           )}
-          <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 group-hover:text-[#F4B223] group-hover:translate-x-1 transition-all duration-200" />
+          <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-[#F4B223] group-hover:translate-x-1 transition-all duration-200" />
         </div>
       </div>
 

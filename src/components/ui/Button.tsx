@@ -1,5 +1,11 @@
 import React from 'react';
 
+/**
+ * ⚠️ IMPORTANT:
+ * className should ONLY be used for layout (width, margin, positioning)
+ * DO NOT pass colors, padding, or hover states via className
+ * Use variants instead
+ */
 interface ButtonProps {
   variant: 'primary' | 'secondary' | 'ghost';
   children: React.ReactNode;
@@ -17,7 +23,8 @@ export default function Button({
   disabled = false,
   as = 'button',
 }: ButtonProps) {
-  const baseStyles = 'px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed';
+  // Internal classes: variant styles (colors, padding, layout)
+  const internalClasses = 'px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed';
 
   const variantStyles = {
     primary: 'bg-brp-primary hover:bg-brp-primaryHover text-white',
@@ -25,13 +32,16 @@ export default function Button({
     ghost: 'text-gray-600 hover:bg-gray-100',
   };
 
+  // External classes: ONLY layout/positioning (e.g., w-full, opacity, flex modifiers)
+  const externalClasses = className;
+
   const Component = as;
 
   return (
     <Component
       onClick={onClick}
       disabled={as === 'button' ? disabled : undefined}
-      className={`${baseStyles} ${variantStyles[variant]} ${className}`}
+      className={`${internalClasses} ${variantStyles[variant]} ${externalClasses}`}
     >
       {children}
     </Component>

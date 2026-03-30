@@ -5,6 +5,29 @@ export default {
     extend: {
       colors: {
         /**
+         * 🚨 DESIGN SYSTEM ENFORCEMENT RULES
+         *
+         * 1. NEVER use hardcoded hex values (e.g. #F4B223, #E5A520)
+         * 2. ALWAYS use BurnRatePro tokens:
+         *    - bg-brp-primary
+         *    - hover:bg-brp-primaryHover
+         *    - text-brp-primary
+         *    - border-brp-primary
+         *
+         * 3. ALL buttons must use the <Button /> component
+         *    - Do NOT use raw <button> with styling
+         *
+         * 4. className on Button is for layout ONLY
+         *    - Allowed: w-full, opacity, margin, positioning
+         *    - Forbidden: colors, padding, hover states
+         *
+         * 5. If you need a new style → ADD A VARIANT
+         *    Do NOT inline styles
+         *
+         * This file is the SINGLE SOURCE OF TRUTH for all brand colors.
+         */
+
+        /**
          * BurnRatePro Brand Token System
          *
          * CRITICAL DEVELOPER GUIDELINES:

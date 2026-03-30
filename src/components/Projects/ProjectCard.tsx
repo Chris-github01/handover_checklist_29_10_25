@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Calendar, Building2, ArrowRight, Trash2, CreditCard as Edit, CheckCircle2, Copy, Check, User, Phone, Mail } from 'lucide-react';
 import { ProjectWithStats } from '../../hooks/useProjects';
 import { useAuth } from '../../contexts/AuthContext';
+import Button from '../ui/Button';
 
 interface ProjectCardProps {
   project: ProjectWithStats;
@@ -234,13 +235,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
           >
             {copied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
           </button>
-          <button
+          <Button
+            variant="ghost"
             onClick={handleEdit}
-            className="p-2 text-brp-primary hover:text-brp-primaryHover hover:bg-brp-primarySoft rounded-lg transition-colors opacity-0 group-hover:opacity-100"
-            title="Edit Project"
+            className="p-2 opacity-0 group-hover:opacity-100"
           >
             <Edit className="w-4 h-4" />
-          </button>
+          </Button>
           {canDelete && (
             <button
               onClick={handleDelete}

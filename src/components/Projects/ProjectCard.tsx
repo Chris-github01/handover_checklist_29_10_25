@@ -228,13 +228,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
         </div>
 
         <div className="flex items-center space-x-2">
-          <button
+          <Button
+            variant="ghost"
             onClick={handleCopy}
-            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
-            title="Copy Project Title"
+            className="p-2 opacity-0 group-hover:opacity-100"
           >
             {copied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
-          </button>
+          </Button>
           <Button
             variant="ghost"
             onClick={handleEdit}
@@ -243,13 +243,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
             <Edit className="w-4 h-4" />
           </Button>
           {canDelete && (
-            <button
+            <Button
+              variant="ghost"
               onClick={handleDelete}
-              className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
-              title="Delete Project"
+              className="p-2 opacity-0 group-hover:opacity-100"
             >
-              <Trash2 className="w-4 h-4" />
-            </button>
+              <Trash2 className="w-4 h-4 text-red-400 hover:text-red-600" />
+            </Button>
           )}
           <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-brp-primary group-hover:translate-x-1 transition-all duration-200" />
         </div>

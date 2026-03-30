@@ -57,8 +57,8 @@ const StageTile: React.FC<StageTileProps> = ({ stage, onClick, canAccess, canEdi
       )}
       
       {canAccess && !canEdit && (
-        <div className="absolute top-4 right-4 bg-[rgba(244,178,35,0.15)] bg-brp-primarySoft rounded-full p-1" title="View Only">
-          <Eye className="w-4 h-4 text-[#F4B223] text-brp-primary" />
+        <div className="absolute top-4 right-4 bg-brp-primarySoft rounded-full p-1" title="View Only">
+          <Eye className="w-4 h-4 text-brp-primary" />
         </div>
       )}
 
@@ -85,7 +85,7 @@ const StageTile: React.FC<StageTileProps> = ({ stage, onClick, canAccess, canEdi
                 checked={status === 'complete'}
                 onChange={onToggleComplete}
                 onClick={(e) => e.stopPropagation()}
-                className="w-5 h-5 text-[#F4B223] text-brp-primary border-gray-300 rounded focus:ring-2 focus:ring-[#F4B223] focus:ring-brp-primary cursor-pointer"
+                className="w-5 h-5 text-brp-primary border-gray-300 rounded focus:ring-2 focus:ring-brp-primary cursor-pointer"
                 title="Mark stage as complete"
               />
             )}

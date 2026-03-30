@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, FileDown } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import jsPDF from 'jspdf';
+import Button from '../ui/Button';
 
 interface Stage {
   id: string;
@@ -288,13 +289,14 @@ const PDFTemplateModal: React.FC<PDFTemplateModalProps> = ({ onClose }) => {
             >
               Cancel
             </button>
-            <button
+            <Button
+              variant="primary"
               onClick={generatePDF}
-              className="px-4 py-2 bg-brp-primary hover:bg-brp-primaryHover text-white rounded-lg transition-colors flex items-center space-x-2"
+              className="flex items-center space-x-2"
             >
               <FileDown className="w-5 h-5" />
               <span>Generate PDF</span>
-            </button>
+            </Button>
           </div>
         </div>
       </div>

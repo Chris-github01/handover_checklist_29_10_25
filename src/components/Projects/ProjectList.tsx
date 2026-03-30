@@ -603,7 +603,6 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
           <Button
             variant="primary"
             onClick={() => setShowCreateModal(true)}
-            className="flex items-center space-x-2"
           >
             <Plus className="w-5 h-5" />
             <span>New Project</span>

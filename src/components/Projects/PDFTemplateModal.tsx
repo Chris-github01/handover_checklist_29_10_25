@@ -292,7 +292,6 @@ const PDFTemplateModal: React.FC<PDFTemplateModalProps> = ({ onClose }) => {
             <Button
               variant="primary"
               onClick={generatePDF}
-              className="flex items-center space-x-2"
             >
               <FileDown className="w-5 h-5" />
               <span>Generate PDF</span>

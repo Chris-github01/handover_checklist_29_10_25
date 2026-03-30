@@ -11,6 +11,7 @@ import { getNextProjectCode } from '../../lib/database';
 import { buildFolderName } from '../../lib/naming';
 import { useAuth } from '../../contexts/AuthContext';
 import jsPDF from 'jspdf';
+import Button from '../ui/Button';
 
 interface ProjectListProps {
   activeTab: 'in_progress' | 'complete' | 'closed';
@@ -599,13 +600,14 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
             />
           </div>
 
-          <button
+          <Button
+            variant="primary"
             onClick={() => setShowCreateModal(true)}
-            className="bg-brp-primary hover:bg-brp-primaryHover text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+            className="flex items-center space-x-2"
           >
             <Plus className="w-5 h-5" />
             <span>New Project</span>
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -679,13 +681,14 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
               : 'Get started by creating your first project'}
           </p>
           {!searchTerm && (
-            <button
+            <Button
+              variant="primary"
               onClick={() => setShowCreateModal(true)}
-              className="bg-brp-primary hover:bg-brp-primaryHover text-white px-6 py-3 rounded-lg font-medium inline-flex items-center space-x-2 transition-colors"
+              className="inline-flex items-center space-x-2"
             >
               <Plus className="w-5 h-5" />
               <span>Create Project</span>
-            </button>
+            </Button>
           )}
         </div>
       ) : (
@@ -761,13 +764,14 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
                 </select>
               </div>
 
-              <button
+              <Button
+                variant="primary"
                 onClick={handleGenerateProjectCode}
                 disabled={loadingCode}
-                className="w-full bg-brp-primary hover:bg-brp-primaryHover text-white px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full"
               >
                 {loadingCode ? 'Generating...' : 'Generate Code'}
-              </button>
+              </Button>
 
               {generatedCode && (
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4">

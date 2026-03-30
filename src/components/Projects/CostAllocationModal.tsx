@@ -357,7 +357,7 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
                     type="number"
                     value={agreedContractValue}
                     onChange={(e) => setAgreedContractValue(Number(e.target.value))}
-                    className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brp-primary focus:border-transparent"
                     step="0.01"
                   />
                 </div>
@@ -373,7 +373,7 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
                     type="number"
                     value={contractWorksClaimed}
                     onChange={(e) => setContractWorksClaimed(Number(e.target.value))}
-                    className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brp-primary focus:border-transparent"
                     step="0.01"
                   />
                 </div>

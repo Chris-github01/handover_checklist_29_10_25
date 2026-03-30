@@ -89,7 +89,7 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onSuccess }) => {
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
-            <Lock className="w-8 h-8 text-blue-600" />
+            <Lock className="w-8 h-8 text-brp-primary" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900">Reset Your Password</h1>
           <p className="text-gray-600 mt-2">Enter your new password below</p>

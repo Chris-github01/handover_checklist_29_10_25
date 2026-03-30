@@ -945,7 +945,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                 }
               }}
               className={'w-5 h-5 rounded border-2 ' + (
-                (canCheck && canEdit) ? 'border-gray-300 text-[#F4B223] text-brp-primary focus:ring-[#F4B223] focus:ring-brp-primary' : 'border-gray-200 bg-gray-100 cursor-not-allowed'
+                (canCheck && canEdit) ? 'border-gray-300 text-brp-primary focus:ring-brp-primary' : 'border-gray-200 bg-gray-100 cursor-not-allowed'
               )}
             />
           </div>
@@ -988,7 +988,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                   title={isStep3Item ? "Add Files" : "Add File"}
                 >
                   {uploadingByKey.has(uploadKey) ? (
-                    <div className="w-4 h-4 border-2 border-[#F4B223] border-brp-primary border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-brp-primary border-t-transparent rounded-full animate-spin" />
                   ) : (
                     <Plus className="w-4 h-4" />
                   )}
@@ -1007,7 +1007,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                   onChange={(e) => handleDropdownChange(item.id, e.target.value)}
                   className={`w-full px-3 py-2 text-sm border border-gray-300 rounded-md ${
                     canEdit
-                      ? 'focus:ring-2 focus:ring-[#F4B223] focus:ring-brp-primary focus:border-transparent'
+                      ? 'focus:ring-2 focus:ring-brp-primary focus:border-transparent'
                       : 'bg-gray-100 cursor-not-allowed'
                   }`}
                 >
@@ -1036,7 +1036,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                 <label className="block text-xs font-medium text-gray-700">Notes</label>
                 {isPreLetMeetingItem && (
                   <div className="relative ml-2 group">
-                    <Info className="w-3 h-3 text-[#F4B223] text-brp-primary cursor-help" />
+                    <Info className="w-3 h-3 text-brp-primary cursor-help" />
                     <div className="absolute left-0 top-5 w-80 bg-gray-900 text-white text-xs rounded-lg p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 shadow-lg">
                       <div className="font-medium mb-2">Use this area to record important pre-site setup notes or job-specific requirements such as:</div>
                       <ul className="space-y-1 list-disc list-inside">
@@ -1052,7 +1052,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                 )}
                 {isHSDetailsItem && (
                   <div className="relative ml-2 group">
-                    <Info className="w-3 h-3 text-[#F4B223] text-brp-primary cursor-help" />
+                    <Info className="w-3 h-3 text-brp-primary cursor-help" />
                     <div className="absolute left-0 top-5 w-80 bg-gray-900 text-white text-xs rounded-lg p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 shadow-lg">
                       <div className="font-medium mb-2">Record health and safety requirements and considerations:</div>
                       <ul className="space-y-1 list-disc list-inside">
@@ -1068,7 +1068,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                 )}
                 {isHandoverToSMItem && (
                   <div className="relative ml-2 group">
-                    <Info className="w-3 h-3 text-[#F4B223] text-brp-primary cursor-help" />
+                    <Info className="w-3 h-3 text-brp-primary cursor-help" />
                     <div className="absolute left-0 top-5 w-80 bg-gray-900 text-white text-xs rounded-lg p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 shadow-lg">
                       <div className="font-medium mb-2">Note any additional notes as discussed in the Pre-Let meeting such as:</div>
                       <ul className="space-y-1 list-disc list-inside">
@@ -1103,7 +1103,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                 placeholder="Add notes..."
                 className={`w-full px-3 py-2 text-sm border border-gray-300 rounded-md resize-none ${
                   canEdit
-                    ? 'focus:ring-2 focus:ring-[#F4B223] focus:ring-brp-primary focus:border-transparent'
+                    ? 'focus:ring-2 focus:ring-brp-primary focus:border-transparent'
                     : 'bg-gray-100 cursor-not-allowed'
                 }`}
                 rows={2}
@@ -1312,7 +1312,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                     showNotification(`Error: ${error?.message || 'Failed to complete action'}`, 'error');
                   }
                 }}
-                className="px-6 py-2 bg-[#F4B223] bg-brp-primary hover:bg-[#E5A520] hover:bg-brp-primaryHover text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center space-x-2"
+                className="px-6 py-2 bg-brp-primary hover:bg-brp-primaryHover text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center space-x-2"
                 disabled={sendingNotification}
               >
                 {sendingNotification ? (
@@ -1353,7 +1353,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
             <div
               className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
                 dragOver
-                  ? 'border-[#F4B223] border-brp-primary bg-[rgba(244,178,35,0.1)] bg-brp-primarySoft'
+                  ? 'border-brp-primary bg-brp-primarySoft'
                   : 'border-gray-300 hover:border-gray-400'
               }`}
               onDragOver={handleDragOver}
@@ -1362,7 +1362,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
             >
               {multiUploading ? (
                 <div className="flex flex-col items-center space-y-3">
-                  <div className="w-8 h-8 border-4 border-[#F4B223] border-brp-primary border-t-transparent rounded-full animate-spin" />
+                  <div className="w-8 h-8 border-4 border-brp-primary border-t-transparent rounded-full animate-spin" />
                   <p className="text-gray-600">Uploading files...</p>
                 </div>
               ) : (
@@ -1386,7 +1386,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                   />
                   <label
                     htmlFor={`multi-file-${showMultiUpload}`}
-                    className="px-4 py-2 bg-[#F4B223] bg-brp-primary hover:bg-[#E5A520] hover:bg-brp-primaryHover text-white rounded-lg cursor-pointer transition-colors"
+                    className="px-4 py-2 bg-brp-primary hover:bg-brp-primaryHover text-white rounded-lg cursor-pointer transition-colors"
                   >
                     Choose Files
                   </label>

@@ -6,6 +6,7 @@ interface ButtonProps {
   onClick?: () => void;
   className?: string;
   disabled?: boolean;
+  as?: 'button' | 'span';
 }
 
 export default function Button({
@@ -14,6 +15,7 @@ export default function Button({
   onClick,
   className = '',
   disabled = false,
+  as = 'button',
 }: ButtonProps) {
   const baseStyles = 'px-4 py-2 rounded-lg transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed';
 
@@ -23,13 +25,15 @@ export default function Button({
     ghost: 'text-gray-600 hover:bg-gray-100',
   };
 
+  const Component = as;
+
   return (
-    <button
+    <Component
       onClick={onClick}
-      disabled={disabled}
+      disabled={as === 'button' ? disabled : undefined}
       className={`${baseStyles} ${variantStyles[variant]} ${className}`}
     >
       {children}
-    </button>
+    </Component>
   );
 }

@@ -7,6 +7,7 @@ import { uploadFile, deleteFile } from '../../lib/storage';
 import { X, CheckCircle, Clock, AlertCircle, FileText, Upload, Download, Plus, Trash2, Info, UploadCloud as CloudUpload } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import type { User } from '../../types/database';
+import Button from '../ui/Button';
 
 // Notification system
 const showNotification = (message: string, type: 'success' | 'error') => {
@@ -1276,7 +1277,8 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
             </button> */}
 
             {canEdit ? (
-              <button
+              <Button
+                variant="primary"
                 onClick={async () => {
                   console.log('=== DONE BUTTON CLICKED ===');
                   console.log('Pending changes:', pendingChanges.size);
@@ -1312,8 +1314,8 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                     showNotification(`Error: ${error?.message || 'Failed to complete action'}`, 'error');
                   }
                 }}
-                className="px-6 py-2 bg-brp-primary hover:bg-brp-primaryHover text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center space-x-2"
                 disabled={sendingNotification}
+                className="flex items-center space-x-2"
               >
                 {sendingNotification ? (
                   <>
@@ -1323,7 +1325,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                 ) : (
                   <span>Done</span>
                 )}
-              </button>
+              </Button>
             ) : (
               <button
                 onClick={onClose}
@@ -1384,11 +1386,10 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                       }
                     }}
                   />
-                  <label
-                    htmlFor={`multi-file-${showMultiUpload}`}
-                    className="px-4 py-2 bg-brp-primary hover:bg-brp-primaryHover text-white rounded-lg cursor-pointer transition-colors"
-                  >
-                    Choose Files
+                  <label htmlFor={`multi-file-${showMultiUpload}`}>
+                    <Button variant="primary" as="span" className="cursor-pointer">
+                      Choose Files
+                    </Button>
                   </label>
                 </div>
               )}

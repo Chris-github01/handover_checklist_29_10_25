@@ -945,7 +945,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                 }
               }}
               className={'w-5 h-5 rounded border-2 ' + (
-                (canCheck && canEdit) ? 'border-gray-300 text-blue-600 focus:ring-blue-500' : 'border-gray-200 bg-gray-100 cursor-not-allowed'
+                (canCheck && canEdit) ? 'border-gray-300 text-[#F4B223] focus:ring-[#F4B223]' : 'border-gray-200 bg-gray-100 cursor-not-allowed'
               )}
             />
           </div>
@@ -984,7 +984,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                 />
                 <label
                   htmlFor={`file-${item.id}`}
-                  className={`p-1 ${canEdit ? 'text-gray-400 hover:text-blue-600 cursor-pointer' : 'text-gray-300 cursor-not-allowed'}`}
+                  className={`p-1 ${canEdit ? 'text-gray-400 hover:text-gray-600 cursor-pointer' : 'text-gray-300 cursor-not-allowed'}`}
                   title={isStep3Item ? "Add Files" : "Add File"}
                 >
                   {uploadingByKey.has(uploadKey) ? (
@@ -1006,8 +1006,8 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                   disabled={!canEdit}
                   onChange={(e) => handleDropdownChange(item.id, e.target.value)}
                   className={`w-full px-3 py-2 text-sm border border-gray-300 rounded-md ${
-                    canEdit 
-                      ? 'focus:ring-2 focus:ring-blue-500 focus:border-transparent' 
+                    canEdit
+                      ? 'focus:ring-2 focus:ring-[#F4B223] focus:border-transparent'
                       : 'bg-gray-100 cursor-not-allowed'
                   }`}
                 >
@@ -1102,8 +1102,8 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                 }}
                 placeholder="Add notes..."
                 className={`w-full px-3 py-2 text-sm border border-gray-300 rounded-md resize-none ${
-                  canEdit 
-                    ? 'focus:ring-2 focus:ring-blue-500 focus:border-transparent' 
+                  canEdit
+                    ? 'focus:ring-2 focus:ring-[#F4B223] focus:border-transparent'
                     : 'bg-gray-100 cursor-not-allowed'
                 }`}
                 rows={2}
@@ -1120,7 +1120,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                       <button
                         type="button"
                         onClick={() => setShowMultiUpload(item.id)}
-                        className="text-xs text-blue-600 hover:text-blue-700 flex items-center space-x-1"
+                        className="text-xs text-gray-600 hover:text-gray-700 flex items-center space-x-1"
                       >
                         <CloudUpload className="w-3 h-3" />
                         <span>Add Files</span>
@@ -1129,7 +1129,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                     <button
                       type="button"
                       onClick={() => document.getElementById(`file-${item.id}`)?.click()}
-                      className="text-xs text-blue-600 hover:text-blue-700 flex items-center space-x-1"
+                      className="text-xs text-gray-600 hover:text-gray-700 flex items-center space-x-1"
                     >
                       <Upload className="w-3 h-3" />
                       <span>{isStep3Item ? 'Browse' : 'Add File'}</span>
@@ -1150,7 +1150,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                       <div className="flex items-center space-x-1">
                         <button
                           onClick={() => handleFileDownload(att.url, att.filename)}
-                          className="p-1 text-blue-600 hover:text-blue-700"
+                          className="p-1 text-gray-600 hover:text-gray-700"
                           title="Download"
                         >
                           <Download className="w-3 h-3" />
@@ -1352,8 +1352,8 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
 
             <div
               className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-                dragOver 
-                  ? 'border-blue-500 bg-blue-50' 
+                dragOver
+                  ? 'border-[#F4B223] bg-[rgba(244,178,35,0.1)]'
                   : 'border-gray-300 hover:border-gray-400'
               }`}
               onDragOver={handleDragOver}

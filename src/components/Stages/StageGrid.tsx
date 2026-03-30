@@ -327,7 +327,7 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
     return (
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center space-x-2">
-          <div className="w-6 h-6 border-2 border-[#F4B223] border-t-transparent rounded-full animate-spin" />
+          <div className="w-6 h-6 border-2 border-[#F4B223] border-brp-primary border-t-transparent rounded-full animate-spin" />
           <span className="text-gray-600">Loading project stages...</span>
         </div>
       </div>
@@ -453,7 +453,7 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
             placeholder="Search stages..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F4B223] focus:border-transparent"
+            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F4B223] focus:ring-brp-primary focus:border-transparent"
           />
         </div>
         
@@ -462,7 +462,7 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as any)}
-            className="px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F4B223] focus:border-transparent"
+            className="px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F4B223] focus:ring-brp-primary focus:border-transparent"
           >
             <option value="all">All Stages</option>
             <option value="pending">Pending</option>
@@ -495,7 +495,7 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
             <div className="text-sm text-gray-500">Complete</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-[#F4B223]">
+            <div className="text-2xl font-bold text-[#F4B223] text-brp-primary">
               {Math.round((stages.filter(s => getStageStatus(s) === 'complete').length / stages.length) * 100)}%
             </div>
             <div className="text-sm text-gray-500">Overall</div>

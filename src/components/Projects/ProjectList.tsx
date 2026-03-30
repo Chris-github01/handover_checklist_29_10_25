@@ -481,7 +481,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
     return (
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center space-x-2">
-          <div className="w-6 h-6 border-2 border-[#F4B223] border-brp-primary border-t-transparent rounded-full animate-spin" />
+          <div className="w-6 h-6 border-2 border-brp-primary border-t-transparent rounded-full animate-spin" />
           <span className="text-gray-600">Loading projects...</span>
         </div>
       </div>
@@ -556,7 +556,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
                     }}
                     className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center space-x-2 transition-colors"
                   >
-                    <FileText className="w-5 h-5 text-[#F4B223] text-brp-primary" />
+                    <FileText className="w-5 h-5 text-brp-primary" />
                     <span className="text-gray-700">Projects PDF Template</span>
                   </button>
 
@@ -601,7 +601,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
 
           <button
             onClick={() => setShowCreateModal(true)}
-            className="bg-[#F4B223] bg-brp-primary hover:bg-[#E5A520] hover:bg-brp-primaryHover text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+            className="bg-brp-primary hover:bg-brp-primaryHover text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
           >
             <Plus className="w-5 h-5" />
             <span>New Project</span>
@@ -653,7 +653,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
               placeholder="Search projects..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F4B223] focus:ring-brp-primary focus:border-transparent"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brp-primary focus:border-transparent"
             />
           </div>
           <button
@@ -681,7 +681,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
           {!searchTerm && (
             <button
               onClick={() => setShowCreateModal(true)}
-              className="bg-[#F4B223] bg-brp-primary hover:bg-[#E5A520] hover:bg-brp-primaryHover text-white px-6 py-3 rounded-lg font-medium inline-flex items-center space-x-2 transition-colors"
+              className="bg-brp-primary hover:bg-brp-primaryHover text-white px-6 py-3 rounded-lg font-medium inline-flex items-center space-x-2 transition-colors"
             >
               <Plus className="w-5 h-5" />
               <span>Create Project</span>
@@ -754,7 +754,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
                 <select
                   value={selectedRegion}
                   onChange={(e) => handleRegionChange(e.target.value as 'auckland' | 'wellington')}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F4B223] focus:ring-brp-primary focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brp-primary focus:border-transparent"
                 >
                   <option value="auckland">Auckland</option>
                   <option value="wellington">Wellington</option>
@@ -764,7 +764,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
               <button
                 onClick={handleGenerateProjectCode}
                 disabled={loadingCode}
-                className="w-full bg-[#F4B223] bg-brp-primary hover:bg-[#E5A520] hover:bg-brp-primaryHover text-white px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-brp-primary hover:bg-brp-primaryHover text-white px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loadingCode ? 'Generating...' : 'Generate Code'}
               </button>

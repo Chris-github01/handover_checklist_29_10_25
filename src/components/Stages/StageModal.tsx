@@ -988,7 +988,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                   title={isStep3Item ? "Add Files" : "Add File"}
                 >
                   {uploadingByKey.has(uploadKey) ? (
-                    <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-[#F4B223] border-t-transparent rounded-full animate-spin" />
                   ) : (
                     <Plus className="w-4 h-4" />
                   )}
@@ -1036,7 +1036,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                 <label className="block text-xs font-medium text-gray-700">Notes</label>
                 {isPreLetMeetingItem && (
                   <div className="relative ml-2 group">
-                    <Info className="w-3 h-3 text-blue-500 cursor-help" />
+                    <Info className="w-3 h-3 text-[#F4B223] cursor-help" />
                     <div className="absolute left-0 top-5 w-80 bg-gray-900 text-white text-xs rounded-lg p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 shadow-lg">
                       <div className="font-medium mb-2">Use this area to record important pre-site setup notes or job-specific requirements such as:</div>
                       <ul className="space-y-1 list-disc list-inside">
@@ -1052,7 +1052,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                 )}
                 {isHSDetailsItem && (
                   <div className="relative ml-2 group">
-                    <Info className="w-3 h-3 text-blue-500 cursor-help" />
+                    <Info className="w-3 h-3 text-[#F4B223] cursor-help" />
                     <div className="absolute left-0 top-5 w-80 bg-gray-900 text-white text-xs rounded-lg p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 shadow-lg">
                       <div className="font-medium mb-2">Record health and safety requirements and considerations:</div>
                       <ul className="space-y-1 list-disc list-inside">
@@ -1068,7 +1068,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                 )}
                 {isHandoverToSMItem && (
                   <div className="relative ml-2 group">
-                    <Info className="w-3 h-3 text-blue-500 cursor-help" />
+                    <Info className="w-3 h-3 text-[#F4B223] cursor-help" />
                     <div className="absolute left-0 top-5 w-80 bg-gray-900 text-white text-xs rounded-lg p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 shadow-lg">
                       <div className="font-medium mb-2">Note any additional notes as discussed in the Pre-Let meeting such as:</div>
                       <ul className="space-y-1 list-disc list-inside">
@@ -1362,7 +1362,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
             >
               {multiUploading ? (
                 <div className="flex flex-col items-center space-y-3">
-                  <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                  <div className="w-8 h-8 border-4 border-[#F4B223] border-t-transparent rounded-full animate-spin" />
                   <p className="text-gray-600">Uploading files...</p>
                 </div>
               ) : (

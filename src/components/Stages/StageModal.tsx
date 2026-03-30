@@ -958,7 +958,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                 {item.title}
                 {item.is_required && <span className="text-red-500 ml-1">*</span>}
                 {item.requires_all_children && (
-                  <span className="text-xs text-blue-600 ml-2">(Requires all sub-items)</span>
+                  <span className="text-xs text-gray-600 ml-2">(Requires all sub-items)</span>
                 )}
               </h4>
 
@@ -1208,7 +1208,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
               <h2 className="text-xl font-bold text-gray-900">{stage.title}</h2>
               <p className="text-sm text-gray-600">
                 Owner: {stage.owner_role} • {footerMeta.completed}/{footerMeta.total} items completed • {footerMeta.completedRequired}/{footerMeta.totalRequired} required
-                {!canEdit && <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">View Only</span>}
+                {!canEdit && <span className="ml-2 px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">View Only</span>}
               </p>
             </div>
           </div>
@@ -1247,7 +1247,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
               type="button"
               onClick={testEmail}
               disabled={!canEdit}
-              className="px-4 py-2 border border-blue-300 text-blue-700 rounded-lg hover:bg-blue-50 transition-colors flex items-center space-x-2"
+              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center space-x-2"
               title="Test Email"
             >
               <span>Test Email</span>
@@ -1312,7 +1312,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                     showNotification(`Error: ${error?.message || 'Failed to complete action'}`, 'error');
                   }
                 }}
-                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center space-x-2"
+                className="px-6 py-2 bg-[#F4B223] hover:bg-[#E5A520] text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center space-x-2"
                 disabled={sendingNotification}
               >
                 {sendingNotification ? (
@@ -1386,7 +1386,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                   />
                   <label
                     htmlFor={`multi-file-${showMultiUpload}`}
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg cursor-pointer transition-colors"
+                    className="px-4 py-2 bg-[#F4B223] hover:bg-[#E5A520] text-white rounded-lg cursor-pointer transition-colors"
                   >
                     Choose Files
                   </label>

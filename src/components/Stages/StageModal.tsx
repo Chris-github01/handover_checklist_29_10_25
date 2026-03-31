@@ -8,6 +8,7 @@ import { X, CheckCircle, Clock, AlertCircle, FileText, Upload, Download, Plus, T
 import { supabase } from '../../lib/supabase';
 import type { User } from '../../types/database';
 import Button from '../ui/Button';
+import { Card, CardContent } from '../ui/Card';
 
 // Notification system
 const showNotification = (message: string, type: 'success' | 'error') => {
@@ -930,11 +931,13 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
     const isStep3Item = stage.code === 'STEP_3';
 
     return (
-      <div
+      <Card
         key={item.id}
-        className={`border rounded-lg p-4 ${isChild ? 'ml-6 border-gray-200 bg-gray-50' : 'border-gray-300'}`}
+        variant="default"
+        className={isChild ? 'ml-6' : ''}
       >
-        <div className="flex items-start space-x-3">
+        <CardContent className={isChild ? 'bg-gray-50' : ''}>
+          <div className="flex items-start space-x-3">
           <div className="flex-shrink-0 mt-1">
             <input
               type="checkbox"
@@ -1143,43 +1146,48 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                 {attachments
                   .filter(att => att.item_id === item.id)
                   .map(att => (
-                    <div key={att.id} className="flex items-center justify-between p-2 bg-white rounded border text-xs">
-                      <div className="flex items-center space-x-2">
-                        <FileText className="w-3 h-3 text-gray-400" />
-                        <span className="truncate">{att.filename}</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <button
-                          onClick={() => handleFileDownload(att.url, att.filename)}
-                          className="p-1 text-gray-600 hover:text-gray-700"
-                          title="Download"
-                        >
-                          <Download className="w-3 h-3" />
-                        </button>
-                        {canEdit && (
-                          <button
-                            onClick={() => handleFileDelete(att.id, att.file_path)}
-                            className="p-1 text-red-400 hover:text-red-600"
-                            title="Delete File"
-                          >
-                            <Trash2 className="w-3 h-3" />
-                          </button>
-                        )}
-                      </div>
-                    </div>
+                    <Card key={att.id} variant="default">
+                      <CardContent className="!p-2">
+                        <div className="flex items-center justify-between text-xs">
+                          <div className="flex items-center space-x-2">
+                            <FileText className="w-3 h-3 text-gray-400" />
+                            <span className="truncate">{att.filename}</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <button
+                              onClick={() => handleFileDownload(att.url, att.filename)}
+                              className="p-1 text-gray-600 hover:text-gray-700"
+                              title="Download"
+                            >
+                              <Download className="w-3 h-3" />
+                            </button>
+                            {canEdit && (
+                              <button
+                                onClick={() => handleFileDelete(att.id, att.file_path)}
+                                className="p-1 text-red-400 hover:text-red-600"
+                                title="Delete File"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
                   ))}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Children */}
-        {hasChildren && (
-          <div className="mt-4 space-y-3">
-            {item.children!.map(child => renderItem(child, true))}
-          </div>
-        )}
-      </div>
+          {/* Children */}
+          {hasChildren && (
+            <div className="mt-4 space-y-3">
+              {item.children!.map(child => renderItem(child, true))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
     );
   };
 

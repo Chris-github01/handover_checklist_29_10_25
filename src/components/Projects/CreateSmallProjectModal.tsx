@@ -3,6 +3,7 @@ import { X, Building2, Calendar, User, AlertCircle } from 'lucide-react';
 import type { Project } from '../../types/database';
 import { getNextProjectCode, checkProjectCodeExists } from '../../lib/database';
 import { buildFolderName } from '../../lib/naming';
+import Button from '../ui/Button';
 
 interface CreateSmallProjectModalProps {
   onClose: () => void;
@@ -211,13 +212,13 @@ const CreateSmallProjectModal: React.FC<CreateSmallProjectModalProps> = ({ onClo
                     <p className="text-sm text-yellow-800 mb-2">
                       This project code already exists. Use suggested code: <strong>{suggestedCode}</strong>
                     </p>
-                    <button
-                      type="button"
+                    <Button
+                      variant="warning"
                       onClick={useSuggestedCode}
-                      className="text-sm bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded transition-colors"
+                      className="text-sm"
                     >
                       Use {suggestedCode}
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { StageWithItems } from '../../types/database';
 import { CheckCircle, Clock, AlertCircle, Lock, User, ChevronRight, Eye } from 'lucide-react';
+import { Card, CardContent } from '../ui/Card';
 
 interface StageTileProps {
   stage: StageWithItems;
@@ -35,21 +36,37 @@ const StageTile: React.FC<StageTileProps> = ({ stage, onClick, canAccess, canEdi
     }
   };
 
-  const progressPercentage = stage.totalItems > 0 
-    ? Math.round((stage.completedItems / stage.totalItems) * 100) 
+  const progressPercentage = stage.totalItems > 0
+    ? Math.round((stage.completedItems / stage.totalItems) * 100)
     : 0;
 
+  const getCardVariant = (): 'default' | 'success' | 'warning' => {
+    if (!canEdit) return 'default';
+
+    switch (status) {
+      case 'complete':
+        return 'success';
+      case 'in_progress':
+        return 'warning';
+      default:
+        return 'default';
+    }
+  };
+
   return (
-    <div
-      onClick={onClick}
-      className={`relative border-2 rounded-xl p-6 transition-all duration-200 ${
-        canEdit 
-          ? `cursor-pointer ${getStatusColor()}` 
+    <Card
+      variant={getCardVariant()}
+      interactive={canEdit || canAccess}
+      className={`relative ${
+        canEdit
+          ? getStatusColor()
           : canAccess
-          ? `cursor-pointer border-gray-300 bg-gray-50 hover:bg-gray-100`
+          ? 'border-gray-300 bg-gray-50 hover:bg-gray-100'
           : 'border-gray-200 bg-gray-100 cursor-not-allowed opacity-60'
       }`}
+      onClick={onClick}
     >
+      <CardContent className="p-6">
       {!canAccess && (
         <div className="absolute top-4 right-4 bg-gray-200 rounded-full p-1">
           <Lock className="w-4 h-4 text-gray-500" />
@@ -127,7 +144,8 @@ const StageTile: React.FC<StageTileProps> = ({ stage, onClick, canAccess, canEdi
           </span>
         )}
       </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

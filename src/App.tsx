@@ -149,7 +149,7 @@ const AppContent: React.FC = () => {
 
   if (loading && !isPasswordRecovery) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 border-4 border-brp-primary border-t-transparent rounded-full animate-spin" />
           <span className="text-gray-600 text-lg">Loading...</span>
@@ -195,7 +195,7 @@ const AppContent: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <Header />
       <main className="flex-1">
         {selectedProject ? (

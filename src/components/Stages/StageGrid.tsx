@@ -7,6 +7,7 @@ import { supabase } from '../../lib/supabase';
 import { ArrowLeft, Search, Filter, Download, DollarSign, FileText } from 'lucide-react';
 import { CostAllocationModal } from '../Projects/CostAllocationModal';
 import { CostReportModal } from '../Projects/CostReportModal';
+import { Card, CardContent } from '../ui/Card';
 import StageTile from './StageTile';
 import StageModal from './StageModal';
 import type { StageWithItems, Project } from '../../types/database';
@@ -473,35 +474,37 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
       </div>
 
       {/* Progress Summary */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Project Progress</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-gray-600">
-              {stages.filter(s => getStageStatus(s) === 'pending').length}
+      <Card variant="default" className="mb-8">
+        <CardContent>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Project Progress</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-gray-600">
+                {stages.filter(s => getStageStatus(s) === 'pending').length}
+              </div>
+              <div className="text-sm text-gray-500">Pending</div>
             </div>
-            <div className="text-sm text-gray-500">Pending</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-orange-600">
-              {stages.filter(s => getStageStatus(s) === 'in_progress').length}
+            <div className="text-center">
+              <div className="text-2xl font-bold text-orange-600">
+                {stages.filter(s => getStageStatus(s) === 'in_progress').length}
+              </div>
+              <div className="text-sm text-gray-500">In Progress</div>
             </div>
-            <div className="text-sm text-gray-500">In Progress</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-green-600">
-              {stages.filter(s => getStageStatus(s) === 'complete').length}
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600">
+                {stages.filter(s => getStageStatus(s) === 'complete').length}
+              </div>
+              <div className="text-sm text-gray-500">Complete</div>
             </div>
-            <div className="text-sm text-gray-500">Complete</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-brp-primary">
-              {Math.round((stages.filter(s => getStageStatus(s) === 'complete').length / stages.length) * 100)}%
+            <div className="text-center">
+              <div className="text-2xl font-bold text-brp-primary">
+                {Math.round((stages.filter(s => getStageStatus(s) === 'complete').length / stages.length) * 100)}%
+              </div>
+              <div className="text-sm text-gray-500">Overall</div>
             </div>
-            <div className="text-sm text-gray-500">Overall</div>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* Stage Grid */}
 

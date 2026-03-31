@@ -148,19 +148,19 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
       <CardContent className="p-6" onClick={onClick}>
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
-          <h3 className={`text-lg font-semibold text-gray-900 mb-2 transition-colors ${
+          <h3 className={`text-lg font-semibold text-gray-100 mb-2 transition-colors ${
             !project.is_small_project && 'group-hover:text-brp-primary'
           }`}>
             {project.project_title || project.name}{project.bwof && ' BWOF'}
           </h3>
 
           <div className="flex items-center justify-between">
-            <div className="flex items-center text-gray-600 mb-2">
+            <div className="flex items-center text-gray-400 mb-2">
               <Building2 className="w-4 h-4 mr-2" />
               <span className="text-sm">{project.client}</span>
             </div>
 
-            <div className="flex flex-col space-y-1 text-xs text-gray-600 mr-2">
+            <div className="flex flex-col space-y-1 text-xs text-gray-400 mr-2">
               <div>
                 <span className="font-medium">SM:</span> {project.site_manager || '-'}
               </div>
@@ -171,22 +171,22 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
           </div>
 
           {project.costSummary && project.costSummary.totalProjectValue > 0 && (
-            <div className="mt-3 p-3 bg-purple-50 border border-purple-200 rounded-lg">
-              <div className="text-xs font-semibold text-gray-700 mb-2">Project Summary</div>
+            <div className="mt-3 p-3 bg-purple-950 border border-purple-800 rounded-lg">
+              <div className="text-xs font-semibold text-gray-300 mb-2">Project Summary</div>
               <div className="space-y-1.5 text-xs">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Total Project Value:</span>
-                  <span className="font-medium text-gray-900">${project.costSummary.totalProjectValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                  <span className="text-gray-400">Total Project Value:</span>
+                  <span className="font-medium text-gray-200">${project.costSummary.totalProjectValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Total Claimed to Date:</span>
-                  <span className="font-medium text-green-700">
+                  <span className="text-gray-400">Total Claimed to Date:</span>
+                  <span className="font-medium text-green-400">
                     ${project.costSummary.totalClaimedToDate.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ({project.costSummary.percentageClaimed.toFixed(2)}%)
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Total Outstanding:</span>
-                  <span className="font-medium text-orange-700">
+                  <span className="text-gray-400">Total Outstanding:</span>
+                  <span className="font-medium text-orange-400">
                     ${project.costSummary.totalOutstanding.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ({(100 - project.costSummary.percentageClaimed).toFixed(2)}%)
                   </span>
                 </div>
@@ -195,50 +195,50 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
           )}
 
           {project.project_code && (
-            <div className="flex items-center text-gray-600 mb-2">
+            <div className="flex items-center text-gray-400 mb-2">
               <span className="text-sm font-medium">Code: {project.project_code}</span>
             </div>
           )}
 
           {project.project_type && (
-            <div className="flex items-center text-gray-600 mb-2">
+            <div className="flex items-center text-gray-400 mb-2">
               <span className="text-sm font-medium">{getProjectTypeLabel(project.project_type)}</span>
             </div>
           )}
 
-          <div className="flex items-center text-gray-600">
+          <div className="flex items-center text-gray-400">
             <Calendar className="w-4 h-4 mr-2" />
             <span className="text-sm">Target: {formatDate(project.start_date_target)}</span>
           </div>
 
           {(project.client_qs_name || project.client_qs_number || project.client_qs_email) && (
-            <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
-              <div className="text-xs font-semibold text-gray-700 mb-2">Client QS Information</div>
+            <div className="mt-4 p-3 bg-[#0f0f0f] border border-gray-800 rounded-lg">
+              <div className="text-xs font-semibold text-gray-300 mb-2">Client QS Information</div>
               <div className="space-y-1.5 text-xs">
                 {project.client_qs_name && (
-                  <div className="flex items-center text-gray-600">
+                  <div className="flex items-center text-gray-400">
                     <User className="w-3 h-3 mr-1.5 flex-shrink-0" />
                     <span className="font-medium">{project.client_qs_name}</span>
                   </div>
                 )}
                 {project.client_qs_number && (
-                  <div className="flex items-center text-gray-600">
+                  <div className="flex items-center text-gray-400">
                     <Phone className="w-3 h-3 mr-1.5 flex-shrink-0" />
                     <span>{project.client_qs_number}</span>
                   </div>
                 )}
                 {project.client_qs_email && (
-                  <div className="flex items-center justify-between text-gray-600">
+                  <div className="flex items-center justify-between text-gray-400">
                     <div className="flex items-center flex-1 min-w-0">
                       <Mail className="w-3 h-3 mr-1.5 flex-shrink-0" />
                       <span className="break-all">{project.client_qs_email}</span>
                     </div>
                     <button
                       onClick={handleEmailCopy}
-                      className="ml-2 p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-colors flex-shrink-0"
+                      className="ml-2 p-1 text-gray-500 hover:text-gray-300 hover:bg-gray-800 rounded transition-colors flex-shrink-0"
                       title="Copy email address"
                     >
-                      {emailCopied ? <Check className="w-3 h-3 text-green-600" /> : <Copy className="w-3 h-3" />}
+                      {emailCopied ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3" />}
                     </button>
                   </div>
                 )}
@@ -287,14 +287,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
         </div>
 
         {project.stageStats && project.stageStats.completedStages.length > 0 && (
-          <div className="space-y-1 pt-2 border-t border-gray-100 max-h-0 opacity-0 overflow-hidden group-hover:max-h-[500px] group-hover:opacity-100 transition-all duration-300">
-            <div className="flex items-center text-xs font-medium text-gray-700 mb-1">
-              <CheckCircle2 className="w-3.5 h-3.5 mr-1 text-green-600" />
+          <div className="space-y-1 pt-2 border-t border-gray-800 max-h-0 opacity-0 overflow-hidden group-hover:max-h-[500px] group-hover:opacity-100 transition-all duration-300">
+            <div className="flex items-center text-xs font-medium text-gray-300 mb-1">
+              <CheckCircle2 className="w-3.5 h-3.5 mr-1 text-green-400" />
               <span>Completed Steps:</span>
             </div>
             <div className="space-y-0.5 pl-5">
               {project.stageStats.completedStages.map((stage, index) => (
-                <div key={index} className="text-xs text-gray-600">
+                <div key={index} className="text-xs text-gray-400">
                   • {stage}
                 </div>
               ))}
@@ -303,7 +303,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
         )}
 
         {project.stageStats && project.stageStats.completedStages.length === 0 && (
-          <div className="pt-2 border-t border-gray-100 max-h-0 opacity-0 overflow-hidden group-hover:max-h-[500px] group-hover:opacity-100 transition-all duration-300">
+          <div className="pt-2 border-t border-gray-800 max-h-0 opacity-0 overflow-hidden group-hover:max-h-[500px] group-hover:opacity-100 transition-all duration-300">
             <div className="text-xs text-gray-500 italic">No steps completed yet</div>
           </div>
         )}

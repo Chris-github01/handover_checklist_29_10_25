@@ -71,11 +71,11 @@ export function Card({
   ...props
 }: CardProps) {
   const variantStyles = {
-    default: 'bg-white border-brp-grayBorder shadow-[0_2px_8px_rgba(0,0,0,0.08)]',
-    highlight: 'bg-white border-brp-primary shadow-[0_2px_8px_rgba(0,0,0,0.08),0_0_20px_rgba(244,178,35,0.15)]',
-    success: 'bg-white border-green-200 shadow-[0_2px_8px_rgba(0,0,0,0.08),0_0_20px_rgba(34,197,94,0.1)]',
-    warning: 'bg-white border-amber-200 shadow-[0_2px_8px_rgba(0,0,0,0.08),0_0_20px_rgba(251,191,36,0.1)]',
-    risk: 'bg-white border-red-200 shadow-[0_2px_8px_rgba(0,0,0,0.08),0_0_20px_rgba(239,68,68,0.1)]',
+    default: 'bg-[#1a1a1a] border-gray-800 shadow-[0_2px_8px_rgba(0,0,0,0.3)]',
+    highlight: 'bg-[#1a1a1a] border-brp-primary shadow-[0_2px_8px_rgba(0,0,0,0.3),0_0_20px_rgba(244,178,35,0.2)]',
+    success: 'bg-[#1a1a1a] border-green-800 shadow-[0_2px_8px_rgba(0,0,0,0.3),0_0_20px_rgba(34,197,94,0.15)]',
+    warning: 'bg-[#1a1a1a] border-amber-800 shadow-[0_2px_8px_rgba(0,0,0,0.3),0_0_20px_rgba(251,191,36,0.15)]',
+    risk: 'bg-[#1a1a1a] border-red-800 shadow-[0_2px_8px_rgba(0,0,0,0.3),0_0_20px_rgba(239,68,68,0.15)]',
   };
 
   const interactiveStyles = interactive
@@ -98,7 +98,7 @@ export function CardHeader({ children, className = '', ...props }: CardSectionPr
   const sanitizedClassName = stripForbiddenClasses(className);
 
   return (
-    <div className={`px-6 py-4 border-b border-brp-grayBorder ${sanitizedClassName}`} {...props}>
+    <div className={`px-6 py-4 border-b border-gray-800 ${sanitizedClassName}`} {...props}>
       {children}
     </div>
   );
@@ -118,7 +118,7 @@ export function CardFooter({ children, className = '', ...props }: CardSectionPr
   const sanitizedClassName = stripForbiddenClasses(className);
 
   return (
-    <div className={`px-6 py-4 border-t border-brp-grayBorder ${sanitizedClassName}`} {...props}>
+    <div className={`px-6 py-4 border-t border-gray-800 ${sanitizedClassName}`} {...props}>
       {children}
     </div>
   );

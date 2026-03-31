@@ -195,7 +195,7 @@ const AppContent: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#0f0f0f]">
       <Header />
       <main className="flex-1">
         {selectedProject ? (

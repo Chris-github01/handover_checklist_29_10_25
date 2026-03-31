@@ -936,7 +936,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
         variant="default"
         className={isChild ? 'ml-6' : ''}
       >
-        <CardContent className={isChild ? 'bg-gray-50' : ''}>
+        <CardContent className={isChild ? 'bg-[#0f0f0f]' : ''}>
           <div className="flex items-start space-x-3">
           <div className="flex-shrink-0 mt-1">
             <input
@@ -949,7 +949,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                 }
               }}
               className={'w-5 h-5 rounded border-2 ' + (
-                (canCheck && canEdit) ? 'border-gray-300 text-brp-primary focus:ring-brp-primary' : 'border-gray-200 bg-gray-100 cursor-not-allowed'
+                (canCheck && canEdit) ? 'border-gray-600 text-brp-primary focus:ring-brp-primary bg-[#1a1a1a]' : 'border-gray-700 bg-gray-800 cursor-not-allowed'
               )}
             />
           </div>
@@ -957,12 +957,12 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
           <div className="flex-1">
             <div className="flex items-center justify-between">
               <h4
-                className={`font-medium ${checked ? 'text-green-700' : 'text-gray-900'} ${!canCheck ? 'text-gray-500' : ''}`}
+                className={`font-medium ${checked ? 'text-green-400' : 'text-gray-100'} ${!canCheck ? 'text-gray-500' : ''}`}
               >
                 {item.title}
-                {item.is_required && <span className="text-red-500 ml-1">*</span>}
+                {item.is_required && <span className="text-red-400 ml-1">*</span>}
                 {item.requires_all_children && (
-                  <span className="text-xs text-gray-600 ml-2">(Requires all sub-items)</span>
+                  <span className="text-xs text-gray-400 ml-2">(Requires all sub-items)</span>
                 )}
               </h4>
 
@@ -988,7 +988,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                 />
                 <label
                   htmlFor={`file-${item.id}`}
-                  className={`p-1 ${canEdit ? 'text-gray-400 hover:text-gray-600 cursor-pointer' : 'text-gray-300 cursor-not-allowed'}`}
+                  className={`p-1 ${canEdit ? 'text-gray-500 hover:text-gray-300 cursor-pointer' : 'text-gray-600 cursor-not-allowed'}`}
                   title={isStep3Item ? "Add Files" : "Add File"}
                 >
                   {uploadingByKey.has(uploadKey) ? (
@@ -1000,7 +1000,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
               </div>
             </div>
 
-            {item.description && <p className="text-sm text-gray-600 mt-1">{item.description}</p>}
+            {item.description && <p className="text-sm text-gray-400 mt-1">{item.description}</p>}
 
             {/* Dropdown for special items */}
             {isDropdownItem(item) && (
@@ -1009,15 +1009,15 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                   value={selectedValues[item.id] || ''}
                   disabled={!canEdit}
                   onChange={(e) => handleDropdownChange(item.id, e.target.value)}
-                  className={`w-full px-3 py-2 text-sm border border-gray-300 rounded-md ${
+                  className={`w-full px-3 py-2 text-sm bg-[#0f0f0f] border border-gray-700 rounded-md text-gray-200 ${
                     canEdit
                       ? 'focus:ring-2 focus:ring-brp-primary focus:border-transparent'
-                      : 'bg-gray-100 cursor-not-allowed'
+                      : 'bg-gray-800 cursor-not-allowed'
                   }`}
                 >
                   <option value="">
-                    {item.title.toLowerCase().includes('assign qs') ? 'Select a QS...' : 
-                     item.title.toLowerCase().includes('assign manager') ? 'Select a Manager...' : 
+                    {item.title.toLowerCase().includes('assign qs') ? 'Select a QS...' :
+                     item.title.toLowerCase().includes('assign manager') ? 'Select a Manager...' :
                      'Select an option...'}
                   </option>
                   {getDropdownOptions(item).map(option => (
@@ -1027,7 +1027,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                   ))}
                 </select>
                 {selectedValues[item.id] && (
-                  <p className="text-xs text-green-600 mt-1">
+                  <p className="text-xs text-green-400 mt-1">
                     Selected: {getDropdownOptions(item).find(opt => opt.value === selectedValues[item.id])?.label}
                   </p>
                 )}
@@ -1037,7 +1037,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
             {/* Notes */}
             <div className="mt-3">
               <div className="flex items-center mb-1">
-                <label className="block text-xs font-medium text-gray-700">Notes</label>
+                <label className="block text-xs font-medium text-gray-300">Notes</label>
                 {isPreLetMeetingItem && (
                   <div className="relative ml-2 group">
                     <Info className="w-3 h-3 text-brp-primary cursor-help" />
@@ -1105,10 +1105,10 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                   }
                 }}
                 placeholder="Add notes..."
-                className={`w-full px-3 py-2 text-sm border border-gray-300 rounded-md resize-none ${
+                className={`w-full px-3 py-2 text-sm bg-[#0f0f0f] border border-gray-700 rounded-md resize-none text-gray-200 placeholder-gray-500 ${
                   canEdit
                     ? 'focus:ring-2 focus:ring-brp-primary focus:border-transparent'
-                    : 'bg-gray-100 cursor-not-allowed'
+                    : 'bg-gray-800 cursor-not-allowed'
                 }`}
                 rows={2}
               />
@@ -1117,14 +1117,14 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
             {/* File attachments */}
             <div className="mt-3">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-medium text-gray-700">Files</span>
+                <span className="text-xs font-medium text-gray-300">Files</span>
                 {canEdit && (
                   <div className="flex items-center space-x-2">
                     {isStep3Item && (
                       <button
                         type="button"
                         onClick={() => setShowMultiUpload(item.id)}
-                        className="text-xs text-gray-600 hover:text-gray-700 flex items-center space-x-1"
+                        className="text-xs text-gray-400 hover:text-gray-200 flex items-center space-x-1"
                       >
                         <CloudUpload className="w-3 h-3" />
                         <span>Add Files</span>
@@ -1133,7 +1133,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                     <button
                       type="button"
                       onClick={() => document.getElementById(`file-${item.id}`)?.click()}
-                      className="text-xs text-gray-600 hover:text-gray-700 flex items-center space-x-1"
+                      className="text-xs text-gray-400 hover:text-gray-200 flex items-center space-x-1"
                     >
                       <Upload className="w-3 h-3" />
                       <span>{isStep3Item ? 'Browse' : 'Add File'}</span>
@@ -1150,13 +1150,13 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                       <CardContent className="!p-2">
                         <div className="flex items-center justify-between text-xs">
                           <div className="flex items-center space-x-2">
-                            <FileText className="w-3 h-3 text-gray-400" />
-                            <span className="truncate">{att.filename}</span>
+                            <FileText className="w-3 h-3 text-gray-500" />
+                            <span className="truncate text-gray-300">{att.filename}</span>
                           </div>
                           <div className="flex items-center space-x-1">
                             <button
                               onClick={() => handleFileDownload(att.url, att.filename)}
-                              className="p-1 text-gray-600 hover:text-gray-700"
+                              className="p-1 text-gray-400 hover:text-gray-200"
                               title="Download"
                             >
                               <Download className="w-3 h-3" />
@@ -1164,7 +1164,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
                             {canEdit && (
                               <button
                                 onClick={() => handleFileDelete(att.id, att.file_path)}
-                                className="p-1 text-red-400 hover:text-red-600"
+                                className="p-1 text-red-400 hover:text-red-300"
                                 title="Delete File"
                               >
                                 <Trash2 className="w-3 h-3" />
@@ -1208,23 +1208,23 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[95vh] overflow-hidden flex flex-col">
+      <div className="bg-[#1a1a1a] rounded-2xl w-full max-w-4xl max-h-[95vh] overflow-hidden flex flex-col border border-gray-800">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 flex-shrink-0">
+        <div className="flex items-center justify-between p-6 border-b border-gray-800 flex-shrink-0">
           <div className="flex items-center space-x-3">
             {getStatusIcon}
             <div>
-              <h2 className="text-xl font-bold text-gray-900">{stage.title}</h2>
-              <p className="text-sm text-gray-600">
+              <h2 className="text-xl font-bold text-gray-100">{stage.title}</h2>
+              <p className="text-sm text-gray-400">
                 Owner: {stage.owner_role} • {footerMeta.completed}/{footerMeta.total} items completed • {footerMeta.completedRequired}/{footerMeta.totalRequired} required
-                {!canEdit && <span className="ml-2 px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">View Only</span>}
+                {!canEdit && <span className="ml-2 px-2 py-1 bg-gray-800 text-gray-300 text-xs rounded-full">View Only</span>}
               </p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 text-gray-400 hover:text-gray-200 hover:bg-gray-800 rounded-lg transition-colors"
           >
             <X className="w-6 h-6" />
           </button>
@@ -1238,14 +1238,14 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between p-6 border-t border-gray-200 bg-gray-50 flex-shrink-0">
-          <div className="text-sm text-gray-600">
+        <div className="flex items-center justify-between p-6 border-t border-gray-800 bg-[#0f0f0f] flex-shrink-0">
+          <div className="text-sm text-gray-400">
             <div>
               Last updated:{' '}
               {stage.status?.completed_at ? new Date(stage.status.completed_at).toLocaleString() : 'Never'}
             </div>
             {pendingChanges.size > 0 && (
-              <div className="text-orange-600 font-medium mt-1">
+              <div className="text-orange-400 font-medium mt-1">
                 {pendingChanges.size} unsaved change{pendingChanges.size !== 1 ? 's' : ''}
               </div>
             )}
@@ -1256,16 +1256,16 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
               type="button"
               onClick={testEmail}
               disabled={!canEdit}
-              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center space-x-2"
+              className="px-4 py-2 border border-gray-700 text-gray-300 rounded-lg hover:bg-gray-800 transition-colors flex items-center space-x-2"
               title="Test Email"
             >
               <span>Test Email</span>
             </button>
-            
+
             <button
               type="button"
               disabled={!canEdit}
-              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center space-x-2"
+              className="px-4 py-2 border border-gray-700 text-gray-300 rounded-lg hover:bg-gray-800 transition-colors flex items-center space-x-2"
               title="Export"
               onClick={() => {
                 // hook up your export here (kept as-is)
@@ -1336,7 +1336,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
             ) : (
               <button
                 onClick={onClose}
-                className="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors"
+                className="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors"
               >
                 Close
               </button>
@@ -1348,12 +1348,12 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
       {/* Multi-File Upload Modal for Step 3 */}
       {showMultiUpload && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-[60]">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-md">
+          <div className="bg-[#1a1a1a] rounded-2xl p-6 w-full max-w-md border border-gray-800">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Upload Multiple Files</h3>
+              <h3 className="text-lg font-semibold text-gray-100">Upload Multiple Files</h3>
               <button
                 onClick={() => setShowMultiUpload(null)}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 text-gray-400 hover:text-gray-200 hover:bg-gray-800 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1363,7 +1363,7 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
               className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
                 dragOver
                   ? 'border-brp-primary bg-brp-primarySoft'
-                  : 'border-gray-300 hover:border-gray-400'
+                  : 'border-gray-700 hover:border-gray-600'
               }`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
@@ -1372,13 +1372,13 @@ const StageModal: React.FC<StageModalProps> = ({ stage, projectId, canEdit, onCl
               {multiUploading ? (
                 <div className="flex flex-col items-center space-y-3">
                   <div className="w-8 h-8 border-4 border-brp-primary border-t-transparent rounded-full animate-spin" />
-                  <p className="text-gray-600">Uploading files...</p>
+                  <p className="text-gray-400">Uploading files...</p>
                 </div>
               ) : (
                 <div className="flex flex-col items-center space-y-3">
-                  <CloudUpload className="w-12 h-12 text-gray-400" />
+                  <CloudUpload className="w-12 h-12 text-gray-500" />
                   <div>
-                    <p className="text-gray-600 mb-2">Drag and drop files here</p>
+                    <p className="text-gray-300 mb-2">Drag and drop files here</p>
                     <p className="text-sm text-gray-500">or</p>
                   </div>
                   <input

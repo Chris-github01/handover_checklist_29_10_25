@@ -17,11 +17,11 @@ const StageTile: React.FC<StageTileProps> = ({ stage, onClick, canAccess, canEdi
   const getStatusIcon = () => {
     switch (status) {
       case 'complete':
-        return <CheckCircle className="w-6 h-6 text-green-600" />;
+        return <CheckCircle className="w-6 h-6 text-green-400" />;
       case 'in_progress':
-        return <Clock className="w-6 h-6 text-orange-600" />;
+        return <Clock className="w-6 h-6 text-orange-400" />;
       default:
-        return <AlertCircle className="w-6 h-6 text-gray-400" />;
+        return <AlertCircle className="w-6 h-6 text-gray-500" />;
     }
   };
 
@@ -64,11 +64,11 @@ const StageTile: React.FC<StageTileProps> = ({ stage, onClick, canAccess, canEdi
     >
       <CardContent className="p-6">
       {!canAccess && (
-        <div className="absolute top-4 right-4 bg-gray-200 rounded-full p-1">
-          <Lock className="w-4 h-4 text-gray-500" />
+        <div className="absolute top-4 right-4 bg-gray-700 rounded-full p-1">
+          <Lock className="w-4 h-4 text-gray-400" />
         </div>
       )}
-      
+
       {canAccess && !canEdit && (
         <div className="absolute top-4 right-4 bg-brp-primarySoft rounded-full p-1" title="View Only">
           <Eye className="w-4 h-4 text-brp-primary" />
@@ -79,12 +79,12 @@ const StageTile: React.FC<StageTileProps> = ({ stage, onClick, canAccess, canEdi
         <div className="flex-1">
           <div className="flex items-center space-x-3 mb-2">
             {getStatusIcon()}
-            <h3 className="font-semibold text-gray-900 text-sm leading-tight">
+            <h3 className="font-semibold text-gray-100 text-sm leading-tight">
               {stage.title}
             </h3>
           </div>
-          
-          <div className="flex items-center text-xs text-gray-600 mb-3">
+
+          <div className="flex items-center text-xs text-gray-400 mb-3">
             <User className="w-3 h-3 mr-1" />
             <span>{stage.owner_role}</span>
           </div>
@@ -109,15 +109,15 @@ const StageTile: React.FC<StageTileProps> = ({ stage, onClick, canAccess, canEdi
 
       {/* Progress Bar */}
       <div className="mb-4">
-        <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
+        <div className="flex items-center justify-between text-xs text-gray-400 mb-1">
           <span>Progress</span>
           <span>{stage.completedItems}/{stage.totalItems}</span>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
+        <div className="w-full bg-gray-700 rounded-full h-2">
           <div
             className={`h-2 rounded-full transition-all duration-300 ${
-              status === 'complete' ? 'bg-green-600' :
-              status === 'in_progress' ? 'bg-orange-600' : 'bg-gray-400'
+              status === 'complete' ? 'bg-green-500' :
+              status === 'in_progress' ? 'bg-orange-500' : 'bg-gray-500'
             }`}
             style={{ width: `${progressPercentage}%` }}
           />
@@ -127,13 +127,13 @@ const StageTile: React.FC<StageTileProps> = ({ stage, onClick, canAccess, canEdi
       {/* Status Badge */}
       <div className="flex items-center justify-between">
         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-          status === 'complete' ? 'bg-green-100 text-green-800' :
-          status === 'in_progress' ? 'bg-orange-100 text-orange-800' : 'bg-gray-100 text-gray-800'
+          status === 'complete' ? 'bg-green-950 text-green-300 border border-green-800' :
+          status === 'in_progress' ? 'bg-orange-950 text-orange-300 border border-orange-800' : 'bg-gray-800 text-gray-300 border border-gray-700'
         }`}>
           {status === 'complete' ? 'Complete' :
            status === 'in_progress' ? 'In Progress' : 'Pending'}
         </span>
-        
+
         {stage.requiredItems > 0 && (
           <span className="text-xs text-gray-500">
             {stage.completedRequiredItems}/{stage.requiredItems} required

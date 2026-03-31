@@ -484,7 +484,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center space-x-2">
           <div className="w-6 h-6 border-2 border-brp-primary border-t-transparent rounded-full animate-spin" />
-          <span className="text-gray-600">Loading projects...</span>
+          <span className="text-gray-400">Loading projects...</span>
         </div>
       </div>
     );
@@ -494,9 +494,9 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <p className="text-red-600 font-medium">Error loading projects</p>
-          <p className="text-gray-600 text-sm mt-1">{error}</p>
+          <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
+          <p className="text-red-400 font-medium">Error loading projects</p>
+          <p className="text-gray-400 text-sm mt-1">{error}</p>
         </div>
       </div>
     );
@@ -507,9 +507,9 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
       <Card variant="risk" className="mb-6">
         <CardContent>
           <div className="flex items-start space-x-3">
-            <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
+            <AlertCircle className="w-6 h-6 text-red-400 flex-shrink-0 mt-0.5" />
             <div className="flex-1">
-              <p className="text-red-900 font-semibold text-sm">
+              <p className="text-red-200 font-semibold text-sm">
                 If a project is awarded or added to Burnratepro, the folder must be immediately moved to current projects, regardless of whether steps 1 and 2 are completed
               </p>
             </div>
@@ -519,15 +519,15 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
 
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h2 className="text-3xl font-bold text-gray-900">Projects</h2>
-          <p className="text-gray-600 mt-1">Manage your project handover processes</p>
+          <h2 className="text-3xl font-bold text-gray-100">Projects</h2>
+          <p className="text-gray-400 mt-1">Manage your project handover processes</p>
         </div>
 
         <div className="flex items-center space-x-3">
           <div className="relative">
             <button
               onClick={() => setShowActionsMenu(!showActionsMenu)}
-              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+              className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
             >
               <MoreVertical className="w-5 h-5" />
               <span>Actions</span>
@@ -539,17 +539,17 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
                   className="fixed inset-0 z-10"
                   onClick={() => setShowActionsMenu(false)}
                 />
-                <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20">
+                <div className="absolute right-0 mt-2 w-56 bg-[#1a1a1a] rounded-lg shadow-lg border border-gray-700 py-1 z-20">
                   {(userProfile?.email === 'pieter@optimalfire.co.nz' || userProfile?.email === 'ramona@optimalfire.co.nz') && (
                     <button
                       onClick={() => {
                         setShowCreateSmallModal(true);
                         setShowActionsMenu(false);
                       }}
-                      className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center space-x-2 transition-colors"
+                      className="w-full px-4 py-2 text-left hover:bg-gray-800 flex items-center space-x-2 transition-colors"
                     >
-                      <Plus className="w-5 h-5 text-teal-600" />
-                      <span className="text-gray-700">Add Small Project</span>
+                      <Plus className="w-5 h-5 text-teal-400" />
+                      <span className="text-gray-200">Add Small Project</span>
                     </button>
                   )}
 
@@ -558,10 +558,10 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
                       setShowPDFTemplateModal(true);
                       setShowActionsMenu(false);
                     }}
-                    className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center space-x-2 transition-colors"
+                    className="w-full px-4 py-2 text-left hover:bg-gray-800 flex items-center space-x-2 transition-colors"
                   >
                     <FileText className="w-5 h-5 text-brp-primary" />
-                    <span className="text-gray-700">Projects PDF Template</span>
+                    <span className="text-gray-200">Projects PDF Template</span>
                   </button>
 
                   {(userProfile?.email === 'pieter@optimalfire.co.nz' || userProfile?.email === 'ramona@optimalfire.co.nz') && (
@@ -571,10 +571,10 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
                           handleExportExcel();
                           setShowActionsMenu(false);
                         }}
-                        className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center space-x-2 transition-colors"
+                        className="w-full px-4 py-2 text-left hover:bg-gray-800 flex items-center space-x-2 transition-colors"
                       >
-                        <Download className="w-5 h-5 text-green-600" />
-                        <span className="text-gray-700">Export Projects Excel</span>
+                        <Download className="w-5 h-5 text-green-400" />
+                        <span className="text-gray-200">Export Projects Excel</span>
                       </button>
 
                       <button
@@ -583,10 +583,10 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
                           setShowActionsMenu(false);
                         }}
                         disabled={importing}
-                        className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center space-x-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full px-4 py-2 text-left hover:bg-gray-800 flex items-center space-x-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        <Upload className="w-5 h-5 text-orange-600" />
-                        <span className="text-gray-700">{importing ? 'Importing...' : 'Import Projects'}</span>
+                        <Upload className="w-5 h-5 text-orange-400" />
+                        <span className="text-gray-200">{importing ? 'Importing...' : 'Import Projects'}</span>
                       </button>
                     </>
                   )}
@@ -614,14 +614,14 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
       </div>
 
       <div className="mb-6 space-y-4">
-        <div className="border-b border-gray-200">
+        <div className="border-b border-gray-700">
           <div className="flex space-x-8">
             <button
               onClick={() => onTabChange('in_progress')}
               className={`pb-4 px-1 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === 'in_progress'
                   ? 'border-brp-primary text-brp-primary'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  : 'border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-600'
               }`}
             >
               Handover in Progress
@@ -631,7 +631,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
               className={`pb-4 px-1 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === 'complete'
                   ? 'border-brp-primary text-brp-primary'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  : 'border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-600'
               }`}
             >
               Live Projects
@@ -641,7 +641,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
               className={`pb-4 px-1 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === 'closed'
                   ? 'border-brp-primary text-brp-primary'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  : 'border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-600'
               }`}
             >
               Completed Projects
@@ -651,35 +651,35 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
 
         <div className="flex items-center space-x-3">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
             <input
               type="text"
               placeholder="Search projects..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brp-primary focus:border-transparent"
+              className="w-full pl-10 pr-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-brp-primary focus:border-transparent"
             />
           </div>
           <button
             onClick={() => setSortBy(sortBy === 'alphabetical' ? 'recent' : 'alphabetical')}
-            className="px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center space-x-2 whitespace-nowrap"
+            className="px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg hover:bg-gray-800 transition-colors flex items-center space-x-2 whitespace-nowrap"
             title={sortBy === 'alphabetical' ? 'Switch to Recent' : 'Switch to Alphabetical'}
           >
-            <ArrowUpDown className="w-5 h-5 text-gray-600" />
-            <span className="text-sm font-medium text-gray-700">{sortBy === 'alphabetical' ? 'A-Z' : 'Recent'}</span>
+            <ArrowUpDown className="w-5 h-5 text-gray-400" />
+            <span className="text-sm font-medium text-gray-200">{sortBy === 'alphabetical' ? 'A-Z' : 'Recent'}</span>
           </button>
         </div>
       </div>
 
       {filteredProjects.length === 0 ? (
         <div className="text-center py-12">
-          <Building2 className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-xl font-medium text-gray-900 mb-2">
+          <Building2 className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+          <h3 className="text-xl font-medium text-gray-100 mb-2">
             {searchTerm ? 'No projects found' : 'No projects yet'}
           </h3>
-          <p className="text-gray-600 mb-6">
-            {searchTerm 
-              ? 'Try adjusting your search terms' 
+          <p className="text-gray-400 mb-6">
+            {searchTerm
+              ? 'Try adjusting your search terms'
               : 'Get started by creating your first project'}
           </p>
           {!searchTerm && (
@@ -736,15 +736,15 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
 
       {showProjectCodeModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-md">
+          <div className="bg-[#1a1a1a] rounded-2xl p-6 w-full max-w-md border border-gray-700">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-gray-900">Generate Project Code</h2>
+              <h2 className="text-xl font-bold text-gray-100">Generate Project Code</h2>
               <button
                 onClick={() => {
                   setShowProjectCodeModal(false);
                   setGeneratedCode('');
                 }}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 text-gray-400 hover:text-gray-200 hover:bg-gray-800 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -752,13 +752,13 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-300 mb-2">
                   Select Region
                 </label>
                 <select
                   value={selectedRegion}
                   onChange={(e) => handleRegionChange(e.target.value as 'auckland' | 'wellington')}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brp-primary focus:border-transparent"
+                  className="w-full px-3 py-2 bg-[#0f0f0f] border border-gray-700 rounded-lg text-gray-200 focus:ring-2 focus:ring-brp-primary focus:border-transparent"
                 >
                   <option value="auckland">Auckland</option>
                   <option value="wellington">Wellington</option>
@@ -775,11 +775,11 @@ const ProjectList: React.FC<ProjectListProps> = ({ activeTab, onTabChange, onSel
               </Button>
 
               {generatedCode && (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                  <label className="block text-xs font-medium text-green-700 mb-1">
+                <div className="bg-green-950 border border-green-800 rounded-lg p-4">
+                  <label className="block text-xs font-medium text-green-400 mb-1">
                     Next Available Project Code
                   </label>
-                  <p className="text-2xl font-mono font-bold text-green-900">{generatedCode}</p>
+                  <p className="text-2xl font-mono font-bold text-green-200">{generatedCode}</p>
                 </div>
               )}
             </div>

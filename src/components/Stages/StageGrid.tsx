@@ -330,7 +330,7 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center space-x-2">
           <div className="w-6 h-6 border-2 border-brp-primary border-t-transparent rounded-full animate-spin" />
-          <span className="text-gray-600">Loading project stages...</span>
+          <span className="text-gray-400">Loading project stages...</span>
         </div>
       </div>
     );
@@ -339,8 +339,8 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
   if (error) {
     return (
       <div className="p-6">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-800">{error}</p>
+        <div className="bg-red-950 border border-red-800 rounded-lg p-4">
+          <p className="text-red-200">{error}</p>
           <Button
             variant="risk"
             onClick={refreshStages}
@@ -360,13 +360,13 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
           <div className="flex items-center space-x-4">
             <button
               onClick={onBack}
-              className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 text-gray-400 hover:text-gray-200 hover:bg-gray-800 rounded-lg transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
             <div>
-              <h2 className="text-3xl font-bold text-gray-900">{projectName}{currentBwof && ' BWOF'}</h2>
-              <p className="text-gray-600 mt-1">Project handover checklist</p>
+              <h2 className="text-3xl font-bold text-gray-100">{projectName}{currentBwof && ' BWOF'}</h2>
+              <p className="text-gray-400 mt-1">Project handover checklist</p>
             </div>
           </div>
         </div>
@@ -406,13 +406,13 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
         <div className="flex items-center space-x-4">
           <button
             onClick={onBack}
-            className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 text-gray-400 hover:text-gray-200 hover:bg-gray-800 rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div>
-            <h2 className="text-3xl font-bold text-gray-900">{projectName}{currentBwof && ' BWOF'}</h2>
-            <p className="text-gray-600 mt-1">Project handover checklist</p>
+            <h2 className="text-3xl font-bold text-gray-100">{projectName}{currentBwof && ' BWOF'}</h2>
+            <p className="text-gray-400 mt-1">Project handover checklist</p>
           </div>
         </div>
 
@@ -452,22 +452,22 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
           <input
             type="text"
             placeholder="Search stages..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brp-primary focus:border-transparent"
+            className="w-full pl-10 pr-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-brp-primary focus:border-transparent"
           />
         </div>
-        
+
         <div className="flex items-center space-x-2">
-          <Filter className="w-5 h-5 text-gray-500" />
+          <Filter className="w-5 h-5 text-gray-400" />
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as any)}
-            className="px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brp-primary focus:border-transparent"
+            className="px-3 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-gray-200 focus:ring-2 focus:ring-brp-primary focus:border-transparent"
           >
             <option value="all">All Stages</option>
             <option value="pending">Pending</option>
@@ -480,22 +480,22 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
       {/* Progress Summary */}
       <Card variant="default" className="mb-8">
         <CardContent>
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Project Progress</h3>
+          <h3 className="text-lg font-semibold text-gray-100 mb-4">Project Progress</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center">
-              <div className="text-2xl font-bold text-gray-600">
+              <div className="text-2xl font-bold text-gray-400">
                 {stages.filter(s => getStageStatus(s) === 'pending').length}
               </div>
               <div className="text-sm text-gray-500">Pending</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-orange-600">
+              <div className="text-2xl font-bold text-orange-400">
                 {stages.filter(s => getStageStatus(s) === 'in_progress').length}
               </div>
               <div className="text-sm text-gray-500">In Progress</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">
+              <div className="text-2xl font-bold text-green-400">
                 {stages.filter(s => getStageStatus(s) === 'complete').length}
               </div>
               <div className="text-sm text-gray-500">Complete</div>

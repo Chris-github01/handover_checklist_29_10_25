@@ -28,11 +28,11 @@ export default function Button({
 
   const variantStyles = {
     primary: 'bg-brp-primary hover:bg-brp-primaryHover text-white',
-    secondary: 'border border-gray-300 text-gray-700 hover:bg-gray-50',
-    ghost: 'text-gray-600 hover:bg-gray-100',
-    success: 'bg-green-600 hover:bg-green-700 text-white',
-    risk: 'bg-red-600 hover:bg-red-700 text-white',
-    warning: 'bg-orange-600 hover:bg-orange-700 text-white',
+    secondary: 'border border-gray-700 text-gray-300 hover:bg-gray-800',
+    ghost: 'text-gray-400 hover:bg-gray-800',
+    success: 'bg-green-600 hover:bg-green-500 text-white',
+    risk: 'bg-red-600 hover:bg-red-500 text-white',
+    warning: 'bg-orange-600 hover:bg-orange-500 text-white',
   };
 
   // External classes: ONLY layout/positioning (e.g., w-full, opacity, flex modifiers)

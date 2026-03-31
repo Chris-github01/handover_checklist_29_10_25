@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
 /**
  * 🚨 CARD COMPONENT SYSTEM - DESIGN SYSTEM ENFORCEMENT
@@ -39,14 +39,14 @@ import { ReactNode } from 'react';
  * </Card>
  */
 
-interface CardProps {
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   variant?: 'default' | 'highlight' | 'success' | 'warning' | 'risk';
   interactive?: boolean;
   className?: string;
 }
 
-interface CardSectionProps {
+interface CardSectionProps extends React.HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   className?: string;
 }
@@ -67,7 +67,8 @@ export function Card({
   children,
   variant = 'default',
   interactive = false,
-  className = ''
+  className = '',
+  ...props
 }: CardProps) {
   const variantStyles = {
     default: 'bg-white border-brp-grayBorder',
@@ -86,37 +87,38 @@ export function Card({
   return (
     <div
       className={`rounded-2xl shadow-lg border ${variantStyles[variant]} ${interactiveStyles} ${sanitizedClassName}`}
+      {...props}
     >
       {children}
     </div>
   );
 }
 
-export function CardHeader({ children, className = '' }: CardSectionProps) {
+export function CardHeader({ children, className = '', ...props }: CardSectionProps) {
   const sanitizedClassName = stripForbiddenClasses(className);
 
   return (
-    <div className={`px-6 py-4 border-b border-brp-grayBorder ${sanitizedClassName}`}>
+    <div className={`px-6 py-4 border-b border-brp-grayBorder ${sanitizedClassName}`} {...props}>
       {children}
     </div>
   );
 }
 
-export function CardContent({ children, className = '' }: CardSectionProps) {
+export function CardContent({ children, className = '', ...props }: CardSectionProps) {
   const sanitizedClassName = stripForbiddenClasses(className);
 
   return (
-    <div className={`px-6 py-4 ${sanitizedClassName}`}>
+    <div className={`px-6 py-4 ${sanitizedClassName}`} {...props}>
       {children}
     </div>
   );
 }
 
-export function CardFooter({ children, className = '' }: CardSectionProps) {
+export function CardFooter({ children, className = '', ...props }: CardSectionProps) {
   const sanitizedClassName = stripForbiddenClasses(className);
 
   return (
-    <div className={`px-6 py-4 border-t border-brp-grayBorder ${sanitizedClassName}`}>
+    <div className={`px-6 py-4 border-t border-brp-grayBorder ${sanitizedClassName}`} {...props}>
       {children}
     </div>
   );

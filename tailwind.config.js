@@ -52,7 +52,7 @@ export default {
           primarySoft: 'rgba(244,178,35,0.15)',
           gray: '#6B7280',
           grayLight: '#F3F4F6',
-          grayBorder: '#D1D5DB'
+          grayBorder: '#E5E7EB'
         }
       }
     },

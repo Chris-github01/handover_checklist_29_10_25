@@ -71,7 +71,7 @@ export function Card({
   ...props
 }: CardProps) {
   const variantStyles = {
-    default: 'bg-white border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.08)]',
+    default: 'bg-white border-brp-grayBorder shadow-[0_2px_8px_rgba(0,0,0,0.08)]',
     highlight: 'bg-white border-brp-primary shadow-[0_2px_8px_rgba(0,0,0,0.08),0_0_20px_rgba(244,178,35,0.15)]',
     success: 'bg-white border-green-200 shadow-[0_2px_8px_rgba(0,0,0,0.08),0_0_20px_rgba(34,197,94,0.1)]',
     warning: 'bg-white border-amber-200 shadow-[0_2px_8px_rgba(0,0,0,0.08),0_0_20px_rgba(251,191,36,0.1)]',

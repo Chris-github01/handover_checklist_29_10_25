@@ -8,6 +8,7 @@ import { ArrowLeft, Search, Filter, Download, DollarSign, FileText } from 'lucid
 import { CostAllocationModal } from '../Projects/CostAllocationModal';
 import { CostReportModal } from '../Projects/CostReportModal';
 import { Card, CardContent } from '../ui/Card';
+import Button from '../ui/Button';
 import StageTile from './StageTile';
 import StageModal from './StageModal';
 import type { StageWithItems, Project } from '../../types/database';
@@ -384,12 +385,13 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
             >
               Initialize Stages
             </button>
-            <button
+            <Button
+              variant="ghost"
               onClick={refreshStages}
-              className="bg-brp-primary hover:bg-brp-primaryHover text-white px-6 py-3 rounded-lg font-medium transition-colors"
+              className="px-6 py-3 font-medium"
             >
               Refresh
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -415,23 +417,23 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
         <div className="flex items-center gap-3">
           {projectStatus === 'live' && (
             <>
-              <button
+              <Button
+                variant="ghost"
                 onClick={() => setShowCostAllocation(true)}
-                className="bg-brp-primary hover:bg-brp-primaryHover text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
-                title="Cost Allocation"
+                className="font-medium"
               >
                 <DollarSign className="w-5 h-5" />
                 <span>Cost Allocation</span>
-              </button>
+              </Button>
 
-              <button
+              <Button
+                variant="ghost"
                 onClick={() => setShowCostReport(true)}
-                className="bg-brp-primary hover:bg-brp-primaryHover text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
-                title="Generate Cost Report"
+                className="font-medium"
               >
                 <FileText className="w-5 h-5" />
                 <span>Generate Cost Report</span>
-              </button>
+              </Button>
             </>
           )}
 

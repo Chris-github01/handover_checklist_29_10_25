@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Lock, Eye, EyeOff } from 'lucide-react';
+import Button from '../ui/Button';
 
 interface ResetPasswordFormProps {
   onSuccess: () => void;
@@ -73,10 +74,10 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onSuccess }) => {
 
   if (!isValidToken && !error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
         <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
           <div className="flex items-center space-x-2 justify-center">
-            <div className="w-6 h-6 border-3 border-blue-500 border-t-transparent rounded-full animate-spin" />
+            <div className="w-6 h-6 border-3 border-brp-primary border-t-transparent rounded-full animate-spin" />
             <span className="text-gray-600">Verifying reset link...</span>
           </div>
         </div>
@@ -85,10 +86,10 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onSuccess }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-brp-primarySoft rounded-full mb-4">
             <Lock className="w-8 h-8 text-brp-primary" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900">Reset Your Password</h1>
@@ -98,12 +99,12 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onSuccess }) => {
         {error && !isValidToken ? (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
             <p className="text-red-800 text-sm mb-4">{error}</p>
-            <a
-              href="/"
-              className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+            <Button
+              onClick={() => window.location.href = '/'}
+              variant="primary"
             >
               Return to Login
-            </a>
+            </Button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -163,10 +164,11 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onSuccess }) => {
               </div>
             )}
 
-            <button
+            <Button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+              variant="primary"
+              className="w-full"
             >
               {loading ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -176,7 +178,7 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onSuccess }) => {
                   <span>Update Password</span>
                 </>
               )}
-            </button>
+            </Button>
           </form>
         )}
       </div>

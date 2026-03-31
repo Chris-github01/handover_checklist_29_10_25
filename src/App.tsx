@@ -6,6 +6,7 @@ import Header from './components/Layout/Header';
 import ProjectList from './components/Projects/ProjectList';
 import StageGrid from './components/Stages/StageGrid';
 import { supabase } from './lib/supabase';
+import Button from './components/ui/Button';
 
 const AppContent: React.FC = () => {
   const { user, loading } = useAuth();
@@ -150,7 +151,7 @@ const AppContent: React.FC = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-4 border-brp-primary border-t-transparent rounded-full animate-spin" />
           <span className="text-gray-600 text-lg">Loading...</span>
         </div>
       </div>
@@ -160,7 +161,7 @@ const AppContent: React.FC = () => {
   if (isPasswordRecovery) {
     if (passwordResetSuccess) {
       return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-slate-100 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
               <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -169,7 +170,7 @@ const AppContent: React.FC = () => {
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Password Updated!</h2>
             <p className="text-gray-600 mb-6">Your password has been successfully updated. You can now sign in with your new password.</p>
-            <button
+            <Button
               onClick={async () => {
                 await supabase.auth.signOut();
                 setIsPasswordRecovery(false);
@@ -177,10 +178,11 @@ const AppContent: React.FC = () => {
                 window.location.hash = '';
                 window.location.reload();
               }}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
+              variant="primary"
+              className="w-full"
             >
               Go to Login
-            </button>
+            </Button>
           </div>
         </div>
       );

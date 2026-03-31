@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { LogIn, Eye, EyeOff, UserPlus, X } from 'lucide-react';
+import Button from '../ui/Button';
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -166,10 +167,10 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-brp-primarySoft rounded-full mb-4">
             <LogIn className="w-8 h-8 text-brp-primary" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900">Project Handover</h1>
@@ -202,7 +203,7 @@ const LoginForm: React.FC = () => {
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors pr-12"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brp-primary focus:border-transparent transition-colors pr-12"
                 placeholder="Enter your password"
                 required
               />
@@ -222,10 +223,11 @@ const LoginForm: React.FC = () => {
             </div>
           )}
 
-          <button
+          <Button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+            variant="primary"
+            className="w-full"
           >
             {loading ? (
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -235,7 +237,7 @@ const LoginForm: React.FC = () => {
                 <span>Sign In</span>
               </>
             )}
-          </button>
+          </Button>
         </form>
 
         <div className="mt-6 space-y-3">
@@ -291,16 +293,17 @@ const LoginForm: React.FC = () => {
                 <p className="text-gray-600 mb-6">
                   We've sent a password reset link to <strong>{resetEmail}</strong>. Please check your inbox and follow the instructions to reset your password.
                 </p>
-                <button
+                <Button
                   onClick={() => {
                     setShowForgotPassword(false);
                     setResetSuccess(false);
                     setResetEmail('');
                   }}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                  variant="primary"
+                  className="w-full"
                 >
                   Close
-                </button>
+                </Button>
               </div>
             ) : (
               <form onSubmit={handleForgotPassword} className="space-y-4">
@@ -339,17 +342,18 @@ const LoginForm: React.FC = () => {
                   >
                     Cancel
                   </button>
-                  <button
+                  <Button
                     type="submit"
                     disabled={resetLoading}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                    variant="primary"
+                    className="flex-1"
                   >
                     {resetLoading ? (
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     ) : (
                       <span>Send Reset Link</span>
                     )}
-                  </button>
+                  </Button>
                 </div>
               </form>
             )}
@@ -380,7 +384,7 @@ const LoginForm: React.FC = () => {
                   type="text"
                   value={createAccountData.name}
                   onChange={(e) => handleCreateAccountInputChange('name', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brp-primary focus:border-transparent"
                   placeholder="Enter your full name"
                   required
                 />
@@ -394,7 +398,7 @@ const LoginForm: React.FC = () => {
                   type="email"
                   value={createAccountData.email}
                   onChange={(e) => handleCreateAccountInputChange('email', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brp-primary focus:border-transparent"
                   placeholder="Enter your email"
                   required
                 />
@@ -407,7 +411,7 @@ const LoginForm: React.FC = () => {
                 <select
                   value={createAccountData.role}
                   onChange={(e) => handleCreateAccountInputChange('role', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brp-primary focus:border-transparent"
                   required
                 >
                   <option value="">Select your department</option>
@@ -432,7 +436,7 @@ const LoginForm: React.FC = () => {
                   type="password"
                   value={createAccountData.password}
                   onChange={(e) => handleCreateAccountInputChange('password', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brp-primary focus:border-transparent"
                   placeholder="Enter your password"
                   required
                   minLength={6}
@@ -447,7 +451,7 @@ const LoginForm: React.FC = () => {
                   type="password"
                   value={createAccountData.confirmPassword}
                   onChange={(e) => handleCreateAccountInputChange('confirmPassword', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brp-primary focus:border-transparent"
                   placeholder="Confirm your password"
                   required
                   minLength={6}
@@ -468,10 +472,11 @@ const LoginForm: React.FC = () => {
                 >
                   Cancel
                 </button>
-                <button
+                <Button
                   type="submit"
                   disabled={createAccountLoading}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                  variant="primary"
+                  className="flex-1"
                 >
                   {createAccountLoading ? (
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -481,7 +486,7 @@ const LoginForm: React.FC = () => {
                       <span>Create Account</span>
                     </>
                   )}
-                </button>
+                </Button>
               </div>
             </form>
           </div>

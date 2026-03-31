@@ -58,11 +58,7 @@ const StageTile: React.FC<StageTileProps> = ({ stage, onClick, canAccess, canEdi
       variant={getCardVariant()}
       interactive={canEdit || canAccess}
       className={`relative ${
-        canEdit
-          ? getStatusColor()
-          : canAccess
-          ? 'border-gray-300 bg-gray-50 hover:bg-gray-100'
-          : 'border-gray-200 bg-gray-100 cursor-not-allowed opacity-60'
+        !canAccess && !canEdit ? 'cursor-not-allowed opacity-60' : ''
       }`}
       onClick={onClick}
     >

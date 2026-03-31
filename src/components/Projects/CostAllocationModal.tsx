@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Plus, Trash2, Save, FileUp, Upload } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { Card, CardContent } from '../ui/Card';
 
 interface Variation {
   id?: string;
@@ -294,214 +295,224 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
 
         <div className="p-6 space-y-6">
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-              <p className="text-sm text-red-600">{error}</p>
-            </div>
+            <Card variant="risk">
+              <CardContent className="bg-red-50">
+                <p className="text-sm text-red-600">{error}</p>
+              </CardContent>
+            </Card>
           )}
 
           {successMessage && (
-            <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-              <p className="text-sm text-green-600">{successMessage}</p>
-            </div>
+            <Card variant="success">
+              <CardContent className="bg-green-50">
+                <p className="text-sm text-green-600">{successMessage}</p>
+              </CardContent>
+            </Card>
           )}
 
-          <div className="bg-gray-50 rounded-lg p-4 mb-6">
-            <h3 className="font-semibold text-gray-900 mb-4">Import from Payment Claim</h3>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <label htmlFor="file-upload" className="flex-1">
-                  <input
-                    id="file-upload"
-                    type="file"
-                    accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv"
-                    onChange={handleFileSelect}
-                    disabled={extracting}
-                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-brp-primary hover:file:bg-blue-100 disabled:opacity-50"
-                  />
-                </label>
-                <button
-                  onClick={handleExtractPDF}
-                  disabled={!selectedFile || extracting}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {extracting ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-                      <span>Extracting...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Upload className="w-4 h-4" />
-                      <span>Extract Data</span>
-                    </>
-                  )}
-                </button>
-              </div>
-              <p className="text-xs text-gray-600">
-                Upload an Excel (.xlsx, .xls) or CSV file to automatically extract contract values and variations
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-blue-50 rounded-lg p-4 space-y-4">
-            <h3 className="font-semibold text-gray-900">Contract Works</h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Agreed Contract Value
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
-                  <input
-                    type="number"
-                    value={agreedContractValue}
-                    onChange={(e) => setAgreedContractValue(Number(e.target.value))}
-                    className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brp-primary focus:border-transparent"
-                    step="0.01"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Contract Works Claimed to Date
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
-                  <input
-                    type="number"
-                    value={contractWorksClaimed}
-                    onChange={(e) => setContractWorksClaimed(Number(e.target.value))}
-                    className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brp-primary focus:border-transparent"
-                    step="0.01"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded p-3 space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Outstanding to Claim:</span>
-                <span className="font-semibold">${contractWorksOutstanding.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Percentage Complete:</span>
-                <span className="font-semibold">{contractWorksPercent.toFixed(2)}%</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-green-50 rounded-lg p-4 space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-gray-900">Variations</h3>
-              <button
-                onClick={addVariation}
-                className="flex items-center gap-2 px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
-              >
-                <Plus className="w-4 h-4" />
-                Add Variation
-              </button>
-            </div>
-
-            {variations.length === 0 ? (
-              <p className="text-sm text-gray-500 text-center py-4">No variations added yet</p>
-            ) : (
+          <Card variant="default" className="mb-6">
+            <CardContent>
+              <h3 className="font-semibold text-gray-900 mb-4">Import from Payment Claim</h3>
               <div className="space-y-3">
-                {variations.map((variation, index) => {
-                  const varOutstanding = variation.value - variation.claimed_amount;
-                  const varPercent = variation.value > 0 ? (variation.claimed_amount / variation.value) * 100 : 0;
-
-                  return (
-                    <div key={index} className="bg-white rounded-lg p-4 space-y-3">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex-1">
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Description
-                          </label>
-                          <input
-                            type="text"
-                            value={variation.description}
-                            onChange={(e) => updateVariation(index, 'description', e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                            placeholder="Variation description"
-                          />
-                        </div>
-                        <button
-                          onClick={() => removeVariation(index)}
-                          className="mt-6 p-2 text-red-600 hover:bg-red-50 rounded transition-colors"
-                        >
-                          <Trash2 className="w-5 h-5" />
-                        </button>
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Variation Value
-                          </label>
-                          <div className="relative">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
-                            <input
-                              type="number"
-                              value={variation.value}
-                              onChange={(e) => updateVariation(index, 'value', Number(e.target.value))}
-                              className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                              step="0.01"
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Claimed to Date
-                          </label>
-                          <div className="relative">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
-                            <input
-                              type="number"
-                              value={variation.claimed_amount}
-                              onChange={(e) => updateVariation(index, 'claimed_amount', Number(e.target.value))}
-                              className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                              step="0.01"
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="bg-gray-50 rounded p-2 space-y-1">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-600">Outstanding:</span>
-                          <span className="font-medium">${varOutstanding.toFixed(2)}</span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-600">Complete:</span>
-                          <span className="font-medium">{varPercent.toFixed(2)}%</span>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+                <div className="flex items-center gap-3">
+                  <label htmlFor="file-upload" className="flex-1">
+                    <input
+                      id="file-upload"
+                      type="file"
+                      accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv"
+                      onChange={handleFileSelect}
+                      disabled={extracting}
+                      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-brp-primary hover:file:bg-blue-100 disabled:opacity-50"
+                    />
+                  </label>
+                  <button
+                    onClick={handleExtractPDF}
+                    disabled={!selectedFile || extracting}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {extracting ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                        <span>Extracting...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-4 h-4" />
+                        <span>Extract Data</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+                <p className="text-xs text-gray-600">
+                  Upload an Excel (.xlsx, .xls) or CSV file to automatically extract contract values and variations
+                </p>
               </div>
-            )}
+            </CardContent>
+          </Card>
 
-            {variations.length > 0 && (
-              <div className="bg-white rounded p-3 space-y-2 border-2 border-green-600">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Total Variations Value:</span>
-                  <span className="font-semibold">${totalVariationsValue.toFixed(2)}</span>
+          <Card variant="info">
+            <CardContent className="bg-blue-50 space-y-4">
+              <h3 className="font-semibold text-gray-900">Contract Works</h3>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Agreed Contract Value
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                    <input
+                      type="number"
+                      value={agreedContractValue}
+                      onChange={(e) => setAgreedContractValue(Number(e.target.value))}
+                      className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brp-primary focus:border-transparent"
+                      step="0.01"
+                    />
+                  </div>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Total Variations Claimed:</span>
-                  <span className="font-semibold">${totalVariationsClaimed.toFixed(2)}</span>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Contract Works Claimed to Date
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                    <input
+                      type="number"
+                      value={contractWorksClaimed}
+                      onChange={(e) => setContractWorksClaimed(Number(e.target.value))}
+                      className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brp-primary focus:border-transparent"
+                      step="0.01"
+                    />
+                  </div>
                 </div>
+              </div>
+
+              <div className="bg-white rounded p-3 space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Outstanding to Claim:</span>
-                  <span className="font-semibold">${variationsOutstanding.toFixed(2)}</span>
+                  <span className="font-semibold">${contractWorksOutstanding.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Percentage Complete:</span>
+                  <span className="font-semibold">{contractWorksPercent.toFixed(2)}%</span>
                 </div>
               </div>
-            )}
-          </div>
+            </CardContent>
+          </Card>
+
+          <Card variant="success">
+            <CardContent className="bg-green-50 space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold text-gray-900">Variations</h3>
+                <button
+                  onClick={addVariation}
+                  className="flex items-center gap-2 px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add Variation
+                </button>
+              </div>
+
+              {variations.length === 0 ? (
+                <p className="text-sm text-gray-500 text-center py-4">No variations added yet</p>
+              ) : (
+                <div className="space-y-3">
+                  {variations.map((variation, index) => {
+                    const varOutstanding = variation.value - variation.claimed_amount;
+                    const varPercent = variation.value > 0 ? (variation.claimed_amount / variation.value) * 100 : 0;
+
+                    return (
+                      <div key={index} className="bg-white rounded-lg p-4 space-y-3">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex-1">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Description
+                            </label>
+                            <input
+                              type="text"
+                              value={variation.description}
+                              onChange={(e) => updateVariation(index, 'description', e.target.value)}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                              placeholder="Variation description"
+                            />
+                          </div>
+                          <button
+                            onClick={() => removeVariation(index)}
+                            className="mt-6 p-2 text-red-600 hover:bg-red-50 rounded transition-colors"
+                          >
+                            <Trash2 className="w-5 h-5" />
+                          </button>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Variation Value
+                            </label>
+                            <div className="relative">
+                              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                              <input
+                                type="number"
+                                value={variation.value}
+                                onChange={(e) => updateVariation(index, 'value', Number(e.target.value))}
+                                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                step="0.01"
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Claimed to Date
+                            </label>
+                            <div className="relative">
+                              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                              <input
+                                type="number"
+                                value={variation.claimed_amount}
+                                onChange={(e) => updateVariation(index, 'claimed_amount', Number(e.target.value))}
+                                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                step="0.01"
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="bg-gray-50 rounded p-2 space-y-1">
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-600">Outstanding:</span>
+                            <span className="font-medium">${varOutstanding.toFixed(2)}</span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-600">Complete:</span>
+                            <span className="font-medium">{varPercent.toFixed(2)}%</span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {variations.length > 0 && (
+                <div className="bg-white rounded p-3 space-y-2 border-2 border-green-600">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Total Variations Value:</span>
+                    <span className="font-semibold">${totalVariationsValue.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Total Variations Claimed:</span>
+                    <span className="font-semibold">${totalVariationsClaimed.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Outstanding to Claim:</span>
+                    <span className="font-semibold">${variationsOutstanding.toFixed(2)}</span>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
 
           <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-4 border-2 border-purple-600">
             <h3 className="font-semibold text-gray-900 mb-3">Summary</h3>

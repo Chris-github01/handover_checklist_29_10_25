@@ -3,6 +3,7 @@ import { Calendar, Building2, ArrowRight, Trash2, CreditCard as Edit, CheckCircl
 import { ProjectWithStats } from '../../hooks/useProjects';
 import { useAuth } from '../../contexts/AuthContext';
 import Button from '../ui/Button';
+import { Card, CardContent } from '../ui/Card';
 
 interface ProjectCardProps {
   project: ProjectWithStats;
@@ -117,15 +118,34 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
     }
   };
 
+  const getCardVariant = (status: string): 'default' | 'highlight' | 'success' | 'warning' | 'risk' => {
+    switch (status) {
+      case 'await_pre_let':
+        return 'risk';
+      case 'awarded':
+      case 'in_progress':
+        return 'warning';
+      case 'active':
+        return 'highlight';
+      case 'live':
+        return 'success';
+      case 'closed':
+      default:
+        return 'default';
+    }
+  };
+
   return (
-    <div
-      onClick={onClick}
-      className={`bg-white rounded-xl border border-gray-200 p-6 transition-all duration-200 group min-h-[240px] ${
+    <Card
+      variant={getCardVariant(project.status)}
+      interactive={!project.is_small_project}
+      className={`min-h-[240px] group ${
         project.is_small_project
           ? 'cursor-default'
-          : 'hover:shadow-lg hover:border-brp-primary cursor-pointer hover:h-auto'
+          : 'hover:h-auto'
       }`}
     >
+      <CardContent className="p-6" onClick={onClick}>
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <h3 className={`text-lg font-semibold text-gray-900 mb-2 transition-colors ${
@@ -288,7 +308,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
           </div>
         )}
       </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

@@ -386,7 +386,7 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
             </button>
             <button
               onClick={refreshStages}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+              className="bg-brp-primary hover:bg-brp-primaryHover text-white px-6 py-3 rounded-lg font-medium transition-colors"
             >
               Refresh
             </button>
@@ -417,7 +417,7 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
             <>
               <button
                 onClick={() => setShowCostAllocation(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+                className="bg-brp-primary hover:bg-brp-primaryHover text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
                 title="Cost Allocation"
               >
                 <DollarSign className="w-5 h-5" />
@@ -426,7 +426,7 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
 
               <button
                 onClick={() => setShowCostReport(true)}
-                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+                className="bg-brp-primary hover:bg-brp-primaryHover text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
                 title="Generate Cost Report"
               >
                 <FileText className="w-5 h-5" />
@@ -533,7 +533,7 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
           disabled={updatingStatus}
           className={`px-8 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
             projectStatus === 'closed'
-              ? 'bg-blue-600 hover:bg-blue-700 text-white'
+              ? 'bg-brp-primary hover:bg-brp-primaryHover text-white'
               : projectStatus === 'live'
               ? 'bg-red-600 hover:bg-red-700 text-white'
               : 'bg-green-600 hover:bg-green-700 text-white'

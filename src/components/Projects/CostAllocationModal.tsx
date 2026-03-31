@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Plus, Trash2, Save, FileUp, Upload } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { Card, CardContent } from '../ui/Card';
+import Button from '../ui/Button';
 
 interface Variation {
   id?: string;
@@ -405,13 +406,14 @@ export function CostAllocationModal({ projectId, projectName, onClose }: CostAll
             <CardContent className="bg-green-50 space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold text-gray-900">Variations</h3>
-                <button
+                <Button
+                  variant="success"
                   onClick={addVariation}
-                  className="flex items-center gap-2 px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
+                  className="text-sm"
                 >
                   <Plus className="w-4 h-4" />
                   Add Variation
-                </button>
+                </Button>
               </div>
 
               {variations.length === 0 ? (

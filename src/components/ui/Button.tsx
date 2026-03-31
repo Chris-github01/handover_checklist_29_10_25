@@ -7,7 +7,7 @@ import React from 'react';
  * Use variants instead
  */
 interface ButtonProps {
-  variant: 'primary' | 'secondary' | 'ghost';
+  variant: 'primary' | 'secondary' | 'ghost' | 'success' | 'risk' | 'warning';
   children: React.ReactNode;
   onClick?: () => void;
   className?: string;
@@ -30,6 +30,9 @@ export default function Button({
     primary: 'bg-brp-primary hover:bg-brp-primaryHover text-white',
     secondary: 'border border-gray-300 text-gray-700 hover:bg-gray-50',
     ghost: 'text-gray-600 hover:bg-gray-100',
+    success: 'bg-green-600 hover:bg-green-700 text-white',
+    risk: 'bg-red-600 hover:bg-red-700 text-white',
+    warning: 'bg-orange-600 hover:bg-orange-700 text-white',
   };
 
   // External classes: ONLY layout/positioning (e.g., w-full, opacity, flex modifiers)

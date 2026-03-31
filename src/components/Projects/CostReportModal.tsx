@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, FileText } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import jsPDF from 'jspdf';
+import Button from '../ui/Button';
 
 interface Variation {
   id: string;
@@ -416,14 +417,14 @@ export function CostReportModal({ projectId, projectName, projectCode, client, o
           >
             Close
           </button>
-          <button
+          <Button
+            variant="success"
             onClick={generatePDF}
             disabled={generating}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <FileText className="w-4 h-4" />
             {generating ? 'Generating...' : 'Generate PDF Report'}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

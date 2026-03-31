@@ -341,12 +341,13 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
       <div className="p-6">
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
           <p className="text-red-800">{error}</p>
-          <button 
+          <Button
+            variant="risk"
             onClick={refreshStages}
-            className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            className="mt-2"
           >
             Retry
-          </button>
+          </Button>
         </div>
       </div>
     );
@@ -379,12 +380,13 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
           <h3 className="text-xl font-medium text-gray-900 mb-2">No stages found</h3>
           <p className="text-gray-600 mb-6">This project doesn't have any stages set up yet.</p>
           <div className="flex space-x-4 justify-center">
-            <button
+            <Button
+              variant="success"
               onClick={handleInitializeStages}
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+              className="px-6 py-3 font-medium"
             >
               Initialize Stages
-            </button>
+            </Button>
             <Button
               variant="ghost"
               onClick={refreshStages}
@@ -437,13 +439,13 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
             </>
           )}
 
-          <button
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+          <Button
+            variant="success"
             title="Export PDF"
           >
             <Download className="w-5 h-5" />
             <span>Export PDF</span>
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -530,16 +532,17 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
 
       {/* Status Change Button */}
       <div className="flex justify-center mt-8">
-        <button
+        <Button
+          variant={
+            projectStatus === 'closed'
+              ? 'primary'
+              : projectStatus === 'live'
+              ? 'risk'
+              : 'success'
+          }
           onClick={projectStatus === 'closed' ? handleFinalAccount : handleStatusChange}
           disabled={updatingStatus}
-          className={`px-8 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
-            projectStatus === 'closed'
-              ? 'bg-brp-primary hover:bg-brp-primaryHover text-white'
-              : projectStatus === 'live'
-              ? 'bg-red-600 hover:bg-red-700 text-white'
-              : 'bg-green-600 hover:bg-green-700 text-white'
-          }`}
+          className="px-8 py-3 font-medium"
         >
           {updatingStatus
             ? 'Sending...'
@@ -548,7 +551,7 @@ const StageGrid: React.FC<StageGridProps> = ({ projectId, projectName, projectCo
             : projectStatus === 'live'
             ? 'Close Project'
             : 'Live'}
-        </button>
+        </Button>
       </div>
 
       {/* Stage Modal */}

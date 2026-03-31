@@ -11,13 +11,13 @@ const Header: React.FC = () => {
 
   const getRoleColor = (role: string) => {
     const colors = {
-      'Admin': 'bg-purple-100 text-purple-800',
-      'Director': 'bg-blue-100 text-blue-800',
+      'Admin': 'bg-brp-primarySoft text-brp-primary',
+      'Director': 'bg-brp-primarySoft text-brp-primary',
       'QS': 'bg-green-100 text-green-800',
       'PM/SM': 'bg-orange-100 text-orange-800',
       'Estimating': 'bg-teal-100 text-teal-800',
-      'Commercial': 'bg-indigo-100 text-indigo-800',
-      'QA': 'bg-pink-100 text-pink-800',
+      'Commercial': 'bg-slate-100 text-slate-800',
+      'QA': 'bg-slate-100 text-slate-800',
       'H&S': 'bg-red-100 text-red-800',
       'Read-only': 'bg-gray-100 text-gray-800'
     };

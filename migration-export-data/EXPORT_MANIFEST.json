@@ -1,0 +1,97 @@
+{
+  "export_date": "2026-04-08",
+  "source_database": "izufnkvcdbshjuwuxhhr",
+  "total_tables": 11,
+  "total_rows": 0,
+  "total_size_bytes": 22,
+  "tables": [
+    {
+      "table": "users",
+      "filename": "users.json",
+      "row_count": 0,
+      "file_size_bytes": 2,
+      "format": "JSON",
+      "status": "✅ Complete"
+    },
+    {
+      "table": "projects",
+      "filename": "projects.json",
+      "row_count": 0,
+      "file_size_bytes": 2,
+      "format": "JSON",
+      "status": "✅ Complete"
+    },
+    {
+      "table": "stages",
+      "filename": "stages.json",
+      "row_count": 0,
+      "file_size_bytes": 2,
+      "format": "JSON",
+      "status": "✅ Complete"
+    },
+    {
+      "table": "stage_items",
+      "filename": "stage_items.json",
+      "row_count": 0,
+      "file_size_bytes": 2,
+      "format": "JSON",
+      "status": "✅ Complete"
+    },
+    {
+      "table": "item_checks",
+      "filename": "item_checks.json",
+      "row_count": 0,
+      "file_size_bytes": 2,
+      "format": "JSON",
+      "status": "✅ Complete"
+    },
+    {
+      "table": "stage_statuses",
+      "filename": "stage_statuses.json",
+      "row_count": 0,
+      "file_size_bytes": 2,
+      "format": "JSON",
+      "status": "✅ Complete"
+    },
+    {
+      "table": "notifications",
+      "filename": "notifications.json",
+      "row_count": 0,
+      "file_size_bytes": 2,
+      "format": "JSON",
+      "status": "✅ Complete"
+    },
+    {
+      "table": "attachments",
+      "filename": "attachments.json",
+      "row_count": 0,
+      "file_size_bytes": 2,
+      "format": "JSON",
+      "status": "✅ Complete"
+    },
+    {
+      "table": "activity_log",
+      "filename": "activity_log.json",
+      "row_count": 0,
+      "file_size_bytes": 2,
+      "format": "JSON",
+      "status": "✅ Complete"
+    },
+    {
+      "table": "project_costs",
+      "filename": "project_costs.json",
+      "row_count": 0,
+      "file_size_bytes": 2,
+      "format": "JSON",
+      "status": "✅ Complete"
+    },
+    {
+      "table": "project_variations",
+      "filename": "project_variations.json",
+      "row_count": 0,
+      "file_size_bytes": 2,
+      "format": "JSON",
+      "status": "✅ Complete"
+    }
+  ]
+}
